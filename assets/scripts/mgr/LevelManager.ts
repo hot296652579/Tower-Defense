@@ -1,28 +1,36 @@
-import { instantiate, Node, Prefab } from 'cc';
-import { AssetManagerEx } from '../core/AssetManagerEx';
+import { instantiate, Node } from "cc";
+import { AssetManagerEx } from "../core/AssetManagerEx";
+import { GameRoot } from "../core/GameRoot";
 
-export class LevelManager {
+class LevelManager {
+
     private currentLevel: Node | null = null;
     private currentLevelName: string = '';
 
     async loadLevel(levelName: string) {
-        // 卸载旧关卡
-        this.unloadLevel();
 
-        const prefab = await AssetManagerEx.inst.load<Prefab>('level', levelName, Prefab);
+        await this.unloadLevel();
+
+        await AssetManagerEx.inst.loadBundle('levels');
+
+        const prefab = await AssetManagerEx.inst.load<any>(
+            'levels',
+            `prefab/${levelName}`
+        );
 
         this.currentLevel = instantiate(prefab);
         this.currentLevelName = levelName;
+
+        GameRoot.inst.sceneLayer.addChild(this.currentLevel);
     }
 
-    unloadLevel() {
+    async unloadLevel() {
+
         if (this.currentLevel) {
             this.currentLevel.destroy();
-            AssetManagerEx.inst.release('level', this.currentLevelName);
             this.currentLevel = null;
         }
 
-        // 彻底释放bundle（关键）
-        AssetManagerEx.inst.releaseBundle('level');
+        AssetManagerEx.inst.releaseBundle('levels');
     }
 }

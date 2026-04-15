@@ -1,29 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="12" height="21" tilewidth="64" tileheight="64" infinite="0" nextlayerid="2" nextobjectid="1">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="12" height="21" tilewidth="64" tileheight="64" infinite="0" nextlayerid="4" nextobjectid="13">
  <tileset firstgid="1" source="Tilemap.tsx"/>
- <layer id="1" name="图块层 1" width="12" height="21">
+ <tileset firstgid="641" source="Bush.tsx"/>
+ <tileset firstgid="673" source="Sheep.tsx"/>
+ <layer id="1" name="ground" width="12" height="21">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,22,23,23,23,23,23,24,0,0,0,
+0,0,42,43,43,43,43,43,44,0,0,0,
+0,0,42,43,43,43,43,43,44,0,0,0,
+0,0,42,43,43,43,63,63,64,0,0,0,
+0,0,42,43,43,44,87,88,89,0,0,0,
+22,23,43,43,43,44,0,0,0,0,0,0,
+62,63,63,43,43,44,0,0,0,0,0,0,
+87,88,89,42,43,43,23,23,23,23,24,0,
+0,0,0,42,43,43,43,43,43,43,44,0,
+0,22,23,43,43,43,43,43,63,63,64,0,
+0,62,63,63,63,43,43,44,87,88,89,0,
+0,87,88,88,89,42,43,64,0,0,0,0,
+0,0,0,0,22,43,44,0,0,0,0,0,
+0,22,23,23,43,43,43,23,23,24,0,0,
+0,62,63,63,63,63,63,63,43,44,0,0,
+0,87,88,88,88,88,88,89,42,44,0,0,
+0,0,0,0,0,0,0,0,62,64,0,0,
+0,0,0,0,0,0,0,0,82,84,0,0
+</data>
+ </layer>
+ <layer id="2" name="des" width="12" height="21">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,43,43,43,43,43,0,0,
-0,0,0,0,43,43,0,0,0,0,43,0,
-0,0,0,0,43,43,43,0,0,0,43,43,
-0,0,0,0,43,43,43,43,43,0,43,43,
-0,0,0,0,0,43,0,0,43,43,43,0,
+0,0,0,657,0,0,673,0,0,0,0,0,
+0,0,0,0,0,0,665,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,649,0,0,0,0,0,0,0,0,
+2147484333,665,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,673,641,0,0,
+0,0,0,0,0,0,0,649,0,0,0,0,
+0,0,649,2147484333,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,665,0,0,657,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="3" name="path">
+  <object id="1" x="594" y="1220">
+   <properties>
+    <property name="next" type="object" value="2"/>
+    <property name="start" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="2" x="567" y="1094">
+   <properties>
+    <property name="next" type="object" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="3" x="413" y="1092">
+   <properties>
+    <property name="next" type="object" value="4"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="4" x="378" y="1003">
+   <properties>
+    <property name="next" type="object" value="5"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="5" x="408" y="898">
+   <properties>
+    <property name="next" type="object" value="6"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="6" x="341" y="777">
+   <properties>
+    <property name="next" type="object" value="7"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="7" x="302" y="699">
+   <properties>
+    <property name="next" type="object" value="8"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="8" x="266" y="574">
+   <properties>
+    <property name="next" type="object" value="9"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="9" x="337" y="395">
+   <properties>
+    <property name="next" type="object" value="10"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="10" x="363" y="306">
+   <properties>
+    <property name="end" type="bool" value="true"/>
+    <property name="next" type="object" value="0"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="11" x="123" y="1096">
+   <properties>
+    <property name="next" type="object" value="12"/>
+    <property name="start" type="bool" value="true"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="12" x="269" y="1072">
+   <properties>
+    <property name="next" type="object" value="4"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
 </map>
