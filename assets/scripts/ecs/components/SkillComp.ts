@@ -1,23 +1,10 @@
-/**
- * 技能组件
- */
 export class SkillComp {
 
-    hp: number;
-    maxHp: number;
+    skills: string[] = [];
 
-    attack: number;
+    cd: number = 0;
 
-    attackInterval: number = 1; // 攻速
-    cd: number = 0;             // 当前CD
-
-    constructor(hp: number, attack: number) {
-        this.hp = hp;
-        this.maxHp = hp;
-        this.attack = attack;
-    }
-
-    isDead(): boolean {
-        return this.hp <= 0;
+    constructor(skills: string[]) {
+        this.skills = skills;
     }
 }

@@ -25,6 +25,7 @@ export class GameRoot extends Component {
 
         const mapPriority = this.MapRoot.getComponent(UITransform).priority;
         const enemyPriority = this.EnemyRoot.getComponent(UITransform).priority;
+        this.MapRoot.getComponent(UITransform).priority = -1;
         this.EnemyRoot.getComponent(UITransform).priority = mapPriority + 1;
     }
 }

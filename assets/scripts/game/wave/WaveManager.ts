@@ -1,5 +1,5 @@
-import { Vec3 } from 'cc';
-import { EnemyFactory } from '../enemy/EnemyFactory';
+import { EnemyFactory } from "../enemy/EnemyFactory";
+import { MapManager } from "../map/MapManager";
 
 type WaveConfig = {
     enemy: string;
@@ -16,12 +16,8 @@ export class WaveManager {
 
     private timer = 0;
 
-    private path: Vec3[] = [];
 
-    init(path: Vec3[]) {
-
-        this.path = path;
-
+    init() {
         // DOTO 加载配置文件
         this.waves = [
             { enemy: 'enemy', count: 3, interval: 1 },
@@ -57,7 +53,8 @@ export class WaveManager {
     }
 
     private spawnEnemy(enemyName: string) {
-        EnemyFactory.create(enemyName, this.path);
+        const path = MapManager.inst.getPathData();
+        EnemyFactory.create(enemyName, path);
     }
 
     isFinished(): boolean {

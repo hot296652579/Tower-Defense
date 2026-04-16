@@ -3,21 +3,9 @@
  */
 export class MoveComp {
 
-    hp: number;
-    maxHp: number;
+    speed: number;
 
-    attack: number;
-
-    attackInterval: number = 1; // 攻速
-    cd: number = 0;             // 当前CD
-
-    constructor(hp: number, attack: number) {
-        this.hp = hp;
-        this.maxHp = hp;
-        this.attack = attack;
-    }
-
-    isDead(): boolean {
-        return this.hp <= 0;
+    constructor(speed: number) {
+        this.speed = speed;
     }
 }
