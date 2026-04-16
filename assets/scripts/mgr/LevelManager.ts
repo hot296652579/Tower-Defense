@@ -21,7 +21,7 @@ class LevelManager {
         this.currentLevel = instantiate(prefab);
         this.currentLevelName = levelName;
 
-        GameRoot.inst.sceneLayer.addChild(this.currentLevel);
+        GameRoot.inst.MapRoot.addChild(this.currentLevel);
     }
 
     async unloadLevel() {

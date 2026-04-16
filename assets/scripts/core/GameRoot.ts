@@ -1,10 +1,16 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, UITransform } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameRoot')
 export class GameRoot extends Component {
 
     @property(Node) sceneLayer: Node = null!;
+    @property(Node) MapRoot: Node = null!;
+    @property(Node) EnemyRoot: Node = null!;
+    @property(Node) TowerRoot: Node = null!;
+    @property(Node) BulletRoot: Node = null!;
+    @property(Node) EffectRoot: Node = null!;
+
     @property(Node) pageLayer: Node = null!;
     @property(Node) windowLayer: Node = null!;
     @property(Node) popupLayer: Node = null!;
@@ -16,5 +22,9 @@ export class GameRoot extends Component {
 
     onLoad() {
         GameRoot.inst = this;
+
+        const mapPriority = this.MapRoot.getComponent(UITransform).priority;
+        const enemyPriority = this.EnemyRoot.getComponent(UITransform).priority;
+        this.EnemyRoot.getComponent(UITransform).priority = mapPriority + 1;
     }
 }

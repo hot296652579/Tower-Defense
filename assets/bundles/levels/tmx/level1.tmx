@@ -28,7 +28,7 @@
 0,0,0,0,0,0,0,0,82,84,0,0
 </data>
  </layer>
- <layer id="2" name="des" width="12" height="21">
+ <layer id="2" name="dec" width="12" height="21">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
