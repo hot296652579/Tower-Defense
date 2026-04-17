@@ -21,11 +21,11 @@ export class PathParser {
     */
     static parse(tiledMap: TiledMap): PathData {
         const pathData = new PathData();
+        const uiTrans = MapManager.inst.getTiledMapNode().getComponent(UITransform);
 
         const mapSize = tiledMap.getMapSize();
         const tileSize = tiledMap.getTileSize();
-        const uiTrans = MapManager.inst.getTiledMapNode().getComponent(UITransform);
-
+        const mapWidth = mapSize.width * tileSize.width;
         const mapHeight = mapSize.height * tileSize.height;
 
         const group: TiledObjectGroup | null = tiledMap.getObjectGroup('path');
@@ -49,9 +49,13 @@ export class PathParser {
             const isStart = this.getBooleanProp(props, PathPropKey.START);
             const isEnd = this.getBooleanProp(props, PathPropKey.END);
 
-            const cocosY = mapHeight - y;
-            const localPos = new Vec3(x, cocosY, 0);
+            //因为cocos锚点是(0.5, 0.5)，tiled地图是(0, 0),需要减去半个地图宽度和高度
+            const correctX = x - mapWidth / 2;
+            const correctY = y - mapHeight / 2;
+
+            const localPos = new Vec3(correctX, correctY, 0);
             const worldPos = uiTrans.convertToWorldSpaceAR(localPos);
+
             const pathNode = new PathNode(
                 id,
                 worldPos,

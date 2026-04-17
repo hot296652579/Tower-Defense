@@ -9,9 +9,8 @@ export class PathFollowSystem extends System {
     update(dt: number) {
 
         const entities = this.world.getEntitiesWith(PathComp, MoveComp, StateComp);
-        console.log('entities count:', entities.length);
+        // console.log('entities count:', entities.length);
         for (const e of entities) {
-
             const state = this.world.getComponent(e, StateComp);
             if (state.state !== EntityState.Move) continue;
 
@@ -25,6 +24,7 @@ export class PathFollowSystem extends System {
             const targetPos = currentNode.pos;
 
             const pos = entityNode.worldPosition.clone();
+            console.log('当前节点的世界坐标:', pos);
             const dir = targetPos.clone().subtract(pos);
 
             const dist = dir.length();

@@ -28,6 +28,7 @@ export class EnemyFactory {
 
         // 出生在起点
         const startNode = path.getNode(path.startId);
+        console.log('起点:', startNode!.pos);
         node.setWorldPosition(startNode!.pos);
     }
 }

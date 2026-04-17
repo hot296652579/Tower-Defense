@@ -119,7 +119,7 @@
   <object id="11" x="123" y="1096">
    <properties>
     <property name="next" type="object" value="12"/>
-    <property name="start" type="bool" value="true"/>
+    <property name="start" type="bool" value="false"/>
    </properties>
    <point/>
   </object>
