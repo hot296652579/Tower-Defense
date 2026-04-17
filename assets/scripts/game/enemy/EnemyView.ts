@@ -1,5 +1,6 @@
 import { _decorator, Component } from 'cc';
 import { AttributeComp } from '../../ecs/components/AttributeComp';
+import { MoveComp } from '../../ecs/components/MoveComp';
 import { StateComp } from '../../ecs/components/StateComp';
 import { EntityState, World } from '../../ecs/core/World';
 
@@ -33,7 +34,7 @@ export class EnemyView extends Component {
         World.inst.addComponent(this.entity, new AttributeComp(this.hp, this.attack));
 
         // 移动
-        // World.inst.addComponent(this.entity, new MoveComp(this.speed));
+        World.inst.addComponent(this.entity, new MoveComp(this.speed));
 
         // 状态
         const state = new StateComp();

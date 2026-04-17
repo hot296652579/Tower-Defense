@@ -1,6 +1,6 @@
+import { TiledMap } from 'cc';
 import { PathData } from './PathData';
 import { PathParser } from './PathParser';
-import { TiledMapLike } from './tiled/TiledTypes';
 
 export class MapManager {
 
@@ -9,7 +9,7 @@ export class MapManager {
     private pathData!: PathData;
 
     /** 初始化地图 */
-    init(tiledMap: TiledMapLike): void {
+    init(tiledMap: TiledMap): void {
         this.pathData = PathParser.parse(tiledMap);
     }
 
@@ -19,8 +19,13 @@ export class MapManager {
     }
 
     /** 获取起点 */
-    getStartId(): number {
+    getStartId(): string | number {
         return this.pathData.startId;
+    }
+
+    /** 获取终点 */
+    getEndId(): string | number {
+        return this.pathData.endId;
     }
 
     /** 获取节点 */

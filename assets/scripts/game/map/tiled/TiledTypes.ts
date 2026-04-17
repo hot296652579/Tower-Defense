@@ -48,12 +48,13 @@ export interface TiledLayer {
     visible: boolean;
 }
 
-/** Tiled 地图类型 
- * @param name 地图名
- * @param objectGroups 地图中的对象组
- * @param layers 地图中的图层
+
+/**
+ * Tiled 地图属性类型 
+ * @param name 属性名
+ * @param value 属性值
 */
-export interface TiledMapLike {
-    getObjectGroup(name: string): TiledObjectGroup;
-    getLayer(name: string): TiledLayer;
-}
+export type TiledProp = {
+    name: string;
+    value: string | number | boolean;
+};

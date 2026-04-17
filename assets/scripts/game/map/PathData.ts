@@ -2,11 +2,12 @@ import { PathNode } from "./PathNode";
 
 export class PathData {
 
-    nodes: Map<number, PathNode> = new Map();
+    nodes: Map<string | number, PathNode> = new Map();
 
-    startId: number = 0;
+    startId: string | number = 0;
+    endId: string | number = 0;
 
-    getNode(id: number): PathNode | undefined {
+    getNode(id: string | number): PathNode | undefined {
         return this.nodes.get(id);
     }
 }

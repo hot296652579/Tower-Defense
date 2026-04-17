@@ -54,6 +54,10 @@ export class WaveManager {
 
     private spawnEnemy(enemyName: string) {
         const path = MapManager.inst.getPathData();
+        if (!path) {
+            console.error('路径数据为空');
+            return;
+        }
         EnemyFactory.create(enemyName, path);
     }
 

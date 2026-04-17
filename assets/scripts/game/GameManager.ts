@@ -8,10 +8,25 @@ import { WaveManager } from '../game/wave/WaveManager';
 
 const { ccclass } = _decorator;
 
+export enum GameState {
+    Init,
+    Loading,
+    Ready,
+    Running,
+    End
+}
+
 @ccclass('GameManager')
 export class GameManager extends Component {
 
+    static inst: GameManager;
     private waveMgr = new WaveManager();
+    private gameState = GameState.Init;
+
+    protected onLoad(): void {
+        this.gameState = GameState.Init;
+        GameManager.inst = this;
+    }
 
     start() {
         // ECS系统注册
@@ -19,12 +34,26 @@ export class GameManager extends Component {
         World.inst.addSystem(new PathFollowSystem());
         World.inst.addSystem(new AnimationSystem());
         // World.inst.addSystem(new AttackSystem());
-
-        this.waveMgr.init();
     }
 
     update(dt: number) {
         World.inst.update(dt);
-        this.waveMgr.update(dt);
+
+        if (this.gameState === GameState.Running) {
+            this.waveMgr.update(dt);
+        }
+    }
+
+    /** 进入关卡 */
+    enterLevel(): void {
+        this.gameState = GameState.Loading;
+    }
+
+    /**地图加载准备完成*/
+    onLevelReady(): void {
+        this.gameState = GameState.Ready;
+        // 初始化波次
+        this.waveMgr.init();
+        this.gameState = GameState.Running;
     }
 }

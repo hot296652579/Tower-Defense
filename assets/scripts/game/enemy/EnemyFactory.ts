@@ -26,7 +26,7 @@ export class EnemyFactory {
         const pathComp = new PathComp(path);
         World.inst.addComponent(entity, pathComp);
 
-        // 👇 出生在起点
+        // 出生在起点
         const startNode = path.getNode(path.startId);
         node.setWorldPosition(startNode!.pos);
     }

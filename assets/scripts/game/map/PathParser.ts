@@ -1,7 +1,6 @@
-import { Vec3 } from 'cc';
+import { TiledMap, TiledObjectGroup, Vec3 } from 'cc';
 import { PathData } from './PathData';
 import { PathNode } from './PathNode';
-import { TiledMapLike, TiledProperty } from './tiled/TiledTypes';
 
 export const PathPropKey = {
     NEXT: 'next',
@@ -9,13 +8,27 @@ export const PathPropKey = {
     END: 'end'
 } as const;
 
+type TiledProps = Record<string, string | number | boolean>;
+
 export class PathParser {
 
-    static parse(tiledMap: TiledMapLike): PathData {
+    /**
+     * 解析路径
+     * @param tiledMap Tiled地图
+     * @returns 路径数据
+     * @ {PathData} pathData 路径数据
+    */
+    static parse(tiledMap: TiledMap): PathData {
 
         const pathData = new PathData();
 
-        const group = tiledMap.getObjectGroup('path');
+        const group: TiledObjectGroup | null = tiledMap.getObjectGroup('path');
+
+        if (!group) {
+            console.error('❌ 未找到 path 图层');
+            return pathData;
+        }
+
         const objects = group.getObjects();
 
         for (const obj of objects) {
@@ -24,7 +37,7 @@ export class PathParser {
             const x = obj.x;
             const y = obj.y;
 
-            const props = obj.properties ?? [];
+            const props = (obj.properties ?? {}) as TiledProps;
 
             const next = this.getNumberProp(props, PathPropKey.NEXT);
             const isStart = this.getBooleanProp(props, PathPropKey.START);
@@ -41,18 +54,33 @@ export class PathParser {
             if (isStart) {
                 pathData.startId = id;
             }
+
+            if (isEnd) {
+                pathData.endId = id;
+            }
         }
 
         return pathData;
     }
 
-    private static getNumberProp(props: TiledProperty[], key: string): number | null {
-        const p = props.find(p => p.name === key);
-        return p ? Number(p.value) : null;
+    /** 读取 number */
+    private static getNumberProp(props: TiledProps, key: string): number | null {
+        const value = props[key];
+
+        if (value === undefined) return null;
+
+        const num = Number(value);
+        return isNaN(num) ? null : num;
     }
 
-    private static getBooleanProp(props: TiledProperty[], key: string): boolean {
-        const p = props.find(p => p.name === key);
-        return p ? Boolean(p.value) : false;
+    /** 读取 boolean */
+    private static getBooleanProp(props: TiledProps, key: string): boolean {
+        const value = props[key];
+
+        if (value === undefined) return false;
+
+        if (typeof value === 'boolean') return value;
+
+        return value === 'true';
     }
 }

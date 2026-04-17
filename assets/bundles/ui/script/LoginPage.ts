@@ -1,7 +1,7 @@
-import { _decorator, Component, instantiate, Node } from 'cc';
+import { _decorator, Component, Node } from 'cc';
 import { AssetManagerEx } from 'db://assets/scripts/core/AssetManagerEx';
-import { GameRoot } from 'db://assets/scripts/core/GameRoot';
 import { UIManager } from 'db://assets/scripts/core/UIManager';
+import { LevelManager } from 'db://assets/scripts/mgr/LevelManager';
 
 const { ccclass, property } = _decorator;
 
@@ -21,12 +21,6 @@ export class LoginPage extends Component {
         await UIManager.inst.closePage();
         await AssetManagerEx.inst.loadBundle('levels');
         await AssetManagerEx.inst.loadBundle('audio');
-        const levelPrefab = await AssetManagerEx.inst.load<any>(
-            'levels',
-            'prefab/Level1'
-        );
-
-        const levelNode = instantiate(levelPrefab);
-        GameRoot.inst.sceneLayer.addChild(levelNode);
+        await LevelManager.inst.loadLevel('Level1');
     }
 }
