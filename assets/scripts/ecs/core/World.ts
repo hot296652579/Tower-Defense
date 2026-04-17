@@ -26,6 +26,10 @@ export class World {
 
     private systems: System[] = [];
 
+    constructor() {
+        console.log('🌍 World created');
+    }
+
     /** 创建实体 */
     createEntity(): number {
         const eid = ++this.id;
@@ -43,7 +47,7 @@ export class World {
 
         map.set(key, comp);
 
-        // World.inst.debugEntity(entity);
+        console.log('➕ add comp:', comp.constructor.name, 'entity:', entity);
     }
 
     /** 获取组件 */
@@ -67,7 +71,7 @@ export class World {
 
             if (hasAll) result.push(entity);
         });
-        console.log('getEntitiesWith:', result);
+        // console.log('getEntitiesWith:', result);
         return result;
     }
 
@@ -95,7 +99,7 @@ export class World {
 
     /** 删除实体 */
     removeEntity(entity: number): void {
-
+        console.log('removeEntity:', entity);
         const node = this.nodes.get(entity);
 
         if (node && node.isValid) {
@@ -108,7 +112,7 @@ export class World {
 
     /** 清空 */
     clear(): void {
-
+        console.log('🔥 World cleared');
         this.nodes.forEach(node => {
             if (node.isValid) node.destroy();
         });

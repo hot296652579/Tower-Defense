@@ -1,8 +1,10 @@
 import { _decorator, Component } from 'cc';
 import { AttributeComp } from '../../ecs/components/AttributeComp';
 import { MoveComp } from '../../ecs/components/MoveComp';
+import { PathComp } from '../../ecs/components/PathComp';
 import { StateComp } from '../../ecs/components/StateComp';
 import { EntityState, World } from '../../ecs/core/World';
+import { MapManager } from '../map/MapManager';
 
 const { ccclass, property } = _decorator;
 
@@ -36,16 +38,18 @@ export class EnemyView extends Component {
         // 移动
         World.inst.addComponent(this.entity, new MoveComp(this.speed));
 
+        World.inst.addComponent(this.entity, new PathComp(MapManager.inst.getPathData()));
+
+        // 动画
+        // World.inst.addComponent(this.entity, new AnimationComp());
+
+        // 攻击
+        // World.inst.addComponent(this.entity, new AttackComp());
+
         // 状态
         const state = new StateComp();
         state.changeState(EntityState.Move);
         World.inst.addComponent(this.entity, state);
-
-        // 技能
-        // World.inst.addComponent(this.entity, new SkillComp(this.skills));
-
-        // 目标
-        // World.inst.addComponent(this.entity, new TargetComp(this.attackRange));
 
         World.inst.bindNode(this.entity, this.node);
     }

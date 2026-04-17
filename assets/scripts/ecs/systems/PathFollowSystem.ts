@@ -9,7 +9,7 @@ export class PathFollowSystem extends System {
     update(dt: number) {
 
         const entities = this.world.getEntitiesWith(PathComp, MoveComp, StateComp);
-
+        console.log('entities count:', entities.length);
         for (const e of entities) {
 
             const state = this.world.getComponent(e, StateComp);
