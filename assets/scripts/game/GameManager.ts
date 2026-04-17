@@ -37,9 +37,8 @@ export class GameManager extends Component {
     }
 
     update(dt: number) {
-        World.inst.update(dt);
-
         if (this.gameState === GameState.Running) {
+            World.inst.update(dt);
             this.waveMgr.update(dt);
         }
     }

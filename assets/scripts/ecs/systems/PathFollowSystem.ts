@@ -33,7 +33,7 @@ export class PathFollowSystem extends System {
                 // 到达当前点 → 跳到 next
                 if (currentNode.next === null) {
                     state.changeState(EntityState.Idle);
-                    return;
+                    continue;
                 }
 
                 pathComp.currentId = currentNode.next;

@@ -10,6 +10,7 @@ export enum EntityState {
 }
 
 type Constructor<T> = new (...args: any[]) => T;
+type ComponentKey = string | symbol | number;
 
 export class World {
 
@@ -18,7 +19,7 @@ export class World {
     private id = 0;
 
     /** entity -> componentMap */
-    private comps: Map<number, Map<Constructor<unknown>, unknown>> = new Map();
+    private comps: Map<number, Map<ComponentKey, unknown>> = new Map();
 
     /** entity -> node */
     private nodes: Map<number, Node> = new Map();
@@ -34,15 +35,23 @@ export class World {
 
     /** 添加组件 */
     addComponent<T>(entity: number, comp: T): void {
+
         const map = this.comps.get(entity);
         if (!map) return;
 
-        map.set(comp.constructor as Constructor<T>, comp);
+        const key = comp.constructor.name;
+
+        map.set(key, comp);
+
+        // World.inst.debugEntity(entity);
     }
 
     /** 获取组件 */
     getComponent<T>(entity: number, type: Constructor<T>): T | undefined {
-        return this.comps.get(entity)?.get(type) as T | undefined;
+
+        const key = type.name;
+
+        return this.comps.get(entity)?.get(key) as T | undefined;
     }
 
     /** 获取多个组件实体 */
@@ -54,11 +63,11 @@ export class World {
 
         this.comps.forEach((map, entity) => {
 
-            const hasAll = types.every(t => map.has(t));
+            const hasAll = types.every(t => map.has(t.name));
 
             if (hasAll) result.push(entity);
         });
-
+        console.log('getEntitiesWith:', result);
         return result;
     }
 
@@ -106,5 +115,15 @@ export class World {
 
         this.nodes.clear();
         this.comps.clear();
+    }
+
+    debugEntity(entity: number) {
+        const map = this.comps.get(entity);
+
+        console.log('Entity:', entity);
+
+        map?.forEach((_, key) => {
+            console.log('  comp:', key);
+        });
     }
 }
