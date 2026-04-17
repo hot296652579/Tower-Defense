@@ -7,9 +7,11 @@ export class MapManager {
     static inst = new MapManager();
 
     private pathData!: PathData;
+    private tiledMap!: TiledMap;
 
     /** 初始化地图 */
     init(tiledMap: TiledMap): void {
+        this.tiledMap = tiledMap;
         this.pathData = PathParser.parse(tiledMap);
     }
 
@@ -31,6 +33,11 @@ export class MapManager {
     /** 获取节点 */
     getNode(id: number) {
         return this.pathData.getNode(id);
+    }
+
+    /** 获取地图节点*/
+    getTiledMapNode() {
+        return this.tiledMap.node;
     }
 
     /** 清理（切关卡用） */

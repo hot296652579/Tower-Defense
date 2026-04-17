@@ -17,15 +17,15 @@ export class PathFollowSystem extends System {
 
             const pathComp = this.world.getComponent(e, PathComp);
             const move = this.world.getComponent(e, MoveComp);
-            const node = this.world.getNode(e);
+            const entityNode = this.world.getNode(e);
 
             const currentNode = pathComp.path.getNode(pathComp.currentId);
             if (!currentNode) continue;
 
             const targetPos = currentNode.pos;
 
-            const pos = node.worldPosition.clone();
-            const dir = targetPos.subtract(pos);
+            const pos = entityNode.worldPosition.clone();
+            const dir = targetPos.clone().subtract(pos);
 
             const dist = dir.length();
 
@@ -37,13 +37,13 @@ export class PathFollowSystem extends System {
                 }
 
                 pathComp.currentId = currentNode.next;
-                return;
+                continue;
             }
 
             dir.normalize();
             pos.add(dir.multiplyScalar(move.speed * dt));
 
-            node.setWorldPosition(pos);
+            entityNode.setWorldPosition(pos);
         }
     }
 }

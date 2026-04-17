@@ -47,7 +47,7 @@ export class World {
 
         map.set(key, comp);
 
-        console.log('➕ add comp:', comp.constructor.name, 'entity:', entity);
+        // console.log('➕ add comp:', comp.constructor.name, 'entity:', entity);
     }
 
     /** 获取组件 */

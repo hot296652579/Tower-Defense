@@ -1,4 +1,5 @@
-import { TiledMap, TiledObjectGroup, Vec3 } from 'cc';
+import { TiledMap, TiledObjectGroup, UITransform, Vec3 } from 'cc';
+import { MapManager } from './MapManager';
 import { PathData } from './PathData';
 import { PathNode } from './PathNode';
 
@@ -19,8 +20,13 @@ export class PathParser {
      * @ {PathData} pathData 路径数据
     */
     static parse(tiledMap: TiledMap): PathData {
-
         const pathData = new PathData();
+
+        const mapSize = tiledMap.getMapSize();
+        const tileSize = tiledMap.getTileSize();
+        const uiTrans = MapManager.inst.getTiledMapNode().getComponent(UITransform);
+
+        const mapHeight = mapSize.height * tileSize.height;
 
         const group: TiledObjectGroup | null = tiledMap.getObjectGroup('path');
 
@@ -39,17 +45,20 @@ export class PathParser {
 
             const props = (obj.properties ?? {}) as TiledProps;
 
-            const next = this.getNumberProp(props, PathPropKey.NEXT);
+            const nextId = this.getNumberProp(props, PathPropKey.NEXT);
             const isStart = this.getBooleanProp(props, PathPropKey.START);
             const isEnd = this.getBooleanProp(props, PathPropKey.END);
 
-            const node = new PathNode(
+            const cocosY = mapHeight - y;
+            const localPos = new Vec3(x, cocosY, 0);
+            const worldPos = uiTrans.convertToWorldSpaceAR(localPos);
+            const pathNode = new PathNode(
                 id,
-                new Vec3(x, y, 0),
-                next
+                worldPos,
+                nextId === 0 ? null : nextId
             );
 
-            pathData.nodes.set(id, node);
+            pathData.nodes.set(id, pathNode);
 
             if (isStart) {
                 pathData.startId = id;
