@@ -18,18 +18,25 @@ export class PathFollowSystem extends System {
             const move = this.world.getComponent(e, MoveComp);
             const entityNode = this.world.getNode(e);
 
+            // console.log("=== 怪物状态：", state.state);
+            // console.log("=== 怪物速度：", move.speed);
+            console.log("=== 当前路径点 ID：", pathComp.currentId);
+
             const currentNode = pathComp.path.getNode(pathComp.currentId);
-            if (!currentNode) continue;
+            if (!currentNode) {
+                console.log("=== 找不到路径点！");
+                continue;
+            };
 
             const targetPos = currentNode.pos;
-
             const pos = entityNode.worldPosition.clone();
-            console.log('当前节点的世界坐标:', pos);
+
             const dir = targetPos.clone().subtract(pos);
 
             const dist = dir.length();
 
-            if (dist < 5) {
+            // console.log("=== 距离目标：", dist);
+            if (dist < 15) {
                 // 到达当前点 → 跳到 next
                 if (currentNode.next === null) {
                     state.changeState(EntityState.Idle);
