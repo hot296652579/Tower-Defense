@@ -39,7 +39,7 @@ export class PathParser {
 
         for (const obj of objects) {
 
-            const id = obj.id;
+            const id = Number(obj.id);
             const x = obj.x;
             const y = obj.y;
 
