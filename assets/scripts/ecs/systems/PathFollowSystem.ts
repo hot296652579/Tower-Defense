@@ -1,3 +1,11 @@
+/*
+ * @Author: super_javan 296652579@qq.com
+ * @Date: 2026-04-20 21:51:28
+ * @LastEditors: super_javan 296652579@qq.com
+ * @LastEditTime: 2026-04-20 22:03:58
+ * @FilePath: /Tower-Defense/assets/scripts/ecs/systems/PathFollowSystem.ts
+ * @Description: 路径跟随系统
+ */
 import { MoveComp } from '../components/MoveComp';
 import { PathComp } from '../components/PathComp';
 import { StateComp } from '../components/StateComp';
@@ -20,7 +28,7 @@ export class PathFollowSystem extends System {
 
             // console.log("=== 怪物状态：", state.state);
             // console.log("=== 怪物速度：", move.speed);
-            console.log("=== 当前路径点 ID：", pathComp.currentId);
+            // console.log("=== 当前路径点 ID：", pathComp.currentId);
 
             const currentNode = pathComp.path.getNode(pathComp.currentId);
             if (!currentNode) {
