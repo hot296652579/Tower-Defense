@@ -1,6 +1,8 @@
 import { TiledMap } from 'cc';
+import { TowerManager } from '../../mgr/TowerManager';
 import { PathData } from './PathData';
 import { PathParser } from './PathParser';
+import { TowerPointParser } from './TowerPointParser';
 
 export class MapManager {
 
@@ -14,6 +16,9 @@ export class MapManager {
     init(tiledMap: TiledMap): void {
         this.tiledMap = tiledMap;
         this.paths = PathParser.parse(tiledMap);
+
+        const points = TowerPointParser.parse(tiledMap);
+        TowerManager.inst.init(points);
     }
 
     /** 获取路径数据 */

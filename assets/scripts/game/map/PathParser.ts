@@ -21,7 +21,7 @@ export class PathParser {
     static parse(tiledMap: TiledMap): Map<number, PathData> {
         const result = new Map<number, PathData>();
 
-        const group: TiledObjectGroup | null = tiledMap.getObjectGroup('path');
+        const group: TiledObjectGroup | null = tiledMap.getObjectGroup('enemy_path');
 
         if (!group) {
             console.error('❌ 未找到 path 图层');
