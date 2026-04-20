@@ -1,13 +1,17 @@
 import { Vec3 } from "cc";
 
 export class PathNode {
-    id: string | number;
+    id: number;
     pos: Vec3;
     next: number | null;
+    isStart?: boolean;
+    isEnd?: boolean;
 
-    constructor(id: string | number, pos: Vec3, next: number | null) {
+    constructor(id: number, pos: Vec3, next: number | null, isStart?: boolean, isEnd?: boolean) {
         this.id = id;
         this.pos = pos;
         this.next = next;
+        this.isStart = isStart;
+        this.isEnd = isEnd;
     }
 }

@@ -4,7 +4,7 @@ export class PathComp {
 
     path: PathData;
 
-    currentId: number | string = null;
+    currentId: number = null;
 
     constructor(path: PathData) {
         this.path = path;

@@ -20,8 +20,8 @@ export class WaveManager {
     init() {
         // DOTO 加载配置文件
         this.waves = [
-            { enemy: 'enemy', count: 1, interval: 1 },
-            // { enemy: 'enemy', count: 5, interval: 0.5 }
+            { enemy: 'enemy', count: 3, interval: 1 },
+            { enemy: 'enemy', count: 5, interval: 0.5 }
         ];
 
         this.waveIndex = 0;
@@ -53,7 +53,7 @@ export class WaveManager {
     }
 
     private spawnEnemy(enemyName: string) {
-        const path = MapManager.inst.getPathData();
+        const path = MapManager.inst.getRandomPath();
         console.log('路径数据:', path);
         if (!path) {
             console.error('路径数据为空');

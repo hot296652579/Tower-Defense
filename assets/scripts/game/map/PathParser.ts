@@ -1,5 +1,4 @@
-import { TiledMap, TiledObjectGroup, UITransform, Vec3 } from 'cc';
-import { MapManager } from './MapManager';
+import { TiledMap, TiledObjectGroup, Vec3 } from 'cc';
 import { PathData } from './PathData';
 import { PathNode } from './PathNode';
 
@@ -19,61 +18,67 @@ export class PathParser {
      * @returns 路径数据
      * @ {PathData} pathData 路径数据
     */
-    static parse(tiledMap: TiledMap): PathData {
-        const pathData = new PathData();
-        const uiTrans = MapManager.inst.getTiledMapNode().getComponent(UITransform);
-
-        const mapSize = tiledMap.getMapSize();
-        const tileSize = tiledMap.getTileSize();
-        const mapWidth = mapSize.width * tileSize.width;
-        const mapHeight = mapSize.height * tileSize.height;
+    static parse(tiledMap: TiledMap): Map<number, PathData> {
+        const result = new Map<number, PathData>();
 
         const group: TiledObjectGroup | null = tiledMap.getObjectGroup('path');
 
         if (!group) {
             console.error('❌ 未找到 path 图层');
-            return pathData;
+            return result;
         }
 
         const objects = group.getObjects();
-
+        //全部节点先放一起
+        const nodeMap = new Map<number, PathNode>();
         for (const obj of objects) {
-
             const id = Number(obj.id);
-            const x = obj.x;
-            const y = obj.y;
-
-            const props = (obj.properties ?? {}) as TiledProps;
+            const props = obj.properties ?? {};
 
             const nextId = this.getNumberProp(props, PathPropKey.NEXT);
             const isStart = this.getBooleanProp(props, PathPropKey.START);
             const isEnd = this.getBooleanProp(props, PathPropKey.END);
-
-            //因为cocos锚点是(0.5, 0.5)，tiled地图是(0, 0),需要减去半个地图宽度和高度
-            const correctX = x - mapWidth / 2;
-            const correctY = y - mapHeight / 2;
-
-            const localPos = new Vec3(correctX, correctY, 0);
-            const worldPos = uiTrans.convertToWorldSpaceAR(localPos);
-
-            const pathNode = new PathNode(
+            nodeMap.set(id, new PathNode(
                 id,
-                worldPos,
-                nextId === 0 ? null : nextId
-            );
-
-            pathData.nodes.set(id, pathNode);
-
-            if (isStart) {
-                pathData.startId = id;
-            }
-
-            if (isEnd) {
-                pathData.endId = id;
-            }
+                new Vec3(obj.x, obj.y, 0),
+                nextId === 0 ? null : nextId,
+                isStart,
+                isEnd
+            ));
         }
 
-        return pathData;
+        //找到所有起点
+        const starts = [...nodeMap.values()].filter(node => node.isStart);
+
+        let pathIndex = 0;
+
+        for (const start of starts) {
+            const path = new PathData();
+            path.startId = Number(start.id);
+
+            let current = start;
+            while (current) {
+                path.nodes.set(+current.id, new PathNode(
+                    current.id,
+                    current.pos,
+                    current.next
+                ))
+
+                if (current.isEnd) {
+                    path.endId = Number(current.id);
+                    break;
+                }
+
+                if (current.next == null) break;
+
+                current = nodeMap.get(current.next);
+            }
+
+            result.set(pathIndex++, path);
+        }
+
+        return result;
+
     }
 
     /** 读取 number */

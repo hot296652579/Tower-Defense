@@ -1,10 +1,4 @@
 import { _decorator, Component } from 'cc';
-import { AttributeComp } from '../../ecs/components/AttributeComp';
-import { MoveComp } from '../../ecs/components/MoveComp';
-import { PathComp } from '../../ecs/components/PathComp';
-import { StateComp } from '../../ecs/components/StateComp';
-import { EntityState, World } from '../../ecs/core/World';
-import { MapManager } from '../map/MapManager';
 
 const { ccclass, property } = _decorator;
 
@@ -30,15 +24,13 @@ export class EnemyView extends Component {
 
     start() {
 
-        this.entity = World.inst.createEntity();
+        // this.entity = World.inst.createEntity();
 
         // 属性
-        World.inst.addComponent(this.entity, new AttributeComp(this.hp, this.attack));
+        // World.inst.addComponent(this.entity, new AttributeComp(this.hp, this.attack));
 
         // 移动
-        World.inst.addComponent(this.entity, new MoveComp(this.speed));
-
-        World.inst.addComponent(this.entity, new PathComp(MapManager.inst.getPathData()));
+        // World.inst.addComponent(this.entity, new MoveComp(this.speed));
 
         // 动画
         // World.inst.addComponent(this.entity, new AnimationComp());
@@ -47,10 +39,14 @@ export class EnemyView extends Component {
         // World.inst.addComponent(this.entity, new AttackComp());
 
         // 状态
-        const state = new StateComp();
-        state.changeState(EntityState.Move);
-        World.inst.addComponent(this.entity, state);
+        // const state = new StateComp();
+        // state.changeState(EntityState.Move);
+        // World.inst.addComponent(this.entity, state);
 
-        World.inst.bindNode(this.entity, this.node);
+        // World.inst.bindNode(this.entity, this.node);
+    }
+
+    init(entity: number) {
+        this.entity = entity;
     }
 }
