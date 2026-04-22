@@ -1,36 +1,42 @@
-import { TiledMap, TiledObjectGroup, Vec2 } from 'cc';
-import { RoadArea } from './RoadArea';
+import { Node, TiledMap, TiledObjectGroup, UITransform, Vec2, Vec3 } from 'cc';
+import { RoadPolygon } from './RoadPolygon';
 
-export class RoadAreaParser {
+export class RoadPolygonParser {
 
-    static parse(tiledMap: TiledMap): RoadArea[] {
+    static parse(tiledMap: TiledMap, mapRoot: Node): RoadPolygon[] {
 
-        const result: RoadArea[] = [];
+        const result: RoadPolygon[] = [];
 
-        const group: TiledObjectGroup | null = tiledMap.getObjectGroup('road_area');
+        const group: TiledObjectGroup | null = tiledMap.getObjectGroup('road_polygon');
 
         if (!group) {
-            console.warn('⚠️ 没有 road_area 图层');
+            console.warn('⚠️ 没有 road_polygon 图层');
             return result;
         }
+
+        const uiTrans = mapRoot.getComponent(UITransform);
 
         const objects = group.getObjects();
 
         for (const obj of objects) {
 
+            // ❗polygon 在 Cocos 里是 points
             if (!obj.points || obj.points.length < 3) continue;
 
             const pts: Vec2[] = [];
 
             for (const p of obj.points) {
 
-                const x = obj.x + p.x;
-                const y = obj.y + p.y;
-
-                pts.push(new Vec2(x, y));
+                const world = new Vec3(
+                    obj.x + p.x,
+                    obj.y + p.y,
+                    0
+                );
+                const local = uiTrans.convertToNodeSpaceAR(world);
+                pts.push(new Vec2(local.x, local.y));
             }
 
-            result.push(new RoadArea(Number(obj.id), pts));
+            result.push(new RoadPolygon(Number(obj.id), pts));
         }
 
         return result;

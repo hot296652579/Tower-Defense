@@ -1,5 +1,5 @@
-import { TiledMap, TiledObjectGroup } from 'cc';
-import { MapManager } from './MapManager';
+import { TiledMap, TiledObjectGroup, UITransform, Vec3 } from 'cc';
+import { GameRoot } from '../../core/GameRoot';
 import { PathData } from './PathData';
 import { PathNode } from './PathNode';
 
@@ -29,6 +29,7 @@ export class PathParser {
             return result;
         }
 
+        const mapRoot = GameRoot.inst.MapRoot;
         const objects = group.getObjects();
         //全部节点先放一起
         const nodeMap = new Map<number, PathNode>();
@@ -40,10 +41,15 @@ export class PathParser {
             const isStart = this.getBooleanProp(props, PathPropKey.START);
             const isEnd = this.getBooleanProp(props, PathPropKey.END);
 
-            const world = MapManager.inst.toWorldXY(obj.x, obj.y);
+            // const world = MapManager.inst.toWorldXY(obj.x, obj.y);
+            const world = new Vec3(obj.x, obj.y, 0);
+            const local = mapRoot
+                .getComponent(UITransform)
+                .convertToNodeSpaceAR(world);
+
             nodeMap.set(id, new PathNode(
                 id,
-                world,
+                local,
                 nextId === 0 ? null : nextId,
                 isStart,
                 isEnd

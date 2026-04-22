@@ -6,8 +6,9 @@
  * @FilePath: /Tower-Defense/assets/scripts/ecs/systems/BuildSystem.ts
  * @Description: 创建建造系统，监听触摸事件，尝试在塔位上建造塔
  */
-import { _decorator, Camera, Component, EventTouch, find, input, Input, UITransform, Vec3 } from 'cc';
+import { _decorator, Camera, Component, EventTouch, find, input, Input, UITransform, Vec2, Vec3 } from 'cc';
 import { GameRoot } from '../../core/GameRoot';
+import { MapManager } from '../../game/map/MapManager';
 import { TowerFactory } from '../../game/tower/TowerFactory';
 import { TowerManager } from '../../mgr/TowerManager';
 
@@ -33,12 +34,25 @@ export class BuildSystem extends Component {
     private onTouchEnd(event: EventTouch) {
 
         const uiPos = event.getUILocation();
+        const mapRoot = GameRoot.inst.MapRoot;
+        const uiTrans = mapRoot.getComponent(UITransform)!;
 
-        const localPos = GameRoot.inst.MapRoot
-            .getComponent(UITransform)
-            .convertToNodeSpaceAR(
-                new Vec3(uiPos.x, uiPos.y, 0)
-            );
+        const worldPos = new Vec3();
+        const localPos = new Vec3();
+
+        uiTrans.convertToWorldSpaceAR(new Vec3(uiPos.x, uiPos.y, 0), worldPos);
+        uiTrans.convertToNodeSpaceAR(worldPos, localPos);
+
+        //先判断是否点击在道路多边形
+        const p2 = new Vec2(localPos.x, localPos.y);
+        const polygons = MapManager.inst.getRoadPolygons();
+
+        for (const poly of polygons) {
+            if (poly.contains(p2)) {
+                console.log('✅ 点击在道路范围内');
+                return;
+            }
+        }
 
         this.tryBuild(localPos);
     }

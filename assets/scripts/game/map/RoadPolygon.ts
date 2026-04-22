@@ -1,11 +1,8 @@
-
 import { Vec2 } from 'cc';
 
-export class RoadArea {
+export class RoadPolygon {
 
     id: number;
-
-    // 多边形点
     points: Vec2[];
 
     constructor(id: number, points: Vec2[]) {
@@ -13,11 +10,8 @@ export class RoadArea {
         this.points = points;
     }
 
-    /**点是否在多边形内
-     * @param point 点
-     * @returns 是否在多边形内
-    */
-    contains(point: Vec2): boolean {
+    /** 点是否在多边形内 */
+    contains(p: Vec2): boolean {
 
         let inside = false;
 
@@ -29,8 +23,8 @@ export class RoadArea {
             const xj = pts[j].x, yj = pts[j].y;
 
             const intersect =
-                ((yi > point.y) !== (yj > point.y)) &&
-                (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi);
+                ((yi > p.y) !== (yj > p.y)) &&
+                (p.x < (xj - xi) * (p.y - yi) / (yj - yi) + xi);
 
             if (intersect) inside = !inside;
         }
