@@ -1,4 +1,5 @@
-import { TiledMap, TiledObjectGroup, Vec3 } from 'cc';
+import { TiledMap, TiledObjectGroup } from 'cc';
+import { MapManager } from './MapManager';
 import { PathData } from './PathData';
 import { PathNode } from './PathNode';
 
@@ -38,9 +39,11 @@ export class PathParser {
             const nextId = this.getNumberProp(props, PathPropKey.NEXT);
             const isStart = this.getBooleanProp(props, PathPropKey.START);
             const isEnd = this.getBooleanProp(props, PathPropKey.END);
+
+            const world = MapManager.inst.toWorldXY(obj.x, obj.y);
             nodeMap.set(id, new PathNode(
                 id,
-                new Vec3(obj.x, obj.y, 0),
+                world,
                 nextId === 0 ? null : nextId,
                 isStart,
                 isEnd

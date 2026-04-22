@@ -19,7 +19,8 @@ export class TowerView extends Component {
 
     entity = -1;
 
-    start() { }
+    start() {
+    }
 
     init(entity: number) {
         this.entity = entity;

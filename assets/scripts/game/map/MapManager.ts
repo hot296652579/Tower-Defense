@@ -1,4 +1,4 @@
-import { TiledMap } from 'cc';
+import { Mat4, TiledMap, Vec3 } from 'cc';
 import { TowerManager } from '../../mgr/TowerManager';
 import { PathData } from './PathData';
 import { PathParser } from './PathParser';
@@ -11,14 +11,27 @@ export class MapManager {
     private pathData!: PathData;
     private tiledMap!: TiledMap;
     private paths: Map<number, PathData> = new Map();
+    private worldMat: Mat4 = new Mat4();
 
     /** 初始化地图 */
     init(tiledMap: TiledMap): void {
         this.tiledMap = tiledMap;
+        this.tiledMap.node.getWorldMatrix(this.worldMat);
         this.paths = PathParser.parse(tiledMap);
 
         const points = TowerPointParser.parse(tiledMap);
         TowerManager.inst.init(points);
+    }
+
+    /**本地 转 世界坐标 */
+    toWorldPos(localPos: Vec3) {
+        const out = new Vec3();
+        Vec3.transformMat4(out, localPos, this.worldMat);
+        return out;
+    }
+
+    toWorldXY(x: number, y: number) {
+        return this.toWorldPos(new Vec3(x, y, 0));
     }
 
     /** 获取路径数据 */

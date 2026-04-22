@@ -6,7 +6,8 @@
  * @FilePath: /Tower-Defense/assets/scripts/ecs/systems/BuildSystem.ts
  * @Description: 创建建造系统，监听触摸事件，尝试在塔位上建造塔
  */
-import { _decorator, Camera, Component, EventTouch, find, input, Input, Vec3 } from 'cc';
+import { _decorator, Camera, Component, EventTouch, find, input, Input, UITransform, Vec3 } from 'cc';
+import { GameRoot } from '../../core/GameRoot';
 import { TowerFactory } from '../../game/tower/TowerFactory';
 import { TowerManager } from '../../mgr/TowerManager';
 
@@ -32,17 +33,14 @@ export class BuildSystem extends Component {
     private onTouchEnd(event: EventTouch) {
 
         const uiPos = event.getUILocation();
-        const worldPos = new Vec3();
 
-        const screenPos = new Vec3(
-            uiPos.x,
-            uiPos.y
-        );
+        const localPos = GameRoot.inst.MapRoot
+            .getComponent(UITransform)
+            .convertToNodeSpaceAR(
+                new Vec3(uiPos.x, uiPos.y, 0)
+            );
 
-        this.camera.screenToWorld(screenPos, worldPos);
-        worldPos.z = 0;
-
-        this.tryBuild(worldPos);
+        this.tryBuild(localPos);
     }
 
     private tryBuild(pos: Vec3) {
@@ -53,10 +51,13 @@ export class BuildSystem extends Component {
 
             if (p.occupied) continue;
 
-            const dist = pos.clone().subtract(p.pos).length();
+            // const dist = pos.clone().subtract(p.pos).length();
+            const dx = pos.x - p.pos.x;
+            const dy = pos.y - p.pos.y;
+
+            const dist = Math.sqrt(dx * dx + dy * dy);
             console.log('点击位置:', pos, '塔位:', p.pos, '半径:', p.radius, '距离:', dist);
             if (dist <= p.radius) {
-
                 console.log('点击塔位:', p.id);
                 TowerFactory.create(p);
                 return;
