@@ -47,6 +47,9 @@ export class BuildSystem extends Component {
         const p2 = new Vec2(localPos.x, localPos.y);
         const polygons = MapManager.inst.getRoadPolygons();
 
+        console.log('点击位置:', p2);
+        console.log('道路多边形:', polygons);
+
         for (const poly of polygons) {
             if (poly.contains(p2)) {
                 console.log('✅ 点击在道路范围内');
@@ -58,7 +61,7 @@ export class BuildSystem extends Component {
     }
 
     private tryBuild(pos: Vec3) {
-        console.log('尝试建造，世界坐标:', pos);
+        // console.log('尝试建造，世界坐标:', pos);
         const points = TowerManager.inst.getPoints();
 
         for (const p of points) {
@@ -70,7 +73,7 @@ export class BuildSystem extends Component {
             const dy = pos.y - p.pos.y;
 
             const dist = Math.sqrt(dx * dx + dy * dy);
-            console.log('点击位置:', pos, '塔位:', p.pos, '半径:', p.radius, '距离:', dist);
+            // console.log('点击位置:', pos, '塔位:', p.pos, '半径:', p.radius, '距离:', dist);
             if (dist <= p.radius) {
                 console.log('点击塔位:', p.id);
                 TowerFactory.create(p);

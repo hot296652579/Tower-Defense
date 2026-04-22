@@ -54,7 +54,7 @@ export class WaveManager {
 
     private spawnEnemy(enemyName: string) {
         const path = MapManager.inst.getRandomPath();
-        console.log('路径数据:', path);
+        // console.log('路径数据:', path);
         if (!path) {
             console.error('路径数据为空');
             return;

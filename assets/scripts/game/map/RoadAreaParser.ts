@@ -1,9 +1,10 @@
-import { Node, TiledMap, TiledObjectGroup, UITransform, Vec2, Vec3 } from 'cc';
+import { TiledMap, TiledObjectGroup, UITransform, Vec2, Vec3 } from 'cc';
+import { GameRoot } from '../../core/GameRoot';
 import { RoadPolygon } from './RoadPolygon';
 
 export class RoadPolygonParser {
 
-    static parse(tiledMap: TiledMap, mapRoot: Node): RoadPolygon[] {
+    static parse(tiledMap: TiledMap): RoadPolygon[] {
 
         const result: RoadPolygon[] = [];
 
@@ -14,6 +15,7 @@ export class RoadPolygonParser {
             return result;
         }
 
+        const mapRoot = GameRoot.inst.MapRoot;
         const uiTrans = mapRoot.getComponent(UITransform);
 
         const objects = group.getObjects();

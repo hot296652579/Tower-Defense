@@ -2,6 +2,7 @@ import { Mat4, TiledMap, Vec3 } from 'cc';
 import { TowerManager } from '../../mgr/TowerManager';
 import { PathData } from './PathData';
 import { PathParser } from './PathParser';
+import { RoadPolygonParser } from './RoadAreaParser';
 import { RoadPolygon } from './RoadPolygon';
 import { TowerPointParser } from './TowerPointParser';
 
@@ -20,6 +21,7 @@ export class MapManager {
         this.tiledMap = tiledMap;
         this.tiledMap.node.getWorldMatrix(this.worldMat);
         this.paths = PathParser.parse(tiledMap);
+        this.roadPolygons = RoadPolygonParser.parse(tiledMap);
 
         const points = TowerPointParser.parse(tiledMap);
         TowerManager.inst.init(points);
@@ -28,11 +30,6 @@ export class MapManager {
     /** 获取路径数据 */
     getPathData(): PathData {
         return this.getRandomPath();
-    }
-
-    /** 设置道路多边形 */
-    setRoadPolygons(polygons: RoadPolygon[]) {
-        this.roadPolygons = polygons;
     }
 
     /** 获取道路多边形 */
@@ -57,7 +54,7 @@ export class MapManager {
         if (!arr.length) {
             throw new Error('❌ 没有路径');
         }
-        console.log('获取的随机路径:', arr[Math.floor(Math.random() * arr.length)]);
+        // console.log('获取的随机路径:', arr[Math.floor(Math.random() * arr.length)]);
         return arr[Math.floor(Math.random() * arr.length)];
     }
 
