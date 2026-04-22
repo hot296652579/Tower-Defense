@@ -6,7 +6,7 @@ export class GameRoot extends Component {
 
     @property(Node) sceneLayer: Node = null!;
     @property(Node) MapRoot: Node = null!;
-    @property(Node) EnemyRoot: Node = null!;
+    @property(Node) CharacterRoot: Node = null!;
     @property(Node) TowerRoot: Node = null!;
     @property(Node) BulletRoot: Node = null!;
     @property(Node) EffectRoot: Node = null!;
@@ -24,11 +24,11 @@ export class GameRoot extends Component {
         GameRoot.inst = this;
 
         const mapPriority = this.MapRoot.getComponent(UITransform).priority;
-        const enemyPriority = this.EnemyRoot.getComponent(UITransform).priority;
+        const enemyPriority = this.CharacterRoot.getComponent(UITransform).priority;
         this.MapRoot.getComponent(UITransform).priority = -1;
-        this.EnemyRoot.getComponent(UITransform).priority = mapPriority + 1;
+        this.CharacterRoot.getComponent(UITransform).priority = mapPriority + 1;
 
         console.log('MapRoot pos:', this.MapRoot.worldPosition);
-        console.log('EnemyRoot pos:', this.EnemyRoot.worldPosition);
+        console.log('CharacterRoot pos:', this.CharacterRoot.worldPosition);
     }
 }

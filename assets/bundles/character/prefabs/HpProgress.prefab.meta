@@ -2,12 +2,12 @@
   "ver": "1.1.50",
   "importer": "prefab",
   "imported": true,
-  "uuid": "20ff2920-0c02-4de2-a824-c25f9f7408b0",
+  "uuid": "f2d44cec-00b2-4ae6-a27a-f20c669d9d19",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "enemy"
+    "syncNodeName": "HpProgress"
   }
 }

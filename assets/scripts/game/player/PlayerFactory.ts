@@ -8,15 +8,15 @@ import { PathComp } from '../../ecs/components/PathComp';
 import { StateComp } from '../../ecs/components/StateComp';
 import { EntityState, World } from '../../ecs/core/World';
 import { PathData } from '../map/PathData';
-import { EnemyView } from './EnemyView';
+import { PlayerView } from './PlayerView';
 
-export class EnemyFactory {
+export class PlayerFactory {
 
     static async create(name: string, path: PathData) {
 
         const prefab = await AssetManagerEx.inst.load<Prefab>(
             'character',
-            `prefabs/enemy/${name}`,
+            `prefabs/player/${name}`,
             Prefab
         );
 
@@ -37,15 +37,9 @@ export class EnemyFactory {
         state.changeState(EntityState.Move);
         World.inst.addComponent(entity, state);
 
-        World.inst.addComponent(entity, new CampComp(CampType.Enemy));
+        World.inst.addComponent(entity, new CampComp(CampType.Player));
 
-        //设置出生点
-        const startNode = path.getNode(path.startId);
-        if (startNode) {
-            node.setWorldPosition(startNode.pos);
-        }
-
-        const view = node.getComponent(EnemyView)!;
+        const view = node.getComponent(PlayerView)!;
         view.init(entity);
     }
 }

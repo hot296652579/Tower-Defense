@@ -443,7 +443,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "EnemyRoot",
+    "_name": "CharacterRootRoot",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": {
@@ -1512,7 +1512,7 @@
     "MapRoot": {
       "__id__": 7
     },
-    "EnemyRoot": {
+    "CharacterRoot": {
       "__id__": 10
     },
     "TowerRoot": {
