@@ -9,8 +9,10 @@
 import { _decorator, Camera, Component, EventTouch, find, input, Input, UITransform, Vec2, Vec3 } from 'cc';
 import { GameRoot } from '../../core/GameRoot';
 import { MapManager } from '../../game/map/MapManager';
+import { PlayerFactory } from '../../game/player/PlayerFactory';
 import { TowerFactory } from '../../game/tower/TowerFactory';
 import { TowerManager } from '../../mgr/TowerManager';
+import { UnitType } from '../define/UnitType';
 
 const { ccclass } = _decorator;
 
@@ -52,7 +54,8 @@ export class BuildSystem extends Component {
 
         for (const poly of polygons) {
             if (poly.contains(p2)) {
-                console.log('✅ 点击在道路范围内');
+                // 点击在道路范围内
+                PlayerFactory.create('Warrior', localPos, UnitType.Warrior);
                 return;
             }
         }

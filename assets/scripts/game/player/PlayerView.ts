@@ -1,4 +1,4 @@
-import { _decorator, Component } from 'cc';
+import { _decorator, CCString, Component } from 'cc';
 
 const { ccclass, property } = _decorator;
 
@@ -27,7 +27,7 @@ export class PlayerView extends Component {
     @property({ displayName: '攻击范围' })
     attackRange = 100;
 
-    @property({ type: [String], displayName: '技能' })
+    @property({ type: [CCString], displayName: '技能' })
     skills: string[] = [];
 
     entity = -1;

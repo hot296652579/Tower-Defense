@@ -6,7 +6,9 @@ import { CampComp, CampType } from '../../ecs/components/CampComp';
 import { MoveComp } from '../../ecs/components/MoveComp';
 import { PathComp } from '../../ecs/components/PathComp';
 import { StateComp } from '../../ecs/components/StateComp';
+import { UnitComp } from '../../ecs/components/UnitComp';
 import { EntityState, World } from '../../ecs/core/World';
+import { UnitType } from '../../ecs/define/UnitType';
 import { PathData } from '../map/PathData';
 import { EnemyView } from './EnemyView';
 
@@ -38,6 +40,7 @@ export class EnemyFactory {
         World.inst.addComponent(entity, state);
 
         World.inst.addComponent(entity, new CampComp(CampType.Enemy));
+        World.inst.addComponent(entity, new UnitComp(UnitType.Enemy));
 
         //设置出生点
         const startNode = path.getNode(path.startId);
