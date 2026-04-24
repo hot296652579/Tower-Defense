@@ -1,7 +1,8 @@
-import { _decorator, Component } from 'cc';
-import { AttributeComp } from '../../ecs/components/AttributeComp';
-import { World } from '../../ecs/core/World';
+import { _decorator, Animation, Component } from 'cc';
+import { StateComp } from '../../ecs/components/StateComp';
+import { EntityState, World } from '../../ecs/core/World';
 import { AttackType } from '../../ecs/define/AttackType';
+import { AttackSystem } from '../../ecs/systems/AttackSystem';
 import { SkillData } from '../skill/SkillData';
 
 const { ccclass, property } = _decorator;
@@ -34,7 +35,11 @@ export class PlayerView extends Component {
     @property({ displayName: '攻击间隔' })
     attackInterval = 1;
 
+    private _ani: Animation = null;
+
     entity = -1;
+
+    private _isAttacking = false;
 
     skills: SkillData[] = [
         {
@@ -55,29 +60,55 @@ export class PlayerView extends Component {
         }
     ];
 
+    protected onLoad(): void {
+        this._ani = this.getComponent(Animation);
+    }
+
     start() { }
 
     init(entity: number) {
         this.entity = entity;
+    }
 
+    playAttack() {
+        if (!this._ani) return;
+        if (this._isAttacking) return;
+
+        this._ani.play('attack');
+        this._isAttacking = true;
+        this._ani.play('attack');
+    }
+
+    playSkill(skillName: string) {
+        if (!this._ani) return;
+        if (this._isAttacking) return;
+
+        this._isAttacking = true;
+        this._ani.play(skillName);
+
+    }
+
+    /** ================= 动画事件 ================= */
+
+    /**普通攻击命中*/
+    onAttackHit() {
         const world = World.inst;
-        const e = world.getEntity(entity);
+        world.getSystem(AttackSystem).hit(this.entity);
+    }
 
-        const attributeComp = new AttributeComp();
+    /**技能命中*/
+    onSkillHit(skillName: string) {
+        const world = World.inst;
+        world.getSystem(AttackSystem).hit(this.entity, skillName);
+    }
 
-        //把属性值映射到属性组件
-        attributeComp.hp = this.hp;
-        attributeComp.maxHp = this.hpMax;
-        attributeComp.attack = this.attack;
-        attributeComp.defense = this.defense;
-        attributeComp.magicAttack = this.magicAttack;
-        attributeComp.magicDefense = this.magicDefense;
-        attributeComp.speed = this.speed;
-        attributeComp.attackRange = this.attackRange;
-        attributeComp.attackInterval = this.attackInterval;
-        attributeComp.skillIds = this.skills;
+    /** ================= 动画结束 ================= */
 
-        //添加属性组件到实体
-        world.addComponent(entity, attributeComp);
+    //DOTO cocos动画最后一帧添加事件:onAttackEnd
+    onAttackEnd() {
+        const world = World.inst
+        const state = world.getComponent(this.entity, StateComp)
+
+        state.changeState(EntityState.Idle)
     }
 }

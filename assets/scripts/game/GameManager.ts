@@ -34,6 +34,8 @@ export class GameManager extends Component {
         World.inst.addSystem(new PathFollowSystem());
         World.inst.addSystem(new AnimationSystem());
         // World.inst.addSystem(new AttackSystem());
+        // World.inst.addSystem(new SkillSystem());
+        // World.inst.addSystem(new TargetSystem());
     }
 
     update(dt: number) {

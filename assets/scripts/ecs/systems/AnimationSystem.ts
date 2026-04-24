@@ -1,4 +1,5 @@
 import { Animation } from 'cc';
+import { SkillComp } from '../components/SkillComp';
 import { StateComp } from '../components/StateComp';
 import { System } from '../core/System';
 import { EntityState } from '../core/World';
@@ -11,13 +12,17 @@ export class AnimationSystem extends System {
 
         for (const e of entities) {
 
-            const state = this.world.getComponent(e, StateComp);
+            const stateComp = this.world.getComponent(e, StateComp)!;
+
+            // 没变化不处理
+            if (stateComp.state === stateComp.prevState) continue;
+
             const node = this.world.getNode(e);
 
             const anim = node.getComponent(Animation);
             if (!anim) continue;
 
-            switch (state.state) {
+            switch (stateComp.state) {
 
                 case EntityState.Move:
                     this.play(anim, 'run');
@@ -30,12 +35,24 @@ export class AnimationSystem extends System {
                 case EntityState.Attack:
                     this.play(anim, 'attack');
                     break;
+
+                case EntityState.Skill:
+                    const skillComp = this.world.getComponent(e, SkillComp)!
+                    // this.play(anim, skillComp.currentSkill)
+                    break;
             }
+
+            stateComp.prevState = stateComp.state;
         }
     }
 
     private play(anim: Animation, name: string) {
-        if (anim.defaultClip?.name === name) return;
+
+        const state = anim.getState(name);
+        if (!state) {
+            console.warn("动画不存在:", name);
+            return;
+        }
 
         anim.play(name);
     }

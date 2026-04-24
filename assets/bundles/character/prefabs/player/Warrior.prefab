@@ -29,10 +29,13 @@
     "_components": [
       {
         "__id__": 18
+      },
+      {
+        "__id__": 20
       }
     ],
     "_prefab": {
-      "__id__": 20
+      "__id__": 22
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -378,6 +381,33 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "36PA9t3ntAJ6CDlkxVwH+9"
+  },
+  {
+    "__type__": "2d2dfUZb/9Mt7O+wz8M2ylD",
+    "_name": "",
+    "_objFlags": 0,
+    "__editorExtras__": {},
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 21
+    },
+    "hp": 100,
+    "hpMax": 100,
+    "attack": 10,
+    "defense": 10,
+    "magicAttack": 10,
+    "magicDefense": 10,
+    "speed": 100,
+    "attackRange": 100,
+    "attackInterval": 1,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "2c8eJswINEkou0YrXSFGBd"
   },
   {
     "__type__": "cc.PrefabInfo",

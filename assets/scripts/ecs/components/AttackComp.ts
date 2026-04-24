@@ -12,7 +12,7 @@ export class AttackComp {
     attack: number = 0
     range: number = 0
     interval: number = 1
-    type: AttackType = AttackType.PHYSICAL
+    attackType: AttackType = AttackType.PHYSICAL
 
     timer: number = 0
     target: number = -1

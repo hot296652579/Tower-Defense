@@ -1,6 +1,8 @@
 import { AttackComp } from "../components/AttackComp"
 import { AttributeComp } from "../components/AttributeComp"
+import { StateComp } from "../components/StateComp"
 import { System } from "../core/System"
+import { EntityState } from "../core/World"
 import { AttackType } from "../define/AttackType"
 
 export class AttackSystem extends System {
@@ -12,7 +14,7 @@ export class AttackSystem extends System {
         entities.forEach(eid => {
 
             const attackComp = this.world.getComponent(eid, AttackComp)!
-            const attr = this.world.getComponent(eid, AttributeComp)!
+            const stateComp = this.world.getComponent(eid, StateComp)!
 
             if (attackComp.target === -1) return
 
@@ -22,19 +24,13 @@ export class AttackSystem extends System {
 
             attackComp.timer = 0
 
-            const node = this.world.getNode(eid)
-
-            const view = node.getComponent("PlayerView")
-                || node.getComponent("EnemyView")
-
-            // view?.playAttack()
-
+            stateComp.changeState(EntityState.Attack)
         })
 
     }
 
     /** 动画事件触发 */
-    hit(eid: number) {
+    hit(eid: number, skillName?: string) {
 
         const attackComp = this.world.getComponent(eid, AttackComp)!
         if (attackComp.target === -1) return
@@ -47,7 +43,7 @@ export class AttackSystem extends System {
 
         let damage = 0
 
-        if (attackComp.type === AttackType.PHYSICAL) {
+        if (attackComp.attackType === AttackType.PHYSICAL) {
             damage = attackerAttr.attack - targetAttr.defense
         } else {
             damage = attackerAttr.magicAttack - targetAttr.magicDefense
