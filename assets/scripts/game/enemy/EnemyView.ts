@@ -101,6 +101,7 @@ export class EnemyView extends Component {
 
     //DOTO cocos动画最后一帧添加事件:onAttackEnd
     onAttackEnd() {
+        console.log('攻击动画结束!!!');
         const world = World.inst
         const state = world.getComponent(this.entity, StateComp)
 
