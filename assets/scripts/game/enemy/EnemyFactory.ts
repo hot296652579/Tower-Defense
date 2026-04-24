@@ -81,5 +81,6 @@ export class EnemyFactory {
         }
 
         view.init(entity);
+        node["entityId"] = entity;
     }
 }

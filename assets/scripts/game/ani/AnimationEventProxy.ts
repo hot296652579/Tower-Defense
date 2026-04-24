@@ -13,11 +13,7 @@ export class AnimationEventProxy extends Component {
     private _entity = -1;
 
     start() {
-
-        //从父节点拿 entityId
-        const parent = this.node.parent!;
-        this._entity = parent["entityId"];
-
+        this._entity = this.node.parent["entityId"];
     }
 
     /** 普攻命中 */

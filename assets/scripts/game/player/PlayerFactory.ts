@@ -73,5 +73,6 @@ export class PlayerFactory {
         node.setWorldPosition(startPos);
 
         view.init(entity);
+        node["entityId"] = entity;
     }
 }
