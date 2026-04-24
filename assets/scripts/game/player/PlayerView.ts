@@ -99,7 +99,7 @@ export class PlayerView extends Component {
     /**技能命中*/
     onSkillHit(skillName: string) {
         const world = World.inst;
-        world.getSystem(AttackSystem).hit(this.entity, skillName);
+        // world.getSystem(AttackSystem).hit(this.entity, skillName);
     }
 
     /** ================= 动画结束 ================= */

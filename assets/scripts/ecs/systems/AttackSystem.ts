@@ -3,8 +3,12 @@ import { AttributeComp } from "../components/AttributeComp"
 import { StateComp } from "../components/StateComp"
 import { System } from "../core/System"
 import { EntityState } from "../core/World"
-import { AttackType } from "../define/AttackType"
+import { DamageSystem } from "./DamageSystem"
 
+/**
+ * 攻击系统
+ * @description 有目标时，根据攻击间隔攻击目标，只改变状态
+ */
 export class AttackSystem extends System {
 
     update(dt: number) {
@@ -30,30 +34,23 @@ export class AttackSystem extends System {
     }
 
     /** 动画事件触发 */
-    hit(eid: number, skillName?: string) {
+    hit(eid: number) {
 
         const attackComp = this.world.getComponent(eid, AttackComp)!
         if (attackComp.target === -1) return
 
         const attackerAttr = this.world.getComponent(eid, AttributeComp)!
+
         const targetId = attackComp.target
 
-        const targetAttr = this.world.getComponent(targetId, AttributeComp)!
-        const targetNode = this.world.getNode(targetId)
+        const damageSystem = this.world.getSystem(DamageSystem)
 
-        let damage = 0
-
-        if (attackComp.attackType === AttackType.PHYSICAL) {
-            damage = attackerAttr.attack - targetAttr.defense
-        } else {
-            damage = attackerAttr.magicAttack - targetAttr.magicDefense
-        }
-
-        damage = Math.max(1, damage)
-
-        targetAttr.hp -= damage
-
-        targetNode.emit("onHurt")
+        damageSystem.apply({
+            attacker: eid,
+            target: targetId,
+            type: attackComp.attackType,
+            value: attackerAttr.attack
+        })
 
     }
 

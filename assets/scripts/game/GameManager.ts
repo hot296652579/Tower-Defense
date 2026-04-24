@@ -2,8 +2,10 @@ import { _decorator, Component } from 'cc';
 import { World } from '../ecs/core/World';
 
 import { AnimationSystem } from '../ecs/systems/AnimationSystem';
+import { AttackSystem } from '../ecs/systems/AttackSystem';
 import { PathFollowSystem } from '../ecs/systems/PathFollowSystem';
 import { StateSystem } from '../ecs/systems/StateSystem';
+import { TargetSystem } from '../ecs/systems/TargetSystem';
 import { WaveManager } from '../game/wave/WaveManager';
 
 const { ccclass } = _decorator;
@@ -33,9 +35,10 @@ export class GameManager extends Component {
         World.inst.addSystem(new StateSystem());
         World.inst.addSystem(new PathFollowSystem());
         World.inst.addSystem(new AnimationSystem());
-        // World.inst.addSystem(new AttackSystem());
+        World.inst.addSystem(new AttackSystem());
+        World.inst.addSystem(new TargetSystem());
         // World.inst.addSystem(new SkillSystem());
-        // World.inst.addSystem(new TargetSystem());
+
     }
 
     update(dt: number) {
