@@ -68,8 +68,8 @@ export class EnemyFactory {
         World.inst.addComponent(entity, pathComp);
 
         const state = new StateComp();
-        state.changeState(EntityState.Move);
         World.inst.addComponent(entity, state);
+        state.changeState(EntityState.Move);
 
         World.inst.addComponent(entity, new CampComp(CampType.Enemy));
         World.inst.addComponent(entity, new UnitComp(UnitType.Enemy));
