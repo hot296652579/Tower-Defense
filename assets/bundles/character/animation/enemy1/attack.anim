@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.AnimationClip",
-    "_name": "idle",
+    "_name": "attack",
     "_objFlags": 0,
     "__editorExtras__": {
       "embeddedPlayerGroups": []
@@ -9,9 +9,9 @@
     "_native": "",
     "sample": 60,
     "speed": 1,
-    "wrapMode": 2,
+    "wrapMode": 1,
     "enableTrsBlending": false,
-    "_duration": 0.36666666666666664,
+    "_duration": 0.18333333333333332,
     "_hash": 500763545,
     "_tracks": [
       {
@@ -61,46 +61,26 @@
   {
     "__type__": "cc.ObjectCurve",
     "_times": [
-      0,
-      0.05,
-      0.1,
-      0.15,
-      0.2,
-      0.25,
-      0.3,
-      0.35
+      0.016666666666666666,
+      0.06666666666666667,
+      0.11666666666666667,
+      0.16666666666666666
     ],
     "_values": [
       {
-        "__uuid__": "33ca47c3-c709-409e-992d-8969b297468f@f9941",
+        "__uuid__": "ca691dbb-e684-4449-a718-0ddef99d0584@f9941",
         "__expectedType__": "cc.SpriteFrame"
       },
       {
-        "__uuid__": "bd21b671-428b-4944-a7c5-6587616a8072@f9941",
+        "__uuid__": "cd4a20d3-48cf-44fb-a3aa-fad55d7475a0@f9941",
         "__expectedType__": "cc.SpriteFrame"
       },
       {
-        "__uuid__": "56f1afd7-324b-44cb-a0c3-dd66ec81e68e@f9941",
+        "__uuid__": "2e588e01-74a0-4b54-ad71-2b3348e753d4@f9941",
         "__expectedType__": "cc.SpriteFrame"
       },
       {
-        "__uuid__": "dbd00363-315f-47e4-b906-784ae818dce2@f9941",
-        "__expectedType__": "cc.SpriteFrame"
-      },
-      {
-        "__uuid__": "0d8183dd-5cab-4c72-a8a6-78bebb573a3d@f9941",
-        "__expectedType__": "cc.SpriteFrame"
-      },
-      {
-        "__uuid__": "1357bea6-ab5a-4c1f-9e70-8585968d70ab@f9941",
-        "__expectedType__": "cc.SpriteFrame"
-      },
-      {
-        "__uuid__": "5271de46-4882-4b05-93b6-d7fd8a6423d6@f9941",
-        "__expectedType__": "cc.SpriteFrame"
-      },
-      {
-        "__uuid__": "14481c22-bb9e-41e0-800f-fa9995813971@f9941",
+        "__uuid__": "2692894c-c9ae-4cf0-83fe-fd6474784dd3@f9941",
         "__expectedType__": "cc.SpriteFrame"
       }
     ]

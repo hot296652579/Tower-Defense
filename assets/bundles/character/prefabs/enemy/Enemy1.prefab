@@ -204,9 +204,25 @@
     "__prefab": {
       "__id__": 8
     },
-    "playOnLoad": false,
-    "_clips": [],
-    "_defaultClip": null,
+    "playOnLoad": true,
+    "_clips": [
+      {
+        "__uuid__": "e9d5bed7-70cc-49ae-a179-73801c5043ff",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "951cad7b-6983-420d-82e8-3d70dc0a8757",
+        "__expectedType__": "cc.AnimationClip"
+      },
+      {
+        "__uuid__": "c2ee2935-ffeb-4852-8d2b-cf4d95fcfeb8",
+        "__expectedType__": "cc.AnimationClip"
+      }
+    ],
+    "_defaultClip": {
+      "__uuid__": "e9d5bed7-70cc-49ae-a179-73801c5043ff",
+      "__expectedType__": "cc.AnimationClip"
+    },
     "_id": ""
   },
   {
