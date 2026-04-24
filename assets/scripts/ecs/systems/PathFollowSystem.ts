@@ -6,6 +6,8 @@
  * @FilePath: /Tower-Defense/assets/scripts/ecs/systems/PathFollowSystem.ts
  * @Description: 路径跟随系统
  */
+import { AttackComp } from '../components/AttackComp';
+import { AttributeComp } from '../components/AttributeComp';
 import { MoveComp } from '../components/MoveComp';
 import { PathComp } from '../components/PathComp';
 import { StateComp } from '../components/StateComp';
@@ -16,7 +18,7 @@ export class PathFollowSystem extends System {
 
     update(dt: number) {
 
-        const entities = this.world.getEntitiesWith(PathComp, MoveComp, StateComp);
+        const entities = this.world.getEntitiesWith(AttackComp, AttributeComp)
         // console.log('entities count:', entities.length);
         for (const e of entities) {
             const state = this.world.getComponent(e, StateComp);

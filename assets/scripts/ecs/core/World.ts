@@ -75,6 +75,11 @@ export class World {
         return result;
     }
 
+    /** 获取系统 */
+    getSystem<T extends System>(type: Constructor<T>): T | undefined {
+        return this.systems.find(sys => sys.constructor === type) as T | undefined;
+    }
+
     /** 绑定Node */
     bindNode(entity: number, node: Node): void {
         this.nodes.set(entity, node);
@@ -82,6 +87,11 @@ export class World {
 
     getNode(entity: number): Node {
         return this.nodes.get(entity)!;
+    }
+
+    /** 获取实体 */
+    getEntity(entity: number): number {
+        return entity;
     }
 
     /** 添加系统 */

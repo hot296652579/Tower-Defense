@@ -1,3 +1,3 @@
 export class TargetComp {
-    target: number | null = null;
+    target: number = -1;
 }

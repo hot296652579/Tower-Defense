@@ -1,6 +1,7 @@
 import { instantiate, Prefab, Vec3 } from 'cc';
 import { AssetManagerEx } from '../../core/AssetManagerEx';
 import { GameRoot } from '../../core/GameRoot';
+import { AttackComp } from '../../ecs/components/AttackComp';
 import { AttributeComp } from '../../ecs/components/AttributeComp';
 import { CampComp, CampType } from '../../ecs/components/CampComp';
 import { MoveComp } from '../../ecs/components/MoveComp';
@@ -27,8 +28,9 @@ export class PlayerFactory {
         World.inst.bindNode(entity, node);
 
         //所有组件统一在这里加
-        World.inst.addComponent(entity, new AttributeComp(100, 10));
+        World.inst.addComponent(entity, new AttributeComp());
         World.inst.addComponent(entity, new MoveComp(100));
+        World.inst.addComponent(entity, new AttackComp());
 
         const state = new StateComp();
         state.changeState(EntityState.Idle);

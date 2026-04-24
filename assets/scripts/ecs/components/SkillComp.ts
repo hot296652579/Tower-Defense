@@ -1,10 +1,8 @@
+import { SkillData } from "../../game/skill/SkillData"
+
 export class SkillComp {
 
-    skills: string[] = [];
+    skills: Map<string, SkillData> = new Map()
+    cooldown: Map<string, number> = new Map()
 
-    cd: number = 0;
-
-    constructor(skills: string[]) {
-        this.skills = skills;
-    }
 }
