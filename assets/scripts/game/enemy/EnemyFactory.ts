@@ -13,6 +13,7 @@ import { EntityState, World } from '../../ecs/core/World';
 import { UnitType } from '../../ecs/define/UnitType';
 import { PathData } from '../map/PathData';
 import { EnemyView } from './EnemyView';
+import { BaseView } from '../player/BaseView';
 
 export class EnemyFactory {
 
@@ -30,7 +31,7 @@ export class EnemyFactory {
         const entity = World.inst.createEntity();
         World.inst.bindNode(entity, node);
 
-        const view = node.getComponent(EnemyView)!;
+        const view = node.getComponent(BaseView)!;
 
         //所有组件统一在这里加
         World.inst.addComponent(entity, new MoveComp(100));

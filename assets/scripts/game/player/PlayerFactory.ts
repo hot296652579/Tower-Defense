@@ -10,7 +10,7 @@ import { StateComp } from '../../ecs/components/StateComp';
 import { UnitComp } from '../../ecs/components/UnitComp';
 import { EntityState, World } from '../../ecs/core/World';
 import { UnitType } from '../../ecs/define/UnitType';
-import { PlayerView } from './PlayerView';
+import { BaseView } from './BaseView';
 
 export class PlayerFactory {
 
@@ -28,7 +28,7 @@ export class PlayerFactory {
         const entity = World.inst.createEntity();
         World.inst.bindNode(entity, node);
 
-        const view = node.getComponent(PlayerView)!;
+        const view = node.getComponent(BaseView)!;
 
         //所有组件统一在这里加
         World.inst.addComponent(entity, new MoveComp(100));

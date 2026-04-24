@@ -35,14 +35,6 @@ export class SkillSystem extends System {
         if (cd > 0) return
 
         comp.cooldown.set(skillName, skill.interval)
-
-        const node = this.world.getNode(eid)
-
-        const view = node.getComponent("PlayerView")
-            || node.getComponent("EnemyView")
-
-        // view?.playSkill(skillName)
-
     }
 
     /** 动画事件 */

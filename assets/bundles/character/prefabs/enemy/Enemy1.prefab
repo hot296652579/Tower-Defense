@@ -324,7 +324,7 @@
     "propertyPath": [
       "_name"
     ],
-    "value": "progress"
+    "value": "hpProgress"
   },
   {
     "__type__": "cc.TargetInfo",
@@ -386,7 +386,7 @@
     "propertyPath": [
       "_active"
     ],
-    "value": false
+    "value": true
   },
   {
     "__type__": "cc.UITransform",
@@ -417,7 +417,7 @@
     "fileId": "36PA9t3ntAJ6CDlkxVwH+9"
   },
   {
-    "__type__": "5adabvpc6BGIJPgPo4yha6T",
+    "__type__": "10737olS6BCkb5b5hIQ2dzx",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -437,11 +437,12 @@
     "speed": 100,
     "attackRange": 100,
     "attackInterval": 1,
+    "skills": [],
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "946DrmEWRPhJ56zPxhJ2st"
+    "fileId": "dbYKVXTyhNjqt55zeXLquw"
   },
   {
     "__type__": "cc.PrefabInfo",
