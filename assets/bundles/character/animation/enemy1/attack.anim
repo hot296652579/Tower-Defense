@@ -11,7 +11,7 @@
     "speed": 1,
     "wrapMode": 1,
     "enableTrsBlending": false,
-    "_duration": 0.23333333333333334,
+    "_duration": 0.5,
     "_hash": 500763545,
     "_tracks": [
       {
@@ -21,12 +21,22 @@
     "_exoticAnimation": null,
     "_events": [
       {
-        "frame": 0.21666666666666667,
+        "frame": 0.25,
         "func": "",
         "params": []
       },
       {
-        "frame": 0.21666666666666667,
+        "frame": 0.25,
+        "func": "onAttackHit",
+        "params": []
+      },
+      {
+        "frame": 0.5,
+        "func": "",
+        "params": []
+      },
+      {
+        "frame": 0.5,
         "func": "onAttackEnd",
         "params": []
       }
@@ -73,10 +83,10 @@
     "__type__": "cc.ObjectCurve",
     "_times": [
       0.016666666666666666,
-      0.06666666666666667,
-      0.11666666666666667,
-      0.16666666666666666,
-      0.21666666666666667
+      0.13333333333333333,
+      0.25,
+      0.36666666666666664,
+      0.48333333333333334
     ],
     "_values": [
       {

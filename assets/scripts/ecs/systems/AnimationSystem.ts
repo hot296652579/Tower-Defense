@@ -16,7 +16,7 @@ export class AnimationSystem extends System {
 
             // 没变化不处理
             if (stateComp.state === stateComp.prevState) continue;
-            console.log('状态变化 当前状态:', stateComp.state, '上一个状态:', stateComp.prevState);
+            // console.log('状态变化 当前状态:', stateComp.state, '上一个状态:', stateComp.prevState);
             const node = this.world.getNode(e);
 
             const anim = node.getChildByName('ani').getComponent(Animation);
@@ -39,6 +39,9 @@ export class AnimationSystem extends System {
                 case EntityState.Skill:
                     const skillComp = this.world.getComponent(e, SkillComp)!
                     // this.play(anim, skillComp.currentSkill)
+                    break;
+
+                case EntityState.Dead:
                     break;
             }
 

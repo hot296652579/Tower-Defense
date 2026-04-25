@@ -1,4 +1,4 @@
-import { _decorator, Component, Animation, ProgressBar } from 'cc';
+import { _decorator, Component, Animation, ProgressBar, UIOpacity, Vec3, tween, Tween } from 'cc';
 import { World } from '../../ecs/core/World';
 import { AttributeComp } from '../../ecs/components/AttributeComp';
 import { SkillData } from '../skill/SkillData';
@@ -34,7 +34,12 @@ export class BaseView extends Component {
 
     hpBar: ProgressBar | null = null;
 
+    private _isDead = false;
+
     onLoad() {
+
+        this.node.on('onHurt',this.onHurt,this);
+        this.node.on('onDead',this.onDead,this);
 
         this._ani = this.node
             .getChildByName("ani")
@@ -67,6 +72,38 @@ export class BaseView extends Component {
             }
         }
 
+    }
+
+    onDead() {
+        if (this._isDead) return;
+        this._isDead = true;
+        this.enabled = false;
+    
+        Tween.stopAllByTarget(this.node);
+
+        let opacity = this.node.getComponent(UIOpacity);
+        if (!opacity) {
+            opacity = this.node.addComponent(UIOpacity);
+        }
+
+        const startPos = this.node.position.clone();
+        const endPos = startPos.clone().add(new Vec3(0, -50, 0)); 
+
+        tween(this.node)
+            .parallel(
+                // 下沉
+                tween().to(0.5, {
+                    position: endPos
+                }),
+                // 淡出
+                tween(opacity).to(0.5, {
+                    opacity: 0
+                })
+            )
+            .call(() => {
+                World.inst.removeEntity(this.entity);
+            })
+            .start();
     }
 
 }

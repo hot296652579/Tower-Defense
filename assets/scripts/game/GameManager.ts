@@ -7,6 +7,7 @@ import { PathFollowSystem } from '../ecs/systems/PathFollowSystem';
 import { StateSystem } from '../ecs/systems/StateSystem';
 import { TargetSystem } from '../ecs/systems/TargetSystem';
 import { WaveManager } from '../game/wave/WaveManager';
+import { DamageSystem } from '../ecs/systems/DamageSystem';
 
 const { ccclass } = _decorator;
 
@@ -37,6 +38,7 @@ export class GameManager extends Component {
         World.inst.addSystem(new AnimationSystem());
         World.inst.addSystem(new AttackSystem());
         World.inst.addSystem(new TargetSystem());
+        World.inst.addSystem(new DamageSystem());
         // World.inst.addSystem(new SkillSystem());
 
     }
