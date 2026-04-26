@@ -34,6 +34,9 @@ export class SkillSystem extends System {
         const cd = comp.cooldown.get(skillName)!
         if (cd > 0) return
 
+        comp.isCasting = true
+        comp.currentSkill = skillName
+
         comp.cooldown.set(skillName, skill.interval)
     }
 

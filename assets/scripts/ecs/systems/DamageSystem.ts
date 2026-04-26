@@ -36,12 +36,7 @@ export class DamageSystem extends System {
         node.emit("onHurt", damage)
 
         if (targetAttr.hp <= 0) {
-
             targetAttr.hp = 0
-
-            const state = this.world.getComponent(data.target, StateComp)
-            state?.changeState(EntityState.Dead)
-
             node.emit("onDead")
         }
 

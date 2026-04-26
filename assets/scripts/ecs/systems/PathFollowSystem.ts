@@ -8,6 +8,7 @@
  */
 import { AttackComp } from '../components/AttackComp';
 import { AttributeComp } from '../components/AttributeComp';
+import { CampComp, CampType } from '../components/CampComp';
 import { MoveComp } from '../components/MoveComp';
 import { PathComp } from '../components/PathComp';
 import { StateComp } from '../components/StateComp';
@@ -22,6 +23,7 @@ export class PathFollowSystem extends System {
         // console.log('entities count:', entities.length);
         for (const e of entities) {
             const state = this.world.getComponent(e, StateComp);
+            const camp = this.world.getComponent(e,CampComp)
             if (state.state !== EntityState.Move) continue;
 
             const pathComp = this.world.getComponent(e, PathComp);
@@ -31,6 +33,8 @@ export class PathFollowSystem extends System {
             // console.log("=== 怪物状态：", state.state);
             // console.log("=== 怪物速度：", move.speed);
             // console.log("=== 当前路径点 ID：", pathComp.currentId);
+            if(!pathComp)
+                continue
 
             const currentNode = pathComp.path.getNode(pathComp.currentId);
             if (!currentNode) {

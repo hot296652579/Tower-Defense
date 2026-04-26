@@ -3,6 +3,8 @@ import { StateComp } from '../../ecs/components/StateComp';
 import { EntityState, World } from '../../ecs/core/World';
 import { AttackSystem } from '../../ecs/systems/AttackSystem';
 import { SkillSystem } from '../../ecs/systems/SkillSystem';
+import { AttackComp } from '../../ecs/components/AttackComp';
+import { SkillComp } from '../../ecs/components/SkillComp';
 
 const { ccclass } = _decorator;
 
@@ -25,9 +27,11 @@ export class AnimationEventProxy extends Component {
 
     /** 普攻结束 */
     onAttackEnd() {
+        const attack = World.inst.getComponent(this._entity, AttackComp)
 
-        const state = World.inst.getComponent(this._entity, StateComp)!;
-        state.changeState(EntityState.Idle);
+        if (attack) {
+            attack.timer = 0 //重置CD
+        }
 
     }
 
@@ -40,10 +44,11 @@ export class AnimationEventProxy extends Component {
 
     /** 技能结束 */
     onSkillEnd() {
+        const skill = World.inst.getComponent(this._entity, SkillComp)
 
-        const state = World.inst.getComponent(this._entity, StateComp)!;
-        state.changeState(EntityState.Idle);
-
+        if (skill) {
+            skill.isCasting = false
+        }
     }
 
 }

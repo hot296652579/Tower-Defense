@@ -24,11 +24,11 @@ export class AttackSystem extends System {
 
             attackComp.timer += dt
 
-            if (attackComp.timer < attackComp.interval) return
+            // if (attackComp.timer < attackComp.interval) return
 
-            attackComp.timer = 0
+            // attackComp.timer = 0
 
-            stateComp.changeState(EntityState.Attack)
+            // stateComp.changeState(EntityState.Attack)
         })
 
     }
