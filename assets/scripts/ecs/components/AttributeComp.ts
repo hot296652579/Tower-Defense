@@ -4,6 +4,7 @@ import { SkillData } from "../../game/skill/SkillData";
  * 属性组件
  */
 export class AttributeComp {
+    level: number = 1;
 
     hp: number;
     maxHp: number;
@@ -15,7 +16,7 @@ export class AttributeComp {
 
     speed: number = 0; // 移动速度
 
-    attackInterval: number = 1; // 攻速
+    attackInterval: number = 1; // 攻击间隔
 
     attackRange: number = 0;
 

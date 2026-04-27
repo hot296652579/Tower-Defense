@@ -9,10 +9,15 @@
 import { instantiate, Prefab, UITransform } from "cc";
 import { AssetManagerEx } from "../../core/AssetManagerEx";
 import { GameRoot } from "../../core/GameRoot";
+import { AttributeComp } from "../../ecs/components/AttributeComp";
 import { BehaviorComp } from "../../ecs/components/BehaviorComp";
 import { StateComp } from "../../ecs/components/StateComp";
+import { ArrowTowerComp } from "../../ecs/components/Tower/ArrowTowerComp";
+import { BarrackComp } from "../../ecs/components/Tower/BarrackTowerComp";
+import { TowerComp } from "../../ecs/components/Tower/TowerComp";
 import { World } from "../../ecs/core/World";
-import { TowerManager } from "../../mgr/TowerManager";
+import { TowerType } from "../../ecs/define/TowerType";
+import { TowerManager } from "./TowerManager";
 import { TowerView } from "./TowerView";
 import { TownerBuildPoint } from "./TownerBuildPoint";
 
@@ -20,14 +25,20 @@ export class TowerFactory {
 
     static async create(point: TownerBuildPoint) {
 
+        const type = TowerType.Barrack;
+
+        let prefabName = type === TowerType.Barrack ? 'prefabs/TowerBarrack' : 'prefabs/TowerArrow';
+
         const prefab = await AssetManagerEx.inst.load<Prefab>(
             'tower',
-            'prefabs/TowerBlue',
+            prefabName,
             Prefab
         );
 
         const node = instantiate(prefab);
         GameRoot.inst.TowerRoot.addChild(node);
+
+        const view = node.getComponent(TowerView)!;
 
         // ECS
         const entity = World.inst.createEntity();
@@ -35,13 +46,35 @@ export class TowerFactory {
         World.inst.addComponent(entity, new StateComp());
         World.inst.addComponent(entity, new BehaviorComp());
 
+        // 塔组件映射
+        let towerComp = new TowerComp();
+        towerComp.type = type;
+        World.inst.addComponent(entity, towerComp);
+
+        //属性映射
+        let attr = new AttributeComp();
+        attr.attack = view.attack;
+        attr.magicAttack = view.magicAttack;
+        attr.attackRange = view.attackRange;
+        attr.attackInterval = view.attackInterval;
+        World.inst.addComponent(entity, attr);
+
+        this.createComponentByType(entity, type);
+
         // 设置位置
         node.setWorldPosition(point.pos.x, point.pos.y + node.getComponent(UITransform).height / 4, point.pos.z);
 
         // 标记占用
         TowerManager.inst.occupy(point);
-
-        const view = node.getComponent(TowerView)!;
         view.init(entity);
+    }
+
+    //根据类型添加不同组件
+    static createComponentByType(entity: number, type: TowerType) {
+        if (type === TowerType.Barrack) {
+            World.inst.addComponent(entity, new BarrackComp());
+        } else {
+            World.inst.addComponent(entity, new ArrowTowerComp());
+        }
     }
 }

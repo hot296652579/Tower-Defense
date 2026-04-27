@@ -11,7 +11,7 @@ import { GameRoot } from '../../core/GameRoot';
 import { MapManager } from '../../game/map/MapManager';
 import { PlayerFactory } from '../../game/player/PlayerFactory';
 import { TowerFactory } from '../../game/tower/TowerFactory';
-import { TowerManager } from '../../mgr/TowerManager';
+import { TowerManager } from '../../game/tower/TowerManager';
 import { UnitType } from '../define/UnitType';
 
 const { ccclass } = _decorator;

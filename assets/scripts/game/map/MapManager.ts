@@ -1,5 +1,5 @@
 import { Mat4, TiledMap, Vec3 } from 'cc';
-import { TowerManager } from '../../mgr/TowerManager';
+import { TowerManager } from '../tower/TowerManager';
 import { PathData } from './PathData';
 import { PathParser } from './PathParser';
 import { RoadPolygonParser } from './RoadAreaParser';

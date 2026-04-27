@@ -3,12 +3,14 @@ import { World } from '../ecs/core/World';
 
 import { AnimationSystem } from '../ecs/systems/AnimationSystem';
 import { AttackSystem } from '../ecs/systems/AttackSystem';
+import { DamageSystem } from '../ecs/systems/DamageSystem';
+import { DecisionSystem } from '../ecs/systems/DecisionSystem';
 import { PathFollowSystem } from '../ecs/systems/PathFollowSystem';
 import { StateSystem } from '../ecs/systems/StateSystem';
 import { TargetSystem } from '../ecs/systems/TargetSystem';
+import { BarrackSystem } from '../ecs/systems/Tower/BarrackSystem';
+import { TowerAttackSystem } from '../ecs/systems/Tower/TowerAttackSystem';
 import { WaveManager } from '../game/wave/WaveManager';
-import { DamageSystem } from '../ecs/systems/DamageSystem';
-import { DecisionSystem } from '../ecs/systems/DecisionSystem';
 
 const { ccclass } = _decorator;
 
@@ -41,8 +43,12 @@ export class GameManager extends Component {
         World.inst.addSystem(new TargetSystem());
         World.inst.addSystem(new DamageSystem());
         World.inst.addSystem(new DecisionSystem());
+
         // World.inst.addSystem(new SkillSystem());
 
+        // 塔防系统
+        World.inst.addSystem(new TowerAttackSystem());
+        World.inst.addSystem(new BarrackSystem());
     }
 
     update(dt: number) {

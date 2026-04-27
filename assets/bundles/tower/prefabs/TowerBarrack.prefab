@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "TowerBlue",
+    "_name": "TowerBarrack",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "TowerBlue",
+    "_name": "TowerBarrack",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -127,8 +127,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 120,
-      "height": 184
+      "width": 184,
+      "height": 187
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -164,7 +164,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "d4bacca6-4c63-4aa6-abd2-6463796d9dbc@f9941",
+      "__uuid__": "542a3cf7-f501-4dee-bac1-640892f31ab8@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -239,10 +239,11 @@
     "__prefab": {
       "__id__": 11
     },
-    "attack": 10,
-    "magicAttack": 10,
-    "attackRange": 100,
-    "skills": [],
+    "attack": 0,
+    "magicAttack": 0,
+    "attackRange": 0,
+    "attackInterval": 0,
+    "towerType": 0,
     "_id": ""
   },
   {
