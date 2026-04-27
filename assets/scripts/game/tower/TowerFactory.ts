@@ -9,6 +9,7 @@
 import { instantiate, Prefab, UITransform } from "cc";
 import { AssetManagerEx } from "../../core/AssetManagerEx";
 import { GameRoot } from "../../core/GameRoot";
+import { BehaviorComp } from "../../ecs/components/BehaviorComp";
 import { StateComp } from "../../ecs/components/StateComp";
 import { World } from "../../ecs/core/World";
 import { TowerManager } from "../../mgr/TowerManager";
@@ -32,6 +33,7 @@ export class TowerFactory {
         const entity = World.inst.createEntity();
         World.inst.bindNode(entity, node);
         World.inst.addComponent(entity, new StateComp());
+        World.inst.addComponent(entity, new BehaviorComp());
 
         // 设置位置
         node.setWorldPosition(point.pos.x, point.pos.y + node.getComponent(UITransform).height / 4, point.pos.z);
