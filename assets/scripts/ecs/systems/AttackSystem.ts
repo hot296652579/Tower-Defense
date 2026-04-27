@@ -18,17 +18,18 @@ export class AttackSystem extends System {
         entities.forEach(eid => {
 
             const attackComp = this.world.getComponent(eid, AttackComp)!
-            const stateComp = this.world.getComponent(eid, StateComp)!
 
             if (attackComp.target === -1) return
 
+            const targetState = this.world.getComponent(attackComp.target, StateComp)
+
+            if (!targetState || targetState.state === EntityState.Dead) {
+                attackComp.target = -1
+                attackComp.lockTarget = -1
+                return
+            }
+
             attackComp.timer += dt
-
-            // if (attackComp.timer < attackComp.interval) return
-
-            // attackComp.timer = 0
-
-            // stateComp.changeState(EntityState.Attack)
         })
 
     }
@@ -37,11 +38,14 @@ export class AttackSystem extends System {
     hit(eid: number) {
 
         const attackComp = this.world.getComponent(eid, AttackComp)!
-        if (attackComp.target === -1) return
-
         const attackerAttr = this.world.getComponent(eid, AttributeComp)!
 
-        const targetId = attackComp.target
+        if (attackComp.target === -1) return
+
+        const targetId = attackComp.lockTarget
+
+        const targetState = this.world.getComponent(targetId, StateComp)!
+        if (!targetState || targetState.state === EntityState.Dead) return
 
         const damageSystem = this.world.getSystem(DamageSystem)
 

@@ -17,4 +17,5 @@ export class AttackComp {
     timer: number = 0
     target: number = -1
 
+    lockTarget: number = -1
 }

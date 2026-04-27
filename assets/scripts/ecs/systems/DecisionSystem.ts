@@ -47,9 +47,9 @@ export class DecisionSystem extends System {
 
                 // 目标还活着
                 if (targetState && targetState.state !== EntityState.Dead) {
-
                     //攻击CD是否好了（是否准备出手）
                     if (attack.timer >= attack.interval) {
+                        attack.lockTarget = attack.target
                         return EntityState.Attack
                     }
 
@@ -59,6 +59,7 @@ export class DecisionSystem extends System {
 
             //目标不存在 / 已死亡 → 清空
             attack.target = -1
+            attack.lockTarget = -1
         }
 
         const behaviorComp = this.world.getComponent(eid, BehaviorComp)!

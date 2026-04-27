@@ -1,10 +1,9 @@
 import { _decorator, Component } from 'cc';
-import { StateComp } from '../../ecs/components/StateComp';
-import { EntityState, World } from '../../ecs/core/World';
-import { AttackSystem } from '../../ecs/systems/AttackSystem';
-import { SkillSystem } from '../../ecs/systems/SkillSystem';
 import { AttackComp } from '../../ecs/components/AttackComp';
 import { SkillComp } from '../../ecs/components/SkillComp';
+import { World } from '../../ecs/core/World';
+import { AttackSystem } from '../../ecs/systems/AttackSystem';
+import { SkillSystem } from '../../ecs/systems/SkillSystem';
 
 const { ccclass } = _decorator;
 
@@ -29,9 +28,10 @@ export class AnimationEventProxy extends Component {
     onAttackEnd() {
         const attack = World.inst.getComponent(this._entity, AttackComp)
 
-        if (attack) {
-            attack.timer = 0 //重置CD
-        }
+        if (!attack) return
+
+        attack.timer = 0 //重置CD
+        attack.lockTarget = -1 //重置目标锁
 
     }
 
