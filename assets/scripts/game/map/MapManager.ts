@@ -47,6 +47,11 @@ export class MapManager {
         return this.tiledMap.node;
     }
 
+    /** 获取所有路径*/
+    getPaths() {
+        return this.paths;
+    }
+
     /** 获取随机路径*/
     getRandomPath(): PathData {
         const arr = Array.from(this.paths.values());

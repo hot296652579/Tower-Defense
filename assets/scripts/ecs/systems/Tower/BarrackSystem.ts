@@ -1,9 +1,14 @@
+import { UITransform, Vec3 } from "cc";
+import { GameRoot } from "../../../core/GameRoot";
+import { MapManager } from "../../../game/map/MapManager";
+import { PlayerFactory } from "../../../game/player/PlayerFactory";
 import { AttributeComp } from "../../components/AttributeComp";
 import { BarrackComp } from "../../components/Tower/BarrackTowerComp";
 import { TowerComp } from "../../components/Tower/TowerComp";
 import { System } from "../../core/System";
+import { UnitType } from "../../define/UnitType";
 
-
+/**兵营塔系统*/
 export class BarrackSystem extends System {
 
     update(dt: number) {
@@ -32,11 +37,55 @@ export class BarrackSystem extends System {
 
     private spawnSoldier(eid: number) {
 
-        // ⭐ 这里先留接口
-        console.log("生成士兵 from tower:", eid);
+        const node = this.world.getNode(eid);
+        if (!node || !node.isValid) return;
 
-        // TODO:
-        // 找最近路径点
-        // 创建士兵（用你已有 Player/EnemyFactory 或新 SoldierFactory）
+        const mapRoot = GameRoot.inst.MapRoot;
+        const mapTrans = mapRoot.getComponent(UITransform)!;
+
+        //把塔的 world 坐标 → 转成 MapRoot local
+        const towerLocalPos = new Vec3();
+        mapTrans.convertToNodeSpaceAR(node.worldPosition, towerLocalPos);
+
+        let nearestPos: Vec3 | null = null;
+        let minDist = Infinity;
+
+        const paths = MapManager.inst.getPaths();
+
+        paths.forEach(path => {
+
+            path.nodes.forEach(p => {
+                const dx = towerLocalPos.x - p.pos.x;
+                const dy = towerLocalPos.y - p.pos.y;
+                const dist = dx * dx + dy * dy;
+
+                if (dist < minDist) {
+                    minDist = dist;
+                    nearestPos = p.pos;
+                }
+
+            });
+
+        });
+
+        if (!nearestPos) {
+            console.warn("❌ 未找到路径点");
+            return;
+        }
+
+        const angle = Math.random() * Math.PI * 2;
+        const radius = Math.random() * 60;
+
+        const spawnPos = new Vec3(
+            nearestPos.x + Math.cos(angle) * radius,
+            nearestPos.y + Math.sin(angle) * radius,
+            nearestPos.z
+        );
+
+        PlayerFactory.create(
+            'Warrior',
+            spawnPos,
+            UnitType.Warrior
+        );
     }
 }
