@@ -1,7 +1,6 @@
-import { _decorator, Component, Animation, ProgressBar, UIOpacity, Vec3, tween, Tween } from 'cc';
-import { World } from '../../ecs/core/World';
+import { _decorator, Animation, Component, ProgressBar, tween, Tween, UIOpacity, Vec3 } from 'cc';
 import { AttributeComp } from '../../ecs/components/AttributeComp';
-import { SkillData } from '../skill/SkillData';
+import { World } from '../../ecs/core/World';
 
 const { ccclass, property } = _decorator;
 
@@ -12,24 +11,32 @@ export class BaseView extends Component {
 
     /** ===== 属性配置（给 ECS 用） ===== */
 
-    @property hp = 100;
-    @property hpMax = 100;
+    @property({ displayName: '生命值' })
+    hp = 100;
 
-    @property attack = 10;
-    @property defense = 10;
+    @property({ displayName: '最大生命值' })
+    hpMax = 100;
 
-    @property magicAttack = 10;
-    @property magicDefense = 10;
+    @property({ displayName: '物理攻击' })
+    attack = 10;
+    @property({ displayName: '物理防御' })
+    defense = 10;
 
-    @property speed = 100;
+    @property({ displayName: '魔法攻击' })
+    magicAttack = 10;
+    @property({ displayName: '魔法防御' })
+    magicDefense = 10;
 
-    @property attackRange = 100;
-    @property attackInterval = 1;
+    @property({ displayName: '移动速度' })
+    speed = 100;
 
-    @property skills: SkillData[] = [];
+    @property({ displayName: '攻击范围' })
+    attackRange = 100;
+
+    @property({ displayName: '攻击间隔' })
+    attackInterval = 1;
 
     /** ===== 组件缓存 ===== */
-
     private _ani: Animation | null = null;
 
     hpBar: ProgressBar | null = null;
@@ -38,8 +45,8 @@ export class BaseView extends Component {
 
     onLoad() {
 
-        this.node.on('onHurt',this.onHurt,this);
-        this.node.on('onDead',this.onDead,this);
+        this.node.on('onHurt', this.onHurt, this);
+        this.node.on('onDead', this.onDead, this);
 
         this._ani = this.node
             .getChildByName("ani")
@@ -78,7 +85,7 @@ export class BaseView extends Component {
         if (this._isDead) return;
         this._isDead = true;
         this.enabled = false;
-    
+
         Tween.stopAllByTarget(this.node);
 
         let opacity = this.node.getComponent(UIOpacity);
@@ -87,7 +94,7 @@ export class BaseView extends Component {
         }
 
         const startPos = this.node.position.clone();
-        const endPos = startPos.clone().add(new Vec3(0, -50, 0)); 
+        const endPos = startPos.clone().add(new Vec3(0, -50, 0));
 
         tween(this.node)
             .parallel(

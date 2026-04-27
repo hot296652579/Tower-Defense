@@ -1,8 +1,9 @@
+import { AttackComp } from "../components/AttackComp"
+import { BehaviorComp, BehaviorType } from "../components/BehaviorComp"
+import { SkillComp } from "../components/SkillComp"
+import { StateComp } from "../components/StateComp"
 import { System } from "../core/System"
 import { EntityState } from "../core/World"
-import { StateComp } from "../components/StateComp"
-import { AttackComp } from "../components/AttackComp"
-import { SkillComp } from "../components/SkillComp"
 
 export class DecisionSystem extends System {
 
@@ -38,7 +39,7 @@ export class DecisionSystem extends System {
 
         //攻击判断
         if (attack) {
-            console.log('有攻击者 目标id:',attack.target);
+            console.log('有攻击者 目标id:', attack.target);
             // 目标存在
             if (attack.target !== -1) {
 
@@ -58,6 +59,12 @@ export class DecisionSystem extends System {
 
             //目标不存在 / 已死亡 → 清空
             attack.target = -1
+        }
+
+        const behaviorComp = this.world.getComponent(eid, BehaviorComp)!
+
+        if (behaviorComp.type === BehaviorType.Passive) {
+            return EntityState.Idle
         }
 
         // 默认行走状态

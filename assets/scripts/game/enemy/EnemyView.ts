@@ -1,43 +1,12 @@
-import { _decorator, Animation, Component, } from 'cc';
-import { StateComp } from '../../ecs/components/StateComp';
-import { EntityState, World } from '../../ecs/core/World';
+import { _decorator } from 'cc';
 import { AttackType } from '../../ecs/define/AttackType';
-import { AttackSystem } from '../../ecs/systems/AttackSystem';
+import { BaseView } from '../player/BaseView';
 import { SkillData } from '../skill/SkillData';
 
 const { ccclass, property } = _decorator;
 
 @ccclass('EnemyView')
-export class EnemyView extends Component {
-
-    @property({ displayName: '生命值' })
-    hp = 100;
-
-    @property({ displayName: '最大生命值' })
-    hpMax = 100;
-
-    @property({ displayName: '物理攻击' })
-    attack = 10;
-    @property({ displayName: '物理防御' })
-    defense = 10;
-
-    @property({ displayName: '魔法攻击' })
-    magicAttack = 10;
-    @property({ displayName: '魔法防御' })
-    magicDefense = 10;
-
-    @property({ displayName: '移动速度' })
-    speed = 100;
-
-    @property({ displayName: '攻击范围' })
-    attackRange = 100;
-
-    @property({ displayName: '攻击间隔' })
-    attackInterval = 1;
-
-    private _isAttacking = false;
-
-    private _ani: Animation = null;
+export class EnemyView extends BaseView {
 
     skills: SkillData[] = [
         {
@@ -58,54 +27,8 @@ export class EnemyView extends Component {
         }
     ];
 
-    entity = -1;
+    protected start(): void {
 
-    start() { }
-
-    init(entity: number) {
-        this.entity = entity;
-    }
-    playAttack() {
-        if (!this._ani) return;
-        if (this._isAttacking) return;
-
-        this._ani.play('attack');
-        this._isAttacking = true;
-        this._ani.play('attack');
-    }
-
-    playSkill(skillName: string) {
-        if (!this._ani) return;
-        if (this._isAttacking) return;
-
-        this._isAttacking = true;
-        this._ani.play(skillName);
-
-    }
-
-    /** ================= 动画事件 ================= */
-
-    /**普通攻击命中*/
-    onAttackHit() {
-        const world = World.inst;
-        world.getSystem(AttackSystem).hit(this.entity);
-    }
-
-    /**技能命中*/
-    onSkillHit(skillName: string) {
-        const world = World.inst;
-        // world.getSystem(AttackSystem).hit(this.entity, skillName);
-    }
-
-    /** ================= 动画结束 ================= */
-
-    //DOTO cocos动画最后一帧添加事件:onAttackEnd
-    onAttackEnd() {
-        console.log('攻击动画结束!!!');
-        const world = World.inst
-        const state = world.getComponent(this.entity, StateComp)
-
-        state.changeState(EntityState.Idle)
     }
 
 }

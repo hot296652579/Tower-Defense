@@ -417,7 +417,7 @@
     "fileId": "36PA9t3ntAJ6CDlkxVwH+9"
   },
   {
-    "__type__": "10737olS6BCkb5b5hIQ2dzx",
+    "__type__": "5adabvpc6BGIJPgPo4yha6T",
     "_name": "",
     "_objFlags": 0,
     "__editorExtras__": {},
@@ -437,12 +437,11 @@
     "speed": 100,
     "attackRange": 100,
     "attackInterval": 1,
-    "skills": [],
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "dbYKVXTyhNjqt55zeXLquw"
+    "fileId": "1bCMABZf1DFZDoMGBOxhwv"
   },
   {
     "__type__": "cc.PrefabInfo",

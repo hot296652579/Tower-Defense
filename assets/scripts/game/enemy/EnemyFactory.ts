@@ -3,17 +3,17 @@ import { AssetManagerEx } from '../../core/AssetManagerEx';
 import { GameRoot } from '../../core/GameRoot';
 import { AttackComp } from '../../ecs/components/AttackComp';
 import { AttributeComp } from '../../ecs/components/AttributeComp';
+import { BehaviorComp, BehaviorType } from '../../ecs/components/BehaviorComp';
 import { CampComp, CampType } from '../../ecs/components/CampComp';
 import { MoveComp } from '../../ecs/components/MoveComp';
 import { PathComp } from '../../ecs/components/PathComp';
 import { SkillComp } from '../../ecs/components/SkillComp';
 import { StateComp } from '../../ecs/components/StateComp';
 import { UnitComp } from '../../ecs/components/UnitComp';
-import { EntityState, World } from '../../ecs/core/World';
+import { World } from '../../ecs/core/World';
 import { UnitType } from '../../ecs/define/UnitType';
 import { PathData } from '../map/PathData';
 import { EnemyView } from './EnemyView';
-import { BaseView } from '../player/BaseView';
 
 export class EnemyFactory {
 
@@ -31,7 +31,7 @@ export class EnemyFactory {
         const entity = World.inst.createEntity();
         World.inst.bindNode(entity, node);
 
-        const view = node.getComponent(BaseView)!;
+        const view = node.getComponent(EnemyView)!;
 
         //所有组件统一在这里加
         World.inst.addComponent(entity, new MoveComp(100));
@@ -70,7 +70,10 @@ export class EnemyFactory {
 
         const state = new StateComp();
         World.inst.addComponent(entity, state);
-        state.changeState(EntityState.Move);
+
+        const behaviorComp = new BehaviorComp()
+        behaviorComp.type = BehaviorType.Aggressive
+        World.inst.addComponent(entity, behaviorComp)
 
         World.inst.addComponent(entity, new CampComp(CampType.Enemy));
         World.inst.addComponent(entity, new UnitComp(UnitType.Enemy));
