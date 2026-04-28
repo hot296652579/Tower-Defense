@@ -20,6 +20,7 @@ export class DecisionSystem extends System {
 
             if (nextState !== stateComp.state) {
                 stateComp.changeState(nextState)
+                // console.log(`[Decision] ${eid} → ${nextState}`)
             }
         }
     }
@@ -47,14 +48,20 @@ export class DecisionSystem extends System {
 
                 // 目标还活着
                 if (targetState && targetState.state !== EntityState.Dead) {
+
                     //攻击CD是否好了（是否准备出手）
                     if (attack.timer >= attack.interval) {
-                        attack.lockTarget = attack.target
+                        if (attack.lockTarget === -1) {
+                            attack.lockTarget = attack.target
 
-                        CombatDebug.attack(eid, "锁定目标", {
-                            target: attack.target,
-                            lockTarget: attack.lockTarget
-                        });
+                            CombatDebug.attack(eid, "🔒 锁定目标", {
+                                target: attack.target,
+                                lockTarget: attack.lockTarget
+                            });
+
+                            // console.log(`[Decision] ${eid} → Attack`)
+                        }
+
                         return EntityState.Attack
                     }
 

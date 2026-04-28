@@ -6,6 +6,9 @@ import { AttackType } from "../define/AttackType"
  * @param range 攻击范围
  * @param interval 攻击间隔
  * @param type 攻击类型
+ * @param timer 攻击CD定时器
+ * @param target 目标实体ID
+ * @param lockTarget 锁定目标实体ID
 */
 export class AttackComp {
 

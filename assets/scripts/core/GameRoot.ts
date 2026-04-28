@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, UITransform } from 'cc';
+import { _decorator, Component, Node } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameRoot')
@@ -23,10 +23,10 @@ export class GameRoot extends Component {
     onLoad() {
         GameRoot.inst = this;
 
-        const mapPriority = this.MapRoot.getComponent(UITransform).priority;
-        const enemyPriority = this.CharacterRoot.getComponent(UITransform).priority;
-        this.MapRoot.getComponent(UITransform).priority = -1;
-        this.CharacterRoot.getComponent(UITransform).priority = mapPriority + 1;
+        // 获取原始层级索引
+        const mapIndex = this.MapRoot.getSiblingIndex();
+        this.MapRoot.setSiblingIndex(0);
+        this.CharacterRoot.setSiblingIndex(mapIndex + 1);
 
         // console.log('MapRoot pos:', this.MapRoot.worldPosition);
         // console.log('CharacterRoot pos:', this.CharacterRoot.worldPosition);

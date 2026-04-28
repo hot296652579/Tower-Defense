@@ -76,6 +76,8 @@ export class AttackSystem extends System {
             value: attackerAttr.attack
         })
 
+        attackComp.timer = 0
+        attackComp.lockTarget = -1
     }
 
 }

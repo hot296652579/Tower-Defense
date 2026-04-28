@@ -1,10 +1,13 @@
 import { Vec3 } from 'cc'
 import { AttackComp } from '../components/AttackComp'
 import { CampComp } from '../components/CampComp'
+import { StateComp } from '../components/StateComp'
 import { System } from '../core/System'
+import { EntityState } from '../core/World'
 
 /**
  * 目标系统   DOTO:后续做四叉树优化⭐⭐⭐⭐⭐
+ * @description 目标系统负责更新攻击目标，包括选择最近目标、检查目标是否还活着等，寻找目标
  */
 export class TargetSystem extends System {
 
@@ -18,6 +21,20 @@ export class TargetSystem extends System {
             const attack = this.world.getComponent(aid, AttackComp)!
             const aCamp = this.world.getComponent(aid, CampComp)!
             const aNode = this.world.getNode(aid)
+
+            //正在攻击 → 不允许换目标
+            if (attack.lockTarget !== -1) {
+                return
+            }
+
+            //已有目标且还活着 → 不换
+            if (attack.target !== -1) {
+                const targetState = this.world.getComponent(attack.target, StateComp)
+
+                if (targetState && targetState.state !== EntityState.Dead) {
+                    return
+                }
+            }
 
             let nearest = -1
             let minDist = Infinity
