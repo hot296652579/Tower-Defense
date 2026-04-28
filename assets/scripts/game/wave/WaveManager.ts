@@ -20,8 +20,8 @@ export class WaveManager {
     init() {
         // DOTO 加载配置文件
         this.waves = [
-            { enemy: 'Enemy1', count: 1, interval: 1 },
-            { enemy: 'Enemy1', count: 2, interval: 0.5 }
+            { enemy: 'Enemy1', count: 2, interval: 1 },
+            { enemy: 'Enemy1', count: 3, interval: 0.5 }
         ];
 
         this.waveIndex = 0;

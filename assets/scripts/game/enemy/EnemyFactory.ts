@@ -78,6 +78,14 @@ export class EnemyFactory {
         World.inst.addComponent(entity, new CampComp(CampType.Enemy));
         World.inst.addComponent(entity, new UnitComp(UnitType.Enemy));
 
+        //随机偏移
+        const move = new MoveComp(view.speed);
+        const angle = Math.random() * Math.PI * 2;
+        const radius = Math.random() * 50; // 控制分散程度
+        move.moveOffset.x = Math.cos(angle) * radius;
+        move.moveOffset.y = Math.sin(angle) * radius;
+        World.inst.addComponent(entity, move);
+
         //设置出生点
         const startNode = path.getNode(path.startId);
         if (startNode) {
