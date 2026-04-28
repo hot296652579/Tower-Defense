@@ -1,3 +1,4 @@
+import { CombatDebug } from "../../game/CombatDebug"
 import { AttackComp } from "../components/AttackComp"
 import { AttributeComp } from "../components/AttributeComp"
 import { StateComp } from "../components/StateComp"
@@ -44,9 +45,28 @@ export class AttackSystem extends System {
 
         const targetId = attackComp.lockTarget
 
-        const targetState = this.world.getComponent(targetId, StateComp)!
-        if (!targetState || targetState.state === EntityState.Dead) return
+        CombatDebug.attack(eid, "命中触发", {
+            target: attackComp.target,
+            lockTarget: attackComp.lockTarget
+        });
 
+        if (targetId === -1) {
+            CombatDebug.attack(eid, "❌ 没有锁定目标");
+            return;
+        }
+
+        const targetState = this.world.getComponent(targetId, StateComp)!
+        if (!targetState || targetState.state === EntityState.Dead) {
+            CombatDebug.attack(eid, "❌ 目标已死亡");
+            return;
+        }
+
+        if (attackComp.timer < attackComp.interval) {
+            CombatDebug.attack(eid, "❌ 非法命中（CD未到）");
+            return;
+        }
+
+        CombatDebug.attack(eid, "✅ 命中成功", targetId);
         const damageSystem = this.world.getSystem(DamageSystem)
 
         damageSystem.apply({

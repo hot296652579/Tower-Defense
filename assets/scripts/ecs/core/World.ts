@@ -27,7 +27,7 @@ export class World {
     private systems: System[] = [];
 
     constructor() {
-        console.log('🌍 World created');
+        // console.log('🌍 World created');
     }
 
     /** 创建实体 */

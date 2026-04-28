@@ -8,6 +8,17 @@ import { TowerComp } from "../../components/Tower/TowerComp";
 import { System } from "../../core/System";
 import { UnitType } from "../../define/UnitType";
 
+const OFFSETS = [
+    new Vec3(0, 0, 0),        // 中
+    new Vec3(60, 0, 0),       // 右
+    new Vec3(-60, 0, 0),      // 左
+    new Vec3(0, 60, 0),       // 上
+    new Vec3(0, -60, 0),      // 下
+    new Vec3(60, 60, 0),      // 右上
+    new Vec3(-60, 60, 0),     // 左上
+    new Vec3(60, -60, 0),     // 右下
+    new Vec3(-60, -60, 0),    // 左下
+]
 /**兵营塔系统*/
 export class BarrackSystem extends System {
 
@@ -29,13 +40,13 @@ export class BarrackSystem extends System {
             const need = barrackComp.maxSoldier - barrackComp.current;
 
             for (let i = 0; i < need; i++) {
-                this.spawnSoldier(eid);
+                this.spawnSoldier(eid, barrackComp.current + i);
                 barrackComp.current++;
             }
         }
     }
 
-    private spawnSoldier(eid: number) {
+    private spawnSoldier(eid: number, index: number) {
 
         const node = this.world.getNode(eid);
         if (!node || !node.isValid) return;
@@ -73,14 +84,18 @@ export class BarrackSystem extends System {
             return;
         }
 
-        const angle = Math.random() * Math.PI * 2;
-        const radius = Math.random() * 60;
+        // 插槽的方式
+        const offset = OFFSETS[index % OFFSETS.length];
+        console.log('offset:', offset);
 
         const spawnPos = new Vec3(
-            nearestPos.x + Math.cos(angle) * radius,
-            nearestPos.y + Math.sin(angle) * radius,
+            nearestPos.x + offset.x,
+            nearestPos.y + offset.y,
             nearestPos.z
         );
+
+        spawnPos.x += (Math.random() - 0.5) * 20;
+        spawnPos.y += (Math.random() - 0.5) * 20;
 
         PlayerFactory.create(
             'Warrior',

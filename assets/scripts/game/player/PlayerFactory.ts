@@ -72,7 +72,7 @@ export class PlayerFactory {
         World.inst.addComponent(entity, new CampComp(CampType.Player));
         World.inst.addComponent(entity, new UnitComp(unitType));
 
-        console.log('startPos:', startPos);
+        // console.log('startPos:', startPos);
         node.setWorldPosition(startPos);
 
         view.init(entity);

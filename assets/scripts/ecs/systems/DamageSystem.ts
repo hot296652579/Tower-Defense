@@ -1,15 +1,19 @@
 
-import { AttributeComp } from "../components/AttributeComp"
-import { StateComp } from "../components/StateComp"
-import { System } from "../core/System"
-import { EntityState } from "../core/World"
+import { CombatDebug } from "../../game/CombatDebug";
+import { AttributeComp } from "../components/AttributeComp";
+import { System } from "../core/System";
 
-import { AttackType } from "../define/AttackType"
-import { DamageData } from "../define/DamageData"
+import { AttackType } from "../define/AttackType";
+import { DamageData } from "../define/DamageData";
 
 export class DamageSystem extends System {
 
     apply(data: DamageData) {
+
+        CombatDebug.attack(data.attacker, "造成伤害", {
+            target: data.target,
+            value: data.value
+        });
 
         const attackerAttr = this.world.getComponent(data.attacker, AttributeComp)!
         const targetAttr = this.world.getComponent(data.target, AttributeComp)!
@@ -39,11 +43,8 @@ export class DamageSystem extends System {
             targetAttr.hp = 0
             node.emit("onDead")
         }
-
     }
 
-    update(dt: number): void {
-
-    }
+    update(dt: number): void { }
 
 }

@@ -28,7 +28,7 @@ export class GameRoot extends Component {
         this.MapRoot.getComponent(UITransform).priority = -1;
         this.CharacterRoot.getComponent(UITransform).priority = mapPriority + 1;
 
-        console.log('MapRoot pos:', this.MapRoot.worldPosition);
-        console.log('CharacterRoot pos:', this.CharacterRoot.worldPosition);
+        // console.log('MapRoot pos:', this.MapRoot.worldPosition);
+        // console.log('CharacterRoot pos:', this.CharacterRoot.worldPosition);
     }
 }
