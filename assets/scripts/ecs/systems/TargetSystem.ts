@@ -22,6 +22,12 @@ export class TargetSystem extends System {
             const aCamp = this.world.getComponent(aid, CampComp)!
             const aNode = this.world.getNode(aid)
 
+            // 更新冷却时间
+            if (attack.searchCooldown > 0) {
+                attack.searchCooldown -= dt
+                return
+            }
+
             //正在攻击 → 不允许换目标
             if (attack.lockTarget !== -1) {
                 return
@@ -48,6 +54,10 @@ export class TargetSystem extends System {
                 // 同阵营不攻击
                 if (tCamp.camp === aCamp.camp) return
 
+                const tState = this.world.getComponent(tid, StateComp)
+                // 已死亡的目标不选择
+                if (tState && tState.state === EntityState.Dead) return
+
                 const tNode = this.world.getNode(tid)
 
                 const dist = Vec3.distance(
@@ -56,10 +66,8 @@ export class TargetSystem extends System {
                 )
 
                 if (dist < attack.range && dist < minDist) {
-
                     minDist = dist
                     nearest = tid
-
                 }
 
             })

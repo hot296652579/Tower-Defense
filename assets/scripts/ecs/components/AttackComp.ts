@@ -9,6 +9,7 @@ import { AttackType } from "../define/AttackType"
  * @param timer 攻击CD定时器
  * @param target 目标实体ID
  * @param lockTarget 锁定目标实体ID
+ * @param searchCooldown 击杀目标后重新寻找目标的冷却时间
 */
 export class AttackComp {
 
@@ -21,4 +22,7 @@ export class AttackComp {
     target: number = -1
 
     lockTarget: number = -1
+
+    searchCooldown: number = 0 // 重新寻找目标的冷却时间
+    searchCooldownDuration: number = 1 // 冷却持续时间
 }

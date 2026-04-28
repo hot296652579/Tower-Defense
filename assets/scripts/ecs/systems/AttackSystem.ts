@@ -27,6 +27,8 @@ export class AttackSystem extends System {
             if (!targetState || targetState.state === EntityState.Dead) {
                 attackComp.target = -1
                 attackComp.lockTarget = -1
+                // 设置重新寻找目标的冷却时间，让怪物继续移动一会再攻击
+                attackComp.searchCooldown = attackComp.searchCooldownDuration
                 return
             }
 
