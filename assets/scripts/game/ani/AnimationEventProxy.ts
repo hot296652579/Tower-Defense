@@ -19,7 +19,7 @@ export class AnimationEventProxy extends Component {
 
     /** 普攻命中 */
     onAttackHit() {
-
+        // console.log('onAttackHit', this._entity);
         World.inst.getSystem(AttackSystem).hit(this._entity);
 
     }

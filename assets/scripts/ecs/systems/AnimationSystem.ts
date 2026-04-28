@@ -1,4 +1,5 @@
 import { Animation } from 'cc';
+import { CampComp } from '../components/CampComp';
 import { SkillComp } from '../components/SkillComp';
 import { StateComp } from '../components/StateComp';
 import { System } from '../core/System';
@@ -8,7 +9,7 @@ export class AnimationSystem extends System {
 
     update(dt: number) {
 
-        const entities = this.world.getEntitiesWith(StateComp);
+        const entities = this.world.getEntitiesWith(StateComp, CampComp);
 
         for (const e of entities) {
 
@@ -18,6 +19,7 @@ export class AnimationSystem extends System {
             if (stateComp.state === stateComp.prevState) continue;
             // console.log('状态变化 当前状态:', stateComp.state, '上一个状态:', stateComp.prevState);
             const node = this.world.getNode(e);
+            // console.log('node:', node);
 
             const anim = node.getChildByName('ani').getComponent(Animation);
             if (!anim) continue;

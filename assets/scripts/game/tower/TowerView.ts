@@ -25,6 +25,9 @@ export class TowerView extends Component {
     @property({ type: Enum(TowerType), displayName: '塔类型' })
     towerType = TowerType.Arrow;
 
+    entity = -1;
+    targetId = -1;
+
     skills: SkillData[] = [
         {
             name: "skill_0",
@@ -43,8 +46,6 @@ export class TowerView extends Component {
             type: AttackType.PHYSICAL
         }
     ];
-
-    entity = -1;
 
     start() {
     }

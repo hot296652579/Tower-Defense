@@ -9,6 +9,7 @@
 import { instantiate, Prefab, UITransform } from "cc";
 import { AssetManagerEx } from "../../core/AssetManagerEx";
 import { GameRoot } from "../../core/GameRoot";
+import { AttackComp } from "../../ecs/components/AttackComp";
 import { AttributeComp } from "../../ecs/components/AttributeComp";
 import { BehaviorComp } from "../../ecs/components/BehaviorComp";
 import { StateComp } from "../../ecs/components/StateComp";
@@ -25,7 +26,7 @@ export class TowerFactory {
 
     static async create(point: TownerBuildPoint) {
 
-        const type = TowerType.Barrack;
+        let type = TowerType.Arrow as TowerType;
 
         let prefabName = type === TowerType.Barrack ? 'prefabs/TowerBarrack' : 'prefabs/TowerArrow';
 
@@ -59,6 +60,11 @@ export class TowerFactory {
         attr.attackInterval = view.attackInterval;
         World.inst.addComponent(entity, attr);
 
+        const attack = new AttackComp()
+        attack.range = view.attackRange
+        attack.interval = view.attackInterval
+        World.inst.addComponent(entity, attack)
+
         this.createComponentByType(entity, type);
 
         // 设置位置
@@ -67,6 +73,7 @@ export class TowerFactory {
         // 标记占用
         TowerManager.inst.occupy(point);
         view.init(entity);
+        node["entityId"] = entity;
     }
 
     //根据类型添加不同组件

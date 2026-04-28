@@ -19,7 +19,18 @@
       }
     ],
     "_exoticAnimation": null,
-    "_events": [],
+    "_events": [
+      {
+        "frame": 0.1,
+        "func": "",
+        "params": []
+      },
+      {
+        "frame": 0.1,
+        "func": "onAttackHit",
+        "params": []
+      }
+    ],
     "_embeddedPlayers": [],
     "_additiveSettings": {
       "__id__": 6
@@ -100,7 +111,7 @@
         "__expectedType__": "cc.SpriteFrame"
       },
       {
-        "__uuid__": "416ccf59-ac07-46b6-8115-3b14da9a4d5c@f9941",
+        "__uuid__": "d2740426-e637-40b5-8469-e4be86293a5e@f9941",
         "__expectedType__": "cc.SpriteFrame"
       }
     ]

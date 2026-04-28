@@ -435,7 +435,7 @@
     "magicAttack": 80,
     "magicDefense": 20,
     "speed": 100,
-    "attackRange": 100,
+    "attackRange": 80,
     "attackInterval": 1,
     "_id": ""
   },
