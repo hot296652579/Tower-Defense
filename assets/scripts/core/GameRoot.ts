@@ -25,8 +25,10 @@ export class GameRoot extends Component {
 
         // 获取原始层级索引
         const mapIndex = this.MapRoot.getSiblingIndex();
+        const towerIndex = this.TowerRoot.getSiblingIndex();
         this.MapRoot.setSiblingIndex(0);
-        this.CharacterRoot.setSiblingIndex(mapIndex + 1);
+        this.TowerRoot.setSiblingIndex(mapIndex + 1);
+        this.CharacterRoot.setSiblingIndex(towerIndex + 1);
 
         // console.log('MapRoot pos:', this.MapRoot.worldPosition);
         // console.log('CharacterRoot pos:', this.CharacterRoot.worldPosition);
