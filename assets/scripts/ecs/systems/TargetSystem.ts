@@ -22,12 +22,6 @@ export class TargetSystem extends System {
             const aCamp = this.world.getComponent(aid, CampComp)!
             const aNode = this.world.getNode(aid)
 
-            // 更新冷却时间
-            if (attack.searchCooldown > 0) {
-                attack.searchCooldown -= dt
-                return
-            }
-
             //正在攻击 → 不允许换目标
             if (attack.lockTarget !== -1) {
                 return

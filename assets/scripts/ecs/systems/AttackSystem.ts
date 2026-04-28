@@ -27,12 +27,10 @@ export class AttackSystem extends System {
             if (!targetState || targetState.state === EntityState.Dead) {
                 attackComp.target = -1
                 attackComp.lockTarget = -1
-                // 设置重新寻找目标的冷却时间，让怪物继续移动一会再攻击
-                attackComp.searchCooldown = attackComp.searchCooldownDuration
                 return
             }
 
-            attackComp.timer += dt
+            attackComp.currentInterval += dt
         })
 
     }
@@ -63,7 +61,7 @@ export class AttackSystem extends System {
             return;
         }
 
-        if (attackComp.timer < attackComp.interval) {
+        if (attackComp.currentInterval < attackerAttr.attackInterval) {
             CombatDebug.attack(eid, "❌ 非法命中（CD未到）");
             return;
         }
@@ -77,9 +75,6 @@ export class AttackSystem extends System {
             type: attackComp.attackType,
             value: attackerAttr.attack
         })
-
-        attackComp.timer = 0
-        attackComp.lockTarget = -1
     }
 
 }

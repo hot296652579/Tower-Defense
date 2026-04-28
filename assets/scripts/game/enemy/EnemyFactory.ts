@@ -53,7 +53,6 @@ export class EnemyFactory {
         /** AttackComp（从View映射） */
         const attack = new AttackComp()
         attack.range = view.attackRange
-        attack.interval = view.attackInterval
 
         World.inst.addComponent(entity, attack)
 

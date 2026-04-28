@@ -167,9 +167,9 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 50,
+      "g": 145,
+      "b": 233,
       "a": 255
     },
     "_spriteFrame": {
@@ -436,7 +436,7 @@
     "magicDefense": 20,
     "speed": 100,
     "attackRange": 80,
-    "attackInterval": 1,
+    "attackInterval": 2,
     "_id": ""
   },
   {

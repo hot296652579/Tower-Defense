@@ -1,5 +1,6 @@
 import { CombatDebug } from "../../game/CombatDebug"
 import { AttackComp } from "../components/AttackComp"
+import { AttributeComp } from "../components/AttributeComp"
 import { BehaviorComp, BehaviorType } from "../components/BehaviorComp"
 import { SkillComp } from "../components/SkillComp"
 import { StateComp } from "../components/StateComp"
@@ -30,6 +31,7 @@ export class DecisionSystem extends System {
         const stateComp = this.world.getComponent(eid, StateComp)!
         const attack = this.world.getComponent(eid, AttackComp)
         const skill = this.world.getComponent(eid, SkillComp)
+        const attackerAttr = this.world.getComponent(eid, AttributeComp)!
 
         if (stateComp.state === EntityState.Dead) {
             return EntityState.Dead
@@ -50,7 +52,7 @@ export class DecisionSystem extends System {
                 if (targetState && targetState.state !== EntityState.Dead) {
 
                     //攻击CD是否好了（是否准备出手）
-                    if (attack.timer >= attack.interval) {
+                    if (attack.currentInterval >= attackerAttr.attackInterval) {
                         if (attack.lockTarget === -1) {
                             attack.lockTarget = attack.target
 

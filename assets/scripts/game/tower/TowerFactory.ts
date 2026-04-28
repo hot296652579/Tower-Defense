@@ -26,7 +26,7 @@ export class TowerFactory {
 
     static async create(point: TownerBuildPoint) {
 
-        let type = TowerType.Arrow as TowerType;
+        let type = TowerType.Barrack as TowerType;
 
         let prefabName = type === TowerType.Barrack ? 'prefabs/TowerBarrack' : 'prefabs/TowerArrow';
 
@@ -57,12 +57,11 @@ export class TowerFactory {
         attr.attack = view.attack;
         attr.magicAttack = view.magicAttack;
         attr.attackRange = view.attackRange;
-        attr.attackInterval = view.attackInterval;
         World.inst.addComponent(entity, attr);
 
         const attack = new AttackComp()
         attack.range = view.attackRange
-        attack.interval = view.attackInterval
+        attack.currentInterval = view.attackInterval
         World.inst.addComponent(entity, attack)
 
         this.createComponentByType(entity, type);
