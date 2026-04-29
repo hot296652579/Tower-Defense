@@ -47,6 +47,8 @@ export class EnemyFactory {
 
         attr.magicAttack = view.magicAttack
         attr.magicDefense = view.magicDefense
+        attr.attackInterval = view.attackInterval;
+        attr.hurtCooldown = view.hurtCooldown
 
         World.inst.addComponent(entity, attr)
 

@@ -86,7 +86,7 @@ export class BarrackSystem extends System {
 
         // 插槽的方式
         const offset = OFFSETS[index % OFFSETS.length];
-        console.log('offset:', offset);
+        // console.log('offset:', offset);
 
         const spawnPos = new Vec3(
             nearestPos.x + offset.x,

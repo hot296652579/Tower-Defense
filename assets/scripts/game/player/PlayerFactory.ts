@@ -45,6 +45,7 @@ export class PlayerFactory {
 
         attr.magicAttack = view.magicAttack
         attr.magicDefense = view.magicDefense
+        attr.attackInterval = view.attackInterval;
 
         World.inst.addComponent(entity, attr)
 

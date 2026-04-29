@@ -30,7 +30,6 @@ export class AnimationEventProxy extends Component {
 
         if (!attack) return
 
-        attack.currentInterval = 0 //重置CD
         attack.lockTarget = -1 //重置目标锁
 
     }

@@ -17,6 +17,7 @@ export class AttributeComp {
     speed: number = 0; // 移动速度
 
     attackInterval: number = 1; // 攻击间隔
+    hurtCooldown: number = 0.5;
 
     attackRange: number = 0;
 

@@ -7,6 +7,7 @@ import { AttackType } from "../define/AttackType"
  * @param currentInterval 当前攻击间隔
  * @param type 攻击类型
  * @param target 目标实体ID
+ * @param lastHitTime 上次受击时间戳
 */
 export class AttackComp {
 
@@ -18,4 +19,6 @@ export class AttackComp {
     target: number = -1
 
     lockTarget: number = -1
+
+    lastHitTime: number = 0
 }

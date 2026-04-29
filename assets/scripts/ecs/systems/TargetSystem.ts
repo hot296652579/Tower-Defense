@@ -24,7 +24,12 @@ export class TargetSystem extends System {
 
             //正在攻击 → 不允许换目标
             if (attack.lockTarget !== -1) {
-                return
+                const state = this.world.getComponent(attack.lockTarget, StateComp)
+                if (!state || state.state === EntityState.Dead) {
+                    attack.lockTarget = -1
+                } else {
+                    return
+                }
             }
 
             //已有目标且还活着 → 不换

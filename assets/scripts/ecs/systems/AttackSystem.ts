@@ -20,6 +20,10 @@ export class AttackSystem extends System {
 
             const attackComp = this.world.getComponent(eid, AttackComp)!
 
+            attackComp.currentInterval += dt
+
+            // console.log(`[CD] ${eid} = ${attackComp.currentInterval}`)
+
             if (attackComp.target === -1) return
 
             const targetState = this.world.getComponent(attackComp.target, StateComp)
@@ -29,8 +33,6 @@ export class AttackSystem extends System {
                 attackComp.lockTarget = -1
                 return
             }
-
-            attackComp.currentInterval += dt
         })
 
     }
@@ -55,7 +57,10 @@ export class AttackSystem extends System {
             return;
         }
 
+        let targetAttackComp = this.world.getComponent(targetId, AttackComp)!
         const targetState = this.world.getComponent(targetId, StateComp)!
+        const targetAttr = this.world.getComponent(targetId, AttributeComp)!
+
         if (!targetState || targetState.state === EntityState.Dead) {
             CombatDebug.attack(eid, "❌ 目标已死亡");
             return;
@@ -69,12 +74,21 @@ export class AttackSystem extends System {
         CombatDebug.attack(eid, "✅ 命中成功", targetId);
         const damageSystem = this.world.getSystem(DamageSystem)
 
+        const now = performance.now()
+        if (now - targetAttackComp.lastHitTime < targetAttr.hurtCooldown) {
+            return // 本次伤害无效
+        }
+
+        attackComp.lastHitTime = now
+
         damageSystem.apply({
             attacker: eid,
             target: targetId,
             type: attackComp.attackType,
             value: attackerAttr.attack
         })
+
+        attackComp.currentInterval = 0
     }
 
 }

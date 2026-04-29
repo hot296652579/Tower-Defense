@@ -36,6 +36,9 @@ export class BaseView extends Component {
     @property({ displayName: '攻击间隔' })
     attackInterval = 1;
 
+    @property({ displayName: '受击冷却 单位：秒' })
+    hurtCooldown = 0.5;
+
     /** ===== 组件缓存 ===== */
     private _ani: Animation | null = null;
 
