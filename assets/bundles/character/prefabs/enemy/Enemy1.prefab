@@ -436,7 +436,7 @@
     "magicDefense": 20,
     "speed": 100,
     "attackRange": 80,
-    "attackInterval": 3,
+    "attackInterval": 1,
     "hurtCooldown": 0.5,
     "_id": ""
   },

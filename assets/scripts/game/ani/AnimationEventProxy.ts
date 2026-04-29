@@ -25,14 +25,7 @@ export class AnimationEventProxy extends Component {
     }
 
     /** 普攻结束 */
-    onAttackEnd() {
-        const attack = World.inst.getComponent(this._entity, AttackComp)
-
-        if (!attack) return
-
-        attack.lockTarget = -1 //重置目标锁
-
-    }
+    onAttackEnd() {}
 
     /** 技能命中 */
     onSkillHit(skillName: string) {

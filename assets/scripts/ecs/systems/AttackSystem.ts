@@ -89,6 +89,7 @@ export class AttackSystem extends System {
         })
 
         attackComp.currentInterval = 0
+        attackComp.lockTarget = -1
     }
 
 }
