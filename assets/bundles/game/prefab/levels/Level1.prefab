@@ -498,6 +498,7 @@
     "__prefab": {
       "__id__": 30
     },
+<<<<<<< HEAD:assets/bundles/game/prefab/levels/Level1.prefab
     "_alignFlags": 45,
     "_target": null,
     "_left": 0,
@@ -516,6 +517,18 @@
     "_originalHeight": 100,
     "_alignMode": 2,
     "_lockFlags": 0,
+=======
+    "hp": 100,
+    "hpMax": 100,
+    "attack": 100,
+    "defense": 20,
+    "magicAttack": 80,
+    "magicDefense": 20,
+    "speed": 100,
+    "attackRange": 80,
+    "attackInterval": 1,
+    "hurtCooldown": 0.5,
+>>>>>>> e484eaa7c29c58ddab09ff684109f9c346134bec:assets/bundles/character/prefabs/enemy/Enemy1.prefab
     "_id": ""
   },
   {
