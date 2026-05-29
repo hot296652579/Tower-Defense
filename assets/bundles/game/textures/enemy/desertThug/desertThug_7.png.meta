@@ -1,0 +1,134 @@
+{
+  "ver": "1.0.27",
+  "importer": "image",
+  "imported": true,
+  "uuid": "8bf9265f-429b-4189-809d-8eb04819f497",
+  "files": [
+    ".json",
+    ".png"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "8bf9265f-429b-4189-809d-8eb04819f497@6c48a",
+      "displayName": "desertThug_7",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "wrapModeS": "clamp-to-edge",
+        "wrapModeT": "clamp-to-edge",
+        "imageUuidOrDatabaseUri": "8bf9265f-429b-4189-809d-8eb04819f497",
+        "isUuid": true,
+        "visible": false,
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+      "uuid": "8bf9265f-429b-4189-809d-8eb04819f497@f9941",
+      "displayName": "desertThug_7",
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": -0.5,
+        "offsetY": 1.5,
+        "trimX": 17,
+        "trimY": 3,
+        "width": 19,
+        "height": 27,
+        "rawWidth": 54,
+        "rawHeight": 36,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [
+            -9.5,
+            -13.5,
+            0,
+            9.5,
+            -13.5,
+            0,
+            -9.5,
+            13.5,
+            0,
+            9.5,
+            13.5,
+            0
+          ],
+          "indexes": [
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+          ],
+          "uv": [
+            17,
+            33,
+            36,
+            33,
+            17,
+            6,
+            36,
+            6
+          ],
+          "nuv": [
+            0.3148148148148148,
+            0.16666666666666666,
+            0.6666666666666666,
+            0.16666666666666666,
+            0.3148148148148148,
+            0.9166666666666666,
+            0.6666666666666666,
+            0.9166666666666666
+          ],
+          "minPos": [
+            -9.5,
+            -13.5,
+            0
+          ],
+          "maxPos": [
+            9.5,
+            13.5,
+            0
+          ]
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "8bf9265f-429b-4189-809d-8eb04819f497@6c48a",
+        "atlasUuid": "",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "hasAlpha": true,
+    "fixAlphaTransparencyArtifacts": false,
+    "redirect": "8bf9265f-429b-4189-809d-8eb04819f497@6c48a"
+  }
+}

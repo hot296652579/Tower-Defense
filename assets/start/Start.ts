@@ -12,10 +12,10 @@ export class Start extends Component {
         await this.initLoadingUI();
     }
 
-    /** ================= 1. 初始化Loading ================= */
+    /** ================= 初始化Loading ================= */
     async initLoadingUI() {
         return new Promise<void>((resolve) => {
-            resources.load('prefab/Loading', Prefab, (err, prefab) => {
+            resources.load('prefabs/Loading', Prefab, (err, prefab) => {
                 if (err) {
                     console.error('Loading prefab load failed', err);
                     return;

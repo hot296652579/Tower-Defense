@@ -1,0 +1,134 @@
+{
+  "ver": "1.0.27",
+  "importer": "image",
+  "imported": true,
+  "uuid": "88cd9d6d-91a8-4495-9e7d-e9c57b2a1808",
+  "files": [
+    ".json",
+    ".png"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "88cd9d6d-91a8-4495-9e7d-e9c57b2a1808@6c48a",
+      "displayName": "soldier pirate flamer_26",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "wrapModeS": "clamp-to-edge",
+        "wrapModeT": "clamp-to-edge",
+        "imageUuidOrDatabaseUri": "88cd9d6d-91a8-4495-9e7d-e9c57b2a1808",
+        "isUuid": true,
+        "visible": false,
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+      "uuid": "88cd9d6d-91a8-4495-9e7d-e9c57b2a1808@f9941",
+      "displayName": "soldier pirate flamer_26",
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": -20,
+        "offsetY": -5.5,
+        "trimX": 21,
+        "trimY": 20,
+        "width": 42,
+        "height": 43,
+        "rawWidth": 124,
+        "rawHeight": 72,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [
+            -21,
+            -21.5,
+            0,
+            21,
+            -21.5,
+            0,
+            -21,
+            21.5,
+            0,
+            21,
+            21.5,
+            0
+          ],
+          "indexes": [
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+          ],
+          "uv": [
+            21,
+            52,
+            63,
+            52,
+            21,
+            9,
+            63,
+            9
+          ],
+          "nuv": [
+            0.1693548387096774,
+            0.125,
+            0.5080645161290323,
+            0.125,
+            0.1693548387096774,
+            0.7222222222222222,
+            0.5080645161290323,
+            0.7222222222222222
+          ],
+          "minPos": [
+            -21,
+            -21.5,
+            0
+          ],
+          "maxPos": [
+            21,
+            21.5,
+            0
+          ]
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "88cd9d6d-91a8-4495-9e7d-e9c57b2a1808@6c48a",
+        "atlasUuid": "",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "hasAlpha": true,
+    "fixAlphaTransparencyArtifacts": false,
+    "redirect": "88cd9d6d-91a8-4495-9e7d-e9c57b2a1808@6c48a"
+  }
+}

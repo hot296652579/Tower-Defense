@@ -1,4 +1,4 @@
-import { Asset, assetManager, AssetManager } from 'cc';
+import { Asset, assetManager, AssetManager, resources } from 'cc';
 
 export class AssetManagerEx {
     private static _instance: AssetManagerEx;
@@ -13,7 +13,7 @@ export class AssetManagerEx {
     /**
      * 加载Bundle
      */
-    loadBundle(name: string): Promise<AssetManager.Bundle> {
+    async loadBundle(name: string): Promise<AssetManager.Bundle> {
         return new Promise((resolve, reject) => {
             if (this.bundleMap.has(name)) {
                 resolve(this.bundleMap.get(name)!);
@@ -32,20 +32,62 @@ export class AssetManagerEx {
         });
     }
 
-    /**
-     * 加载资源
-     */
-    async load<T extends Asset>(bundleName: string, path: string, type?: any): Promise<T> {
+
+    /**加载Bundle下的所有资源，实时回调进度
+     * @param bundleName Bundle名称
+     * @param onProgress 进度回调
+     * @returns Bundle实例
+    */
+    async loadBundleWithProgress(
+        bundleName: string,
+        onProgress: (finished: number, total: number) => void
+    ): Promise<AssetManager.Bundle> {
         const bundle = await this.loadBundle(bundleName);
 
         return new Promise((resolve, reject) => {
-            bundle.load(path, type, (err, asset: T) => {
+            bundle.loadDir('', (finished, total) => {
+                onProgress(finished, total);
+            }, (err) => {
+                if (err) reject(err);
+                else resolve(bundle);
+            });
+        });
+    }
+
+
+    /**
+     * 加载Bundle下的资源
+     * @param bundleName Bundle名称
+     * @param path 资源路径
+     * @param type 资源类型
+     * @param progress 加载进度回调
+     * @returns 资源实例
+     */
+    async load<T extends Asset>(bundleName: string, path: string, type?: any, progress?: (finished: number, total: number) => void): Promise<T> {
+        const bundle = await this.loadBundle(bundleName);
+
+        return new Promise((resolve, reject) => {
+            bundle.load(path, type, progress, (err, asset: T) => {
                 if (err) {
                     reject(err);
                     return;
                 }
 
                 this.addRef(bundleName, path);
+                resolve(asset);
+            });
+        });
+    }
+
+    /**加载resources目录下的资源*/
+    async loadRes<T extends Asset>(path: string, type?: any): Promise<T> {
+        return new Promise((resolve, reject) => {
+            resources.load(path, type, (err, asset: T) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+
                 resolve(asset);
             });
         });
