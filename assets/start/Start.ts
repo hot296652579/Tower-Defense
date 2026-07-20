@@ -1,5 +1,4 @@
 import { _decorator, Component, instantiate, Node, Prefab, resources } from 'cc';
-import { GameRoot } from '../scripts/core/GameRoot';
 
 const { ccclass } = _decorator;
 
