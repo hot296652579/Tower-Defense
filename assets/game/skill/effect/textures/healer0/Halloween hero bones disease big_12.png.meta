@@ -1,0 +1,134 @@
+{
+  "ver": "1.0.27",
+  "importer": "image",
+  "imported": true,
+  "uuid": "e23a3f07-21fa-4702-bc4a-e7ba64aaed2e",
+  "files": [
+    ".json",
+    ".png"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "e23a3f07-21fa-4702-bc4a-e7ba64aaed2e@6c48a",
+      "displayName": "Halloween hero bones disease big_12",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "wrapModeS": "clamp-to-edge",
+        "wrapModeT": "clamp-to-edge",
+        "imageUuidOrDatabaseUri": "e23a3f07-21fa-4702-bc4a-e7ba64aaed2e",
+        "isUuid": true,
+        "visible": false,
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+      "uuid": "e23a3f07-21fa-4702-bc4a-e7ba64aaed2e@f9941",
+      "displayName": "Halloween hero bones disease big_12",
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": -2,
+        "offsetY": -3.5,
+        "trimX": 11,
+        "trimY": 21,
+        "width": 94,
+        "height": 65,
+        "rawWidth": 120,
+        "rawHeight": 100,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [
+            -47,
+            -32.5,
+            0,
+            47,
+            -32.5,
+            0,
+            -47,
+            32.5,
+            0,
+            47,
+            32.5,
+            0
+          ],
+          "indexes": [
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+          ],
+          "uv": [
+            11,
+            79,
+            105,
+            79,
+            11,
+            14,
+            105,
+            14
+          ],
+          "nuv": [
+            0.09166666666666666,
+            0.14,
+            0.875,
+            0.14,
+            0.09166666666666666,
+            0.79,
+            0.875,
+            0.79
+          ],
+          "minPos": [
+            -47,
+            -32.5,
+            0
+          ],
+          "maxPos": [
+            47,
+            32.5,
+            0
+          ]
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "e23a3f07-21fa-4702-bc4a-e7ba64aaed2e@6c48a",
+        "atlasUuid": "",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "hasAlpha": true,
+    "fixAlphaTransparencyArtifacts": false,
+    "redirect": "e23a3f07-21fa-4702-bc4a-e7ba64aaed2e@6c48a"
+  }
+}

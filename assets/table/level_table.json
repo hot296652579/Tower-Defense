@@ -1,0 +1,132 @@
+[
+    {
+        "levelId": 1,
+        "levelName": "荒野前哨",
+        "mapAssetPath": "map/prefab/Map1",
+        "initGold": 200,
+        "baseMaxHp": 20,
+        "starRule": {
+            "star1": 5,
+            "star2": 12,
+            "star3": 20
+        },
+        "unlockTowerIdList": [
+            1,
+            2
+        ],
+        "unlockHeroIdList": [],
+        "passRewardGold": 150,
+        "waves": [
+            {
+                "waveLocalId": 1,
+                "waveName": "第一波·先遣小队",
+                "spawnGroups": [
+                    {
+                        "delay": 0,
+                        "list": [
+                            {
+                                "monsterId": 100,
+                                "count": 4,
+                                "spawnInterval": 1.2
+                            }
+                        ]
+                    }
+                ],
+                "rewardGold": 50,
+                "tipText": "敌人来袭！战士正在逼近"
+            },
+            {
+                "waveLocalId": 2,
+                "waveName": "第二波·远程支援",
+                "spawnGroups": [
+                    {
+                        "delay": 0,
+                        "list": [
+                            {
+                                "monsterId": 100,
+                                "count": 3,
+                                "spawnInterval": 1.0
+                            }
+                        ]
+                    },
+                    {
+                        "delay": 6,
+                        "list": [
+                            {
+                                "monsterId": 101,
+                                "count": 2,
+                                "spawnInterval": 2.0
+                            }
+                        ]
+                    }
+                ],
+                "rewardGold": 80,
+                "tipText": "暗影法师出现在队伍后方！"
+            }
+        ]
+    },
+    {
+        "levelId": 2,
+        "levelName": "疫病沼泽",
+        "mapAssetPath": "map/prefab/Map2",
+        "initGold": 220,
+        "baseMaxHp": 20,
+        "starRule": {
+            "star1": 5,
+            "star2": 12,
+            "star3": 20
+        },
+        "unlockTowerIdList": [
+            1,
+            2,
+            3
+        ],
+        "unlockHeroIdList": [
+            1
+        ],
+        "passRewardGold": 200,
+        "waves": [
+            {
+                "waveLocalId": 1,
+                "waveName": "沼泽巡逻队",
+                "spawnGroups": [
+                    {
+                        "delay": 0,
+                        "list": [
+                            {
+                                "monsterId": 100,
+                                "count": 5,
+                                "spawnInterval": 1.0
+                            }
+                        ]
+                    }
+                ],
+                "rewardGold": 60,
+                "tipText": "沼泽里涌出大量战士！"
+            },
+            {
+                "waveLocalId": 2,
+                "waveName": "治疗军团",
+                "spawnGroups": [
+                    {
+                        "delay": 0,
+                        "list": [
+                            {
+                                "monsterId": 100,
+                                "count": 3,
+                                "spawnInterval": 1.0
+                            },
+                            {
+                                "monsterId": 102,
+                                "count": 1,
+                                "spawnInterval": 3.5
+                            }
+                        ]
+                    }
+                ],
+                "rewardGold": 120,
+                "tipText": "疫病牧师可以持续治疗友军，优先击杀！"
+            }
+        ]
+    }
+]

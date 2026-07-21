@@ -1,0 +1,134 @@
+{
+  "ver": "1.0.27",
+  "importer": "image",
+  "imported": true,
+  "uuid": "8bdfaeb8-1cec-49ab-aef1-9f8db08d7a8f",
+  "files": [
+    ".json",
+    ".png"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "8bdfaeb8-1cec-49ab-aef1-9f8db08d7a8f@6c48a",
+      "displayName": "CanibalShamanPriest_46",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "wrapModeS": "clamp-to-edge",
+        "wrapModeT": "clamp-to-edge",
+        "imageUuidOrDatabaseUri": "8bdfaeb8-1cec-49ab-aef1-9f8db08d7a8f",
+        "isUuid": true,
+        "visible": false,
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0
+      },
+      "ver": "1.0.22",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+      "uuid": "8bdfaeb8-1cec-49ab-aef1-9f8db08d7a8f@f9941",
+      "displayName": "CanibalShamanPriest_46",
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": -8.5,
+        "offsetY": -1,
+        "trimX": 35,
+        "trimY": 20,
+        "width": 57,
+        "height": 86,
+        "rawWidth": 144,
+        "rawHeight": 124,
+        "borderTop": 0,
+        "borderBottom": 0,
+        "borderLeft": 0,
+        "borderRight": 0,
+        "packable": true,
+        "pixelsToUnit": 100,
+        "pivotX": 0.5,
+        "pivotY": 0.5,
+        "meshType": 0,
+        "vertices": {
+          "rawPosition": [
+            -28.5,
+            -43,
+            0,
+            28.5,
+            -43,
+            0,
+            -28.5,
+            43,
+            0,
+            28.5,
+            43,
+            0
+          ],
+          "indexes": [
+            0,
+            1,
+            2,
+            2,
+            1,
+            3
+          ],
+          "uv": [
+            35,
+            104,
+            92,
+            104,
+            35,
+            18,
+            92,
+            18
+          ],
+          "nuv": [
+            0.24305555555555555,
+            0.14516129032258066,
+            0.6388888888888888,
+            0.14516129032258066,
+            0.24305555555555555,
+            0.8387096774193549,
+            0.6388888888888888,
+            0.8387096774193549
+          ],
+          "minPos": [
+            -28.5,
+            -43,
+            0
+          ],
+          "maxPos": [
+            28.5,
+            43,
+            0
+          ]
+        },
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "8bdfaeb8-1cec-49ab-aef1-9f8db08d7a8f@6c48a",
+        "atlasUuid": "",
+        "trimType": "auto"
+      },
+      "ver": "1.0.12",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "hasAlpha": true,
+    "fixAlphaTransparencyArtifacts": false,
+    "redirect": "8bdfaeb8-1cec-49ab-aef1-9f8db08d7a8f@6c48a"
+  }
+}
