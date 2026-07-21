@@ -1,12 +1,12 @@
-// assets/ui/window/start/StartWnd.ts
-import { _decorator, Button, Node } from "cc";
+
+import { _decorator, Button, director, Node } from "cc";
 import BaseWindow from "../../base/BaseWindow";
 import { UILayerType } from "../../layer/UILayer";
 import { UIManager } from "../../manager/UIManager";
 const { ccclass, property } = _decorator;
 
 @ccclass
-export class StartWnd extends BaseWindow {
+export class LevelSelectWnd extends BaseWindow {
     // 指定当前窗口层级为主界面
     windowLayer = UILayerType.MAIN_WIN;
 
@@ -22,10 +22,9 @@ export class StartWnd extends BaseWindow {
         console.log("启动界面加载完成");
     }
 
-    // 进入游戏按钮点击
-    async onClickEnterGame(): Promise<void> {
-        // 关闭当前启动窗口
-        await UIManager.getInstance().closeWindow("StartWnd");
-        await UIManager.getInstance().openWindow("LevelSelectWnd");
+    onClickEnterGame(): void {
+        UIManager.getInstance().closeWindow("LevelSelectWnd");
+        // 跳转战斗场景
+        director.loadScene("battle/Battle");
     }
 }
