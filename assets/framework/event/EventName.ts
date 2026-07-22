@@ -25,6 +25,10 @@ export enum GameEvent {
     BATTLE_WIN = "BATTLE_WIN",
     BATTLE_LOSE = "BATTLE_LOSE",
 
+    ENTITY_CREATE = "ENTITY_CREATE",//实体创建
+    ENTITY_DESTROY = "ENTITY_DESTROY",//实体销毁
+    ENTITY_STATE_CHANGE = "ENTITY_STATE_CHANGE",//实体状态改变
+
     // 资源加载
     RES_LOAD_FINISH = "RES_LOAD_FINISH",
 }

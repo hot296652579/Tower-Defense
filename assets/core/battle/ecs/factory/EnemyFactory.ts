@@ -5,6 +5,8 @@ import { EcsEntity } from "../base/EcsEntity";
 import EcsWorld from "../base/EcsWorld";
 
 // 引入全部组件
+import { EventManager } from "db://assets/framework/event/EventManager";
+import { GameEvent } from "db://assets/framework/event/EventName";
 import AttackComp from "../components/AttackComp";
 import BufferComp from "../components/BufferComp";
 import EnemyComp from "../components/EnemyComp";
@@ -103,6 +105,7 @@ export class EnemyFactory {
         }
 
         console.log(`创建怪物实体[${entityId}] cfgId:${monsterCfgId} path:${pathId}`);
+        EventManager.getInstance().emit(GameEvent.ENTITY_CREATE, entityId, monsterCfgId);
         return entityId;
     }
 

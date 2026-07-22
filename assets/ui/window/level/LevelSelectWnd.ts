@@ -1,5 +1,6 @@
 
 import { _decorator, Button, director, Node } from "cc";
+import { UIConfig } from "db://assets/define/UIEnum";
 import BaseWindow from "../../base/BaseWindow";
 import { UILayerType } from "../../layer/UILayer";
 import { UIManager } from "../../manager/UIManager";
@@ -23,7 +24,7 @@ export class LevelSelectWnd extends BaseWindow {
     }
 
     onClickEnterGame(): void {
-        UIManager.getInstance().closeWindow("LevelSelectWnd");
+        UIManager.getInstance().closeWindow(UIConfig.LevelSelectWnd.name);
         // 跳转战斗场景
         director.loadScene("scene/Battle");
     }

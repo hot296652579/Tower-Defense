@@ -15,7 +15,7 @@ export default abstract class BaseSingleton {
     }
 
     /** 框架初始化，main.ts 统一调用 */
-    public abstract init(): Promise<void>;
+    public abstract init(...args: any[]): Promise<void>;
 
     /** 游戏销毁/切场景释放资源 */
     public abstract destroy(): void;

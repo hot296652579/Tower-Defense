@@ -1,5 +1,6 @@
 // assets/ui/window/start/StartWnd.ts
 import { _decorator, Button, Node } from "cc";
+import { UIConfig } from "db://assets/define/UIEnum";
 import BaseWindow from "../../base/BaseWindow";
 import { UILayerType } from "../../layer/UILayer";
 import { UIManager } from "../../manager/UIManager";
@@ -24,8 +25,7 @@ export class StartWnd extends BaseWindow {
 
     // 进入游戏按钮点击
     async onClickEnterGame(): Promise<void> {
-        // 关闭当前启动窗口
-        await UIManager.getInstance().closeWindow("StartWnd");
-        await UIManager.getInstance().openWindow("LevelSelectWnd");
+        await UIManager.getInstance().closeWindow(UIConfig.StartWnd.name);
+        await UIManager.getInstance().openWindow(UIConfig.LevelSelectWnd.name);
     }
 }

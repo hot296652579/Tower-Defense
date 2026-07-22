@@ -46,6 +46,7 @@ export class UIManager extends BaseSingleton {
 
     //#region 打开窗口核心接口
     public async openWindow(key: string, param: WindowOpenParam = null): Promise<BaseWindow | null> {
+        console.log(`UIManager: 打开窗口key = ${key}`);
         const cfg = this._windowRegister.get(key);
         if (!cfg) {
             console.error(`UIManager: 未注册窗口key = ${key}`);

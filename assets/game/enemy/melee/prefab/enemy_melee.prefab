@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "enemy_melee",
+    "_name": "Enemy_Melee",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "enemy_melee",
+    "_name": "Enemy_Melee",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -258,8 +258,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 100,
-      "height": 100
+      "width": 50,
+      "height": 70
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",

@@ -1,6 +1,6 @@
 import { _decorator, Component } from 'cc';
 import { BundlesEnum } from '../define/BundlesEnum';
-import { UIEnum } from '../define/UIEnum';
+import { UIConfig } from '../define/UIEnum';
 import { GameMain } from '../GameMain';
 import { UILayerRoot } from '../ui/layer/UILayer';
 import { UIManager } from '../ui/manager/UIManager';
@@ -17,17 +17,17 @@ export class StartScene extends Component {
         const uiMgr = UIManager.getInstance();
 
         // 1. 业务界面
-        uiMgr.registerWindow("StartWnd", UIEnum.StartWnd, false, BundlesEnum.UI);
-        uiMgr.registerWindow("LevelSelectWnd", UIEnum.LevelSelectWnd, true, BundlesEnum.UI);
-        uiMgr.registerWindow("SettingWnd", UIEnum.SettingWnd, true, BundlesEnum.UI);
-        uiMgr.registerWindow("BattleWnd", UIEnum.BattleWnd, true, BundlesEnum.UI);
+        uiMgr.registerWindow(UIConfig.StartWnd.name, UIConfig.StartWnd.path, false, BundlesEnum.UI);
+        uiMgr.registerWindow(UIConfig.LevelSelectWnd.name, UIConfig.LevelSelectWnd.path, true, BundlesEnum.UI);
+        uiMgr.registerWindow(UIConfig.SettingWnd.name, UIConfig.SettingWnd.path, true, BundlesEnum.UI);
+        uiMgr.registerWindow(UIConfig.BattleWnd.name, UIConfig.BattleWnd.path, true, BundlesEnum.UI);
 
         // 2. 通用弹窗
-        uiMgr.registerWindow("TipWnd", UIEnum.TipWnd, true, BundlesEnum.UI);
-        uiMgr.registerWindow("ConfirmWnd", UIEnum.ConfirmWnd, true, BundlesEnum.UI);
+        uiMgr.registerWindow(UIConfig.TipWnd.name, UIConfig.TipWnd.path, true, BundlesEnum.UI);
+        uiMgr.registerWindow(UIConfig.ConfirmWnd.name, UIConfig.ConfirmWnd.path, true, BundlesEnum.UI);
 
         // 默认打开启动页
-        await uiMgr.openWindow("StartWnd");
+        await uiMgr.openWindow(UIConfig.StartWnd.name);
     }
 }
 

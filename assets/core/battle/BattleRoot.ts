@@ -2,6 +2,7 @@ import { _decorator, Component, director, instantiate, Node } from "cc";
 const { ccclass, property } = _decorator;
 
 import { BundlesEnum } from "../../define/BundlesEnum";
+import { UIConfig } from "../../define/UIEnum";
 import { ConfigManager } from "../../framework/config/ConfigManager";
 import { ResourceManager } from "../../framework/resource/ResourceManager";
 import { UILayerRoot } from "../../ui/layer/UILayer";
@@ -9,8 +10,12 @@ import { UIManager } from "../../ui/manager/UIManager";
 import { LevelConfig } from "./data/LevelConfigType";
 import EcsWorld from "./ecs/base/EcsWorld";
 import BattleGlobalComp from "./ecs/components/BattleGlobalComp";
+import EnemyComp from "./ecs/components/EnemyComp";
+import TransformComp from "./ecs/components/TransformComp";
 import { EnemyFactory } from "./ecs/factory/EnemyFactory";
+import MoveSystem from "./ecs/systems/MoveSystem";
 import MapPathData from "./map/MapPathData";
+import { RenderEntityManager } from "./render/RenderEntityManager";
 
 @ccclass
 export default class BattleRoot extends Component {
@@ -63,7 +68,11 @@ export default class BattleRoot extends Component {
         await this.loadMap();
         this.initEcsWorld();
         EnemyFactory.setEcsWorld(this._ecsWorld);
-        await UIManager.getInstance().openWindow("BattleWnd");
+        console.log("ECS世界初始化完成");
+        await RenderEntityManager.getInstance().init(this.entityRoot);
+        console.log("渲染实体管理器初始化完成");
+        await UIManager.getInstance().openWindow(UIConfig.BattleWnd.name);
+        console.log("战斗窗口打开完成");
 
         console.log("===== 战斗初始化全部完成 =====");
 
@@ -107,7 +116,7 @@ export default class BattleRoot extends Component {
         globalComp.isPause = false;
 
         // =====================后续在这里注册所有System=====================
-        // this._ecsWorld.registerSystem(new MoveSystem());
+        this._ecsWorld.registerSystem(new MoveSystem());
         // this._ecsWorld.registerSystem(new FsmSwitchSystem());
         // this._ecsWorld.registerSystem(new AttackSystem());
         // this._ecsWorld.registerSystem(new WaveSpawnSystem());
@@ -122,6 +131,9 @@ export default class BattleRoot extends Component {
         const realDt = dt * globalComp.gameSpeed;
         // 驱动所有ECS系统
         this._ecsWorld.update(realDt);
+
+        const entityList = this._ecsWorld.queryEntities([TransformComp, EnemyComp]);
+        RenderEntityManager.getInstance().syncAllTransform(entityList, this._ecsWorld);
     }
 
     /*** 对外获取路径数据 System需要读取路径点位*/
@@ -139,7 +151,7 @@ export default class BattleRoot extends Component {
         // 销毁ECS世界
         this._ecsWorld.clear();
         // 关闭战斗窗口
-        UIManager.getInstance().closeWindow("BattleWnd");
+        UIManager.getInstance().closeWindow(UIConfig.BattleWnd.name);
         director.loadScene("scene/Start");
     }
 
