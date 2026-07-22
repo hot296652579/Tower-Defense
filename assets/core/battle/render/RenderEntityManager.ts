@@ -1,4 +1,4 @@
-import { Node } from "cc";
+import { Node, Vec3 } from "cc";
 import { BundlesEnum } from "db://assets/define/BundlesEnum";
 import BaseSingleton from "db://assets/framework/base/BaseSingleton";
 import { ConfigManager } from "db://assets/framework/config/ConfigManager";
@@ -80,7 +80,7 @@ export class RenderEntityManager extends BaseSingleton {
             const transComp = world.tryGetComponent(eid, TransformComp);
             if (!transComp) continue;
             // 同步坐标
-            node.setPosition(transComp.pos.x, transComp.pos.y);
+            node.setWorldPosition(new Vec3(transComp.pos.x, transComp.pos.y, 0));
             // 朝向翻转
             node.scale.set(Math.abs(node.scale.x) * transComp.faceDir, node.scale.y);
         }
