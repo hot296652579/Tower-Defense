@@ -17,7 +17,7 @@ export interface LevelStarRule {
 
 /** 关卡主配置 */
 export interface LevelConfig {
-    levelId: number;                  // 关卡唯一ID 1~10
+    id: number;                       // 关卡唯一ID 1~10
     levelName: string;                // 关卡名称
     mapAssetPath: string;             // game分包地图prefab路径
     initGold: number;                 // 开局金币

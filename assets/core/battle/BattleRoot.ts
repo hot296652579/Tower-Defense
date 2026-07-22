@@ -1,6 +1,7 @@
 import { _decorator, Component, director, instantiate, Node } from "cc";
 const { ccclass, property } = _decorator;
 
+import { BundlesEnum } from "../../define/BundlesEnum";
 import { ConfigManager } from "../../framework/config/ConfigManager";
 import { ResourceManager } from "../../framework/resource/ResourceManager";
 import { UILayerRoot } from "../../ui/layer/UILayer";
@@ -42,11 +43,15 @@ export default class BattleRoot extends Component {
         UILayerRoot.initRoot(this.uiRoot);
 
         console.log("开始加载game分包");
-        const bundle = await ResourceManager.getInstance().loadBundle("game");
+        const bundle = await ResourceManager.getInstance().loadBundle(BundlesEnum.Game);
         if (!bundle) {
             console.error("game分包加载失败");
             return;
         }
+
+        await ConfigManager.getInstance().loadTable("hero_table", BundlesEnum.Table);
+        await ConfigManager.getInstance().loadTable("enemy_table", BundlesEnum.Table);
+        await ConfigManager.getInstance().loadTable("level_table", BundlesEnum.Table);
 
         // 获取关卡配置
         this._levelCfg = ConfigManager.getInstance().getRowById<LevelConfig>("level_table", this._levelId)!;

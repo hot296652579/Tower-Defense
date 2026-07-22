@@ -20,6 +20,7 @@ export class StartScene extends Component {
         uiMgr.registerWindow("StartWnd", UIEnum.StartWnd, false, BundlesEnum.UI);
         uiMgr.registerWindow("LevelSelectWnd", UIEnum.LevelSelectWnd, true, BundlesEnum.UI);
         uiMgr.registerWindow("SettingWnd", UIEnum.SettingWnd, true, BundlesEnum.UI);
+        uiMgr.registerWindow("BattleWnd", UIEnum.BattleWnd, true, BundlesEnum.UI);
 
         // 2. 通用弹窗
         uiMgr.registerWindow("TipWnd", UIEnum.TipWnd, true, BundlesEnum.UI);
