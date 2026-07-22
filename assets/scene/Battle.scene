@@ -567,7 +567,19 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "_id": "27terSLQRGiJwrhHBrsy2k"
+    "uiRoot": {
+      "__id__": 3
+    },
+    "mapRoot": {
+      "__id__": 12
+    },
+    "mapNode": {
+      "__id__": 13
+    },
+    "entityRoot": {
+      "__id__": 14
+    },
+    "_id": "28IvNFlWRGdYOYsm/eaBvp"
   },
   {
     "__type__": "cc.PrefabInfo",

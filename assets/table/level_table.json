@@ -1,6 +1,6 @@
 [
     {
-        "levelId": 1,
+        "id": 1,
         "levelName": "荒野前哨",
         "mapAssetPath": "map/prefab/Map1",
         "initGold": 200,
@@ -66,7 +66,7 @@
         ]
     },
     {
-        "levelId": 2,
+        "id": 2,
         "levelName": "疫病沼泽",
         "mapAssetPath": "map/prefab/Map2",
         "initGold": 220,

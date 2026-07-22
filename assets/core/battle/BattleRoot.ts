@@ -1,14 +1,146 @@
-import { _decorator, Component, find } from 'cc';
-import { UILayerRoot } from '../../ui/layer/UILayer';
+import { _decorator, Component, director, instantiate, Node } from "cc";
 const { ccclass, property } = _decorator;
 
-@ccclass('BattleRoot')
-export class BattleRoot extends Component {
+import { ConfigManager } from "../../framework/config/ConfigManager";
+import { ResourceManager } from "../../framework/resource/ResourceManager";
+import { UILayerRoot } from "../../ui/layer/UILayer";
+import { UIManager } from "../../ui/manager/UIManager";
+import { LevelConfig } from "./data/LevelConfigType";
+import EcsWorld from "./ecs/base/EcsWorld";
+import BattleGlobalComp from "./ecs/components/BattleGlobalComp";
+import { EnemyFactory } from "./ecs/factory/EnemyFactory";
+import MapPathData from "./map/MapPathData";
 
-    start() {
-        const UIRoot = find('Canvas/UIRoot');
-        UILayerRoot.initRoot(UIRoot);
+@ccclass
+export default class BattleRoot extends Component {
+    @property(Node)
+    public uiRoot!: Node;
+    @property(Node)
+    public mapRoot!: Node;
+
+    @property(Node)
+    public mapNode!: Node; //地图容器
+
+    @property(Node)
+    public entityRoot!: Node;// 战斗实体渲染父节点：怪物、英雄、炮塔
+
+    // 当前关卡ID
+    private _levelId: number = 0;
+    // 当前关卡配置
+    private _levelCfg!: LevelConfig;
+    // ECS世界实例
+    private _ecsWorld!: EcsWorld;
+    // 地图路径数据缓存
+    private _mapPathData!: MapPathData;
+    // 全局战斗实体固定ID
+    private readonly _globalBattleEntityId = 1;
+
+    async start() {
+        //  获取关卡ID 暂定为1
+        this._levelId = 1;
+
+        UILayerRoot.initRoot(this.uiRoot);
+
+        console.log("开始加载game分包");
+        const bundle = await ResourceManager.getInstance().loadBundle("game");
+        if (!bundle) {
+            console.error("game分包加载失败");
+            return;
+        }
+
+        // 获取关卡配置
+        this._levelCfg = ConfigManager.getInstance().getRowById<LevelConfig>("level_table", this._levelId)!;
+        if (!this._levelCfg) {
+            console.error("关卡配置不存在 id = ", this._levelId);
+            return;
+        }
+
+        await this.loadMap();
+        this.initEcsWorld();
+        EnemyFactory.setEcsWorld(this._ecsWorld);
+        await UIManager.getInstance().openWindow("BattleWnd");
+
+        console.log("===== 战斗初始化全部完成 =====");
+
+        // ----------------【测试代码】----------------
+        // 测试：在path_0起点生成怪物战士
+        const startPos = this._mapPathData.getPathStartPos("path_0");
+        if (startPos) {
+            EnemyFactory.testSpawnMonster(100, "path_0");
+        }
+        // --------------------------------------------
+    }
+
+    /** 加载地图并且解析路径 */
+    private async loadMap() {
+        const mapPrefab = await ResourceManager.getInstance().loadPrefab(this._levelCfg.mapAssetPath, "game");
+        if (!mapPrefab) {
+            console.error("地图加载失败 path:", this._levelCfg.mapAssetPath);
+            return;
+        }
+        const mapInstance = instantiate(mapPrefab);
+        mapInstance.setParent(this.mapNode);
+
+        // 解析地图所有path路径点
+        this._mapPathData = new MapPathData();
+        this._mapPathData.parseFromMapNode(mapInstance);
+    }
+
+    /** 初始化ECS世界，创建全局战斗实体 */
+    private initEcsWorld() {
+        this._ecsWorld = new EcsWorld();
+        // 创建全局战斗实体（固定ID）
+        const globalEntity = this._ecsWorld.createEntity();
+        const globalComp = this._ecsWorld.addComponent(globalEntity, BattleGlobalComp);
+        // 填充关卡初始数据
+        globalComp.gold = this._levelCfg.initGold;
+        globalComp.baseHp = this._levelCfg.baseMaxHp;
+        globalComp.baseMaxHp = this._levelCfg.baseMaxHp;
+        globalComp.curWaveIndex = 0;
+        globalComp.canStartNextWave = true;
+        globalComp.gameSpeed = 1;
+        globalComp.isPause = false;
+
+        // =====================后续在这里注册所有System=====================
+        // this._ecsWorld.registerSystem(new MoveSystem());
+        // this._ecsWorld.registerSystem(new FsmSwitchSystem());
+        // this._ecsWorld.registerSystem(new AttackSystem());
+        // this._ecsWorld.registerSystem(new WaveSpawnSystem());
+        // =================================================================
+    }
+
+    protected update(dt: number): void {
+        if (!this._ecsWorld) return;
+        // 获取全局倍速
+        const globalComp = this._ecsWorld.tryGetComponent(this._globalBattleEntityId, BattleGlobalComp);
+        if (!globalComp || globalComp.isPause) return;
+        const realDt = dt * globalComp.gameSpeed;
+        // 驱动所有ECS系统
+        this._ecsWorld.update(realDt);
+    }
+
+    /*** 对外获取路径数据 System需要读取路径点位*/
+    public getMapPathData(): MapPathData {
+        return this._mapPathData;
+    }
+
+    /*** 获取实体渲染父节点（提供给RenderEntityManager）*/
+    public getEntityRoot(): Node {
+        return this.entityRoot;
+    }
+
+    /** 退出战斗，清理所有资源 */
+    public exitBattle() {
+        // 销毁ECS世界
+        this._ecsWorld.clear();
+        // 关闭战斗窗口
+        UIManager.getInstance().closeWindow("BattleWnd");
+        director.loadScene("scene/Start");
+    }
+
+    protected onDestroy(): void {
+        if (this._ecsWorld) {
+            this._ecsWorld.clear();
+        }
     }
 }
-
-
