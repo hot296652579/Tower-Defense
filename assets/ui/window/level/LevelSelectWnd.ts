@@ -25,6 +25,6 @@ export class LevelSelectWnd extends BaseWindow {
     onClickEnterGame(): void {
         UIManager.getInstance().closeWindow("LevelSelectWnd");
         // 跳转战斗场景
-        director.loadScene("battle/Battle");
+        director.loadScene("scene/Battle");
     }
 }

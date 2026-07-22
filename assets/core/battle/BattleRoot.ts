@@ -1,14 +1,14 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, find } from 'cc';
+import { UILayerRoot } from '../../ui/layer/UILayer';
 const { ccclass, property } = _decorator;
 
 @ccclass('BattleRoot')
 export class BattleRoot extends Component {
+
     start() {
-
-    }
-
-    update(deltaTime: number) {
-        
+        const UIRoot = find('Canvas/UIRoot');
+        UILayerRoot.initRoot(UIRoot);
     }
 }
-
+
+
