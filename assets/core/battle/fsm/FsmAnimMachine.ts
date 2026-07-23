@@ -25,12 +25,7 @@ export class FsmAnimMachine extends BaseComponent {
         }
 
         if (!this._isListenEvent) {
-            // 重点改动：传入自身entityId，EventManager会自动补发缓存事件
-            EventManager.getInstance().on(
-                GameEvent.ENTITY_STATE_CHANGE,
-                this.onEntityStateChange,
-                this
-            );
+            EventManager.getInstance().on(GameEvent.ENTITY_STATE_CHANGE, this.onEntityStateChange, this);
             this._isListenEvent = true;
         }
     }
