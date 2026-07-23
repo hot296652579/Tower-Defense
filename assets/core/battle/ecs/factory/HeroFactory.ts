@@ -12,6 +12,7 @@ import AttackComp from "../components/AttackComp";
 import BufferComp from "../components/BufferComp";
 import FsmStateComp, { EntityFsmState } from "../components/FsmStateComp";
 import HealerComp from "../components/HealerComp";
+import HeroComp from "../components/HeroComp";
 import HPComp from "../components/HPComp";
 import MoveComp from "../components/MoveComp";
 import TransformComp from "../components/TransformComp";
@@ -47,6 +48,7 @@ export class HeroFactory {
         const fsm = this._world.addComponent(entityId, FsmStateComp);
         const move = this._world.addComponent(entityId, MoveComp);
         const atk = this._world.addComponent(entityId, AttackComp);
+        const hero = this._world.addComponent(entityId, HeroComp);
 
         // 赋值生成坐标，默认朝右
         trans.pos = spawnPos.clone();
@@ -72,6 +74,9 @@ export class HeroFactory {
         atk.damageType = cfg.damageType;
         atk.isAttacking = false;
         atk.targetEntityId = 0;
+
+        hero.configId = cfg.id;
+        hero.unitType = cfg.unitType;
 
         // 根据单位类型挂载差异化组件
         switch (cfg.unitType) {

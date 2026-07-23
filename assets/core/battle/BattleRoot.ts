@@ -12,6 +12,7 @@ import { LevelConfig } from "./data/LevelConfigType";
 import EcsWorld from "./ecs/base/EcsWorld";
 import BattleGlobalComp from "./ecs/components/BattleGlobalComp";
 import EnemyComp from "./ecs/components/EnemyComp";
+import HeroComp from "./ecs/components/HeroComp";
 import TransformComp from "./ecs/components/TransformComp";
 import { EnemyFactory } from "./ecs/factory/EnemyFactory";
 import { HeroFactory } from "./ecs/factory/HeroFactory";
@@ -146,6 +147,9 @@ export default class BattleRoot extends Component {
 
         const entityList = this._ecsWorld.queryEntities([TransformComp, EnemyComp]);
         RenderEntityManager.getInstance().syncAllTransform(entityList, this._ecsWorld);
+        // 同步所有英雄Transform
+        const heroList = this._ecsWorld.queryEntities([TransformComp, HeroComp]);
+        RenderEntityManager.getInstance().syncAllTransform(heroList, this._ecsWorld);
     }
 
     /** 场景点击事件 */
@@ -163,7 +167,7 @@ export default class BattleRoot extends Component {
             return;
         }
 
-        const touchPos = event.getUILocation();
+        let touchPos = event.getUILocation();
         HeroFactory.createHero(selectHeroId, touchPos);
     }
 

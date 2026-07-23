@@ -99,6 +99,11 @@ export class RenderEntityManager extends BaseSingleton {
         return node;
     }
 
+    //根据实体ID获取渲染节点
+    public getRenderNode(entityId: number): Node | null {
+        return this._entityNodeMap.get(entityId);
+    }
+
     /** 每一帧同步所有实体Transform坐标 */
     public syncAllTransform(entityIds: number[], world: EcsWorld): void {
         for (const eid of entityIds) {
