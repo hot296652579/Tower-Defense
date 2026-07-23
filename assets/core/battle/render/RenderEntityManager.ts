@@ -1,4 +1,4 @@
-import { find, Node, Vec3 } from "cc";
+import { Node, Vec3 } from "cc";
 import { BundlesEnum } from "db://assets/define/BundlesEnum";
 import BaseSingleton from "db://assets/framework/base/BaseSingleton";
 import { ConfigManager } from "db://assets/framework/config/ConfigManager";
@@ -6,7 +6,6 @@ import { EventManager } from "db://assets/framework/event/EventManager";
 import { GameEvent } from "db://assets/framework/event/EventName";
 import { PoolManager } from "db://assets/framework/pool/PoolManager";
 import { ResourceManager } from "db://assets/framework/resource/ResourceManager";
-import BattleRoot from "../BattleRoot";
 import { UnitConfig } from "../data/UnitConfigType";
 import { EcsEntity } from "../ecs/base/EcsEntity";
 import EcsWorld from "../ecs/base/EcsWorld";
@@ -19,12 +18,14 @@ import { FsmAnimMachine } from "../fsm/FsmAnimMachine";
  * 单次战斗内使用，战斗销毁调用clear()，不要全局长期缓存实体映射
  */
 export class RenderEntityManager extends BaseSingleton {
+    private _ecsWorld!: EcsWorld;
     // entityId → 渲染节点
     private _entityNodeMap: Map<number, Node> = new Map();
     // 怪物渲染父节点
     private _entityRoot!: Node;
 
-    public async init(entityRoot: Node): Promise<void> {
+    public async init(entityRoot: Node, world: EcsWorld): Promise<void> {
+        this._ecsWorld = world;
         this._entityRoot = entityRoot;
         this._entityNodeMap.clear();
         // 监听实体创建事件（后续可以在EnemyFactory创建实体后派发）
@@ -80,10 +81,7 @@ export class RenderEntityManager extends BaseSingleton {
 
         animMachine.entityId = entityId;
 
-        //临时修复事件发送早于节点监听问题
-        const battleRootComp = find("Canvas/BattleRootNode").getComponent(BattleRoot);
-        const world = battleRootComp["_ecsWorld"];
-        const currentFsm = world.tryGetComponent(entityId, FsmStateComp);
+        const currentFsm = this._ecsWorld.tryGetComponent(entityId, FsmStateComp);
         if (currentFsm) {
             animMachine.onEntityStateChange(entityId, currentFsm.state);
         }

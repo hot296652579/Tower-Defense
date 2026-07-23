@@ -70,7 +70,7 @@ export default class BattleRoot extends Component {
         this.initEcsWorld();
         EnemyFactory.setEcsWorld(this._ecsWorld);
         console.log("ECS世界初始化完成");
-        await RenderEntityManager.getInstance().init(this.entityRoot);
+        await RenderEntityManager.getInstance().init(this.entityRoot, this._ecsWorld);
         console.log("渲染实体管理器初始化完成");
         await UIManager.getInstance().openWindow(UIConfig.BattleWnd.name);
         console.log("战斗窗口打开完成");
