@@ -6,7 +6,7 @@ import { EventManager } from "db://assets/framework/event/EventManager";
 import { GameEvent } from "db://assets/framework/event/EventName";
 import { PoolManager } from "db://assets/framework/pool/PoolManager";
 import { ResourceManager } from "db://assets/framework/resource/ResourceManager";
-import { UnitConfig } from "../data/UnitConfigType";
+import { EntityType, UnitConfig } from "../data/UnitConfigType";
 import { EcsEntity } from "../ecs/base/EcsEntity";
 import EcsWorld from "../ecs/base/EcsWorld";
 import FsmStateComp from "../ecs/components/FsmStateComp";
@@ -49,14 +49,22 @@ export class RenderEntityManager extends BaseSingleton {
     /**
      * 根据怪物配置ID 创建渲染节点，绑定ECS实体ID
      */
-    public async createRenderNode(entityId: number, monsterCfgId: number): Promise<Node | null> {
+    public async createRenderNode(entityId: number, cfgId: number, entityType: EntityType): Promise<Node | null> {
         if (!EcsEntity.isValid(entityId)) return null;
         if (this._entityNodeMap.has(entityId)) {
             return this._entityNodeMap.get(entityId)!;
         }
-        const cfg = ConfigManager.getInstance().getRowById<UnitConfig>("enemy_table", monsterCfgId);
+
+        let tableName: string;
+        if (entityType === EntityType.HERO) {
+            tableName = "hero_table";
+        } else {
+            tableName = "enemy_table";
+        }
+
+        const cfg = ConfigManager.getInstance().getRowById<UnitConfig>(tableName, cfgId);
         if (!cfg) {
-            console.error("RenderEntityManager 找不到怪物配置 id:", monsterCfgId);
+            console.error(`RenderEntityManager 找不到${tableName},实体配置 id: ${cfgId}`);
             return null;
         }
         // 注册对象池（key使用prefab路径作为唯一标识）
@@ -81,6 +89,7 @@ export class RenderEntityManager extends BaseSingleton {
 
         animMachine.entityId = entityId;
 
+        //手动同步初始状态，补齐时序丢失动画
         const currentFsm = this._ecsWorld.tryGetComponent(entityId, FsmStateComp);
         if (currentFsm) {
             animMachine.onEntityStateChange(entityId, currentFsm.state);
@@ -108,8 +117,8 @@ export class RenderEntityManager extends BaseSingleton {
         }
     }
 
-    private async onEntityCreate(entityId: number, monsterCfgId: number): Promise<void> {
-        await this.createRenderNode(entityId, monsterCfgId);
+    private async onEntityCreate(entityId: number, cfgId: number, entityType: EntityType): Promise<void> {
+        await this.createRenderNode(entityId, cfgId, entityType);
     }
 
     private onEntityDestroy(entityId: number): void {

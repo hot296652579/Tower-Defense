@@ -21,6 +21,7 @@ export class StartScene extends Component {
         uiMgr.registerWindow(UIConfig.LevelSelectWnd.name, UIConfig.LevelSelectWnd.path, true, BundlesEnum.UI);
         uiMgr.registerWindow(UIConfig.SettingWnd.name, UIConfig.SettingWnd.path, true, BundlesEnum.UI);
         uiMgr.registerWindow(UIConfig.BattleWnd.name, UIConfig.BattleWnd.path, true, BundlesEnum.UI);
+        uiMgr.registerWindow(UIConfig.ChooseHeroWnd.name, UIConfig.ChooseHeroWnd.path, true, BundlesEnum.UI);
 
         // 2. 通用弹窗
         uiMgr.registerWindow(UIConfig.TipWnd.name, UIConfig.TipWnd.path, true, BundlesEnum.UI);

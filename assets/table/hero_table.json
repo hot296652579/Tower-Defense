@@ -1,7 +1,7 @@
 [
     {
         "id": 1,
-        "name": "战士1",
+        "name": "牛头战士",
         "unitType": "melee",
         "hp": 1200,
         "def": 30,

@@ -47,6 +47,14 @@ export const UIConfig = {
         cache: true,
     },
 
+    /** 英雄选择*/
+    ChooseHeroWnd: {
+        name: "ChooseHeroWnd",
+        path: "prefab/battle/ChooseHeroWnd",
+        bundle: "ui",
+        cache: true,
+    },
+
     /** Tip */
     TipWnd: {
         name: "TipWnd",

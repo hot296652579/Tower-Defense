@@ -1,4 +1,4 @@
-import { _decorator, Component, director, instantiate, Node } from "cc";
+import { _decorator, Camera, Component, director, EventTouch, instantiate, Node } from "cc";
 const { ccclass, property } = _decorator;
 
 import { BundlesEnum } from "../../define/BundlesEnum";
@@ -7,12 +7,14 @@ import { ConfigManager } from "../../framework/config/ConfigManager";
 import { ResourceManager } from "../../framework/resource/ResourceManager";
 import { UILayerRoot } from "../../ui/layer/UILayer";
 import { UIManager } from "../../ui/manager/UIManager";
+import { ChooseHeroWnd } from "../../ui/window/battle/ChooseHeroWnd";
 import { LevelConfig } from "./data/LevelConfigType";
 import EcsWorld from "./ecs/base/EcsWorld";
 import BattleGlobalComp from "./ecs/components/BattleGlobalComp";
 import EnemyComp from "./ecs/components/EnemyComp";
 import TransformComp from "./ecs/components/TransformComp";
 import { EnemyFactory } from "./ecs/factory/EnemyFactory";
+import { HeroFactory } from "./ecs/factory/HeroFactory";
 import FsmSwitchSystem from "./ecs/systems/FsmSwitchSystem";
 import MoveSystem from "./ecs/systems/MoveSystem";
 import MapPathData from "./map/MapPathData";
@@ -31,6 +33,9 @@ export default class BattleRoot extends Component {
     @property(Node)
     public entityRoot!: Node;// 战斗实体渲染父节点：怪物、英雄、炮塔
 
+    @property(Camera)
+    public mainCamera!: Camera;
+
     // 当前关卡ID
     private _levelId: number = 0;
     // 当前关卡配置
@@ -41,6 +46,10 @@ export default class BattleRoot extends Component {
     private _mapPathData!: MapPathData;
     // 全局战斗实体固定ID
     private readonly _globalBattleEntityId = 1;
+
+    protected onLoad(): void {
+        this.node.on(Node.EventType.TOUCH_END, this.onSceneClick, this);
+    }
 
     async start() {
         //  获取关卡ID 暂定为1
@@ -69,10 +78,12 @@ export default class BattleRoot extends Component {
         await this.loadMap();
         this.initEcsWorld();
         EnemyFactory.setEcsWorld(this._ecsWorld);
+        HeroFactory.setEcsWorld(this._ecsWorld);
         console.log("ECS世界初始化完成");
         await RenderEntityManager.getInstance().init(this.entityRoot, this._ecsWorld);
         console.log("渲染实体管理器初始化完成");
         await UIManager.getInstance().openWindow(UIConfig.BattleWnd.name);
+        await UIManager.getInstance().openWindow(UIConfig.ChooseHeroWnd.name);
         console.log("战斗窗口打开完成");
 
         console.log("===== 战斗初始化全部完成 =====");
@@ -135,6 +146,25 @@ export default class BattleRoot extends Component {
 
         const entityList = this._ecsWorld.queryEntities([TransformComp, EnemyComp]);
         RenderEntityManager.getInstance().syncAllTransform(entityList, this._ecsWorld);
+    }
+
+    /** 场景点击事件 */
+    private onSceneClick(event: EventTouch): void {
+        console.log("场景点击事件:", event.getLocation());
+
+        const heroWnd = UIManager.getInstance().getWindow<ChooseHeroWnd>(UIConfig.ChooseHeroWnd.name);
+        if (!heroWnd) {
+            console.warn("英雄选择窗口未打开");
+            return;
+        }
+        const selectHeroId = heroWnd.getSelectHeroId();
+        if (selectHeroId === 0) {
+            console.warn("未选择任何英雄，请先点击左侧英雄按钮");
+            return;
+        }
+
+        const touchPos = event.getUILocation();
+        HeroFactory.createHero(selectHeroId, touchPos);
     }
 
     /*** 对外获取路径数据 System需要读取路径点位*/

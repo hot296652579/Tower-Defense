@@ -1,4 +1,9 @@
 
+export enum EntityType {
+    ENEMY = "enemy",
+    HERO = "hero",
+}
+
 /** 单位类型 */
 export enum UnitType {
     MELEE = "melee",    // 近战战士

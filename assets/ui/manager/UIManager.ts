@@ -46,7 +46,7 @@ export class UIManager extends BaseSingleton {
 
     //#region 打开窗口核心接口
     public async openWindow(key: string, param: WindowOpenParam = null): Promise<BaseWindow | null> {
-        console.log(`UIManager: 打开窗口key = ${key}`);
+        // console.log(`UIManager: 打开窗口key = ${key}`);
         const cfg = this._windowRegister.get(key);
         if (!cfg) {
             console.error(`UIManager: 未注册窗口key = ${key}`);
@@ -101,6 +101,11 @@ export class UIManager extends BaseSingleton {
         return win;
     }
     //#endregion
+
+    /** 根据key获取窗口实例 */
+    public getWindow<T extends BaseWindow>(key: string): T | null {
+        return this._windowCache.get(key) as T;
+    }
 
     //#region 关闭窗口
     /** 根据key关闭窗口 */
