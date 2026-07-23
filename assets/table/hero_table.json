@@ -17,7 +17,7 @@
     },
     {
         "id": 2,
-        "name": "大法师",
+        "name": "远程法师",
         "unitType": "ranger",
         "hp": 450,
         "def": 10,
@@ -27,7 +27,7 @@
         "atkRange": 350,
         "damageType": "magic",
         "animKey": "dark_mage",
-        "prefabPath": "hero/ranger/prefab/CanibalHunter",
+        "prefabPath": "hero/ranger/prefab/PirateFlamer",
         "goldDrop": 25,
         "bulletPath": "entity/bullet/magic_bullet",
         "bulletSpeed": 800,

@@ -91,7 +91,7 @@ export class RenderEntityManager extends BaseSingleton {
 
         //手动同步初始状态，补齐时序丢失动画
         const currentFsm = this._ecsWorld.tryGetComponent(entityId, FsmStateComp);
-        if (currentFsm) {
+        if (currentFsm && entityType === EntityType.ENEMY) {
             animMachine.onEntityStateChange(entityId, currentFsm.state);
         }
 
