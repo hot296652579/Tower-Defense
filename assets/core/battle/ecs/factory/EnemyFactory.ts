@@ -5,6 +5,7 @@ import { EcsEntity } from "../base/EcsEntity";
 import EcsWorld from "../base/EcsWorld";
 
 // 引入全部组件
+import { Vec2 } from "cc";
 import { EventManager } from "db://assets/framework/event/EventManager";
 import { GameEvent } from "db://assets/framework/event/EventName";
 import AttackComp from "../components/AttackComp";
@@ -29,7 +30,7 @@ export class EnemyFactory {
      * @param pathId 生成在哪一条路径 path_0 / path_1
      * @returns entityId
      */
-    public static createEnemy(monsterCfgId: number, pathId: string): number {
+    public static createEnemy(monsterCfgId: number, pathId: string, spawnPos: Vec2): number {
         if (!this._world) {
             console.error("EnemyFactory: 未设置EcsWorld");
             return EcsEntity.INVALID;
@@ -52,6 +53,9 @@ export class EnemyFactory {
         const enemy = this._world.addComponent(entityId, EnemyComp);
 
         // 基础数据赋值
+        trans.pos = spawnPos.clone();
+        trans.faceDir = 1;
+
         hp.maxHp = cfg.hp;
         hp.curHp = cfg.hp;
         hp.def = cfg.def;
@@ -114,7 +118,7 @@ export class EnemyFactory {
      * @param monsterId 怪物id
      * @param pathId 路径id
      */
-    public static testSpawnMonster(monsterId: number = 100, pathId: string = "path_0"): number {
-        return this.createEnemy(monsterId, pathId);
+    public static testSpawnMonster(monsterId: number = 100, pathId: string = "path_0", spawnPos: Vec2 = new Vec2()): number {
+        return this.createEnemy(monsterId, pathId, spawnPos);
     }
 }

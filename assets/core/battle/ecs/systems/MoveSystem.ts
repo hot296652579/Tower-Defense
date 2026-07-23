@@ -65,11 +65,6 @@ export default class MoveSystem extends EcsSystem {
                 trans.pos.y += ny * speed;
                 // 设置朝向
                 trans.faceDir = nx >= 0 ? 1 : -1;
-                // 自动切换FSM为行走状态（后续FsmSwitchSystem接管，这里临时测试可用）
-                if (fsm.state === EntityFsmState.IDLE) {
-                    fsm.state = EntityFsmState.WALK;
-                    EventManager.getInstance().emit(GameEvent.ENTITY_STATE_CHANGE, eid, fsm.state);
-                }
             }
         }
     }

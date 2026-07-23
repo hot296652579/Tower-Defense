@@ -1,4 +1,4 @@
-import { Node, Vec3 } from "cc";
+import { find, Node, Vec3 } from "cc";
 import { BundlesEnum } from "db://assets/define/BundlesEnum";
 import BaseSingleton from "db://assets/framework/base/BaseSingleton";
 import { ConfigManager } from "db://assets/framework/config/ConfigManager";
@@ -6,10 +6,13 @@ import { EventManager } from "db://assets/framework/event/EventManager";
 import { GameEvent } from "db://assets/framework/event/EventName";
 import { PoolManager } from "db://assets/framework/pool/PoolManager";
 import { ResourceManager } from "db://assets/framework/resource/ResourceManager";
+import BattleRoot from "../BattleRoot";
 import { UnitConfig } from "../data/UnitConfigType";
 import { EcsEntity } from "../ecs/base/EcsEntity";
 import EcsWorld from "../ecs/base/EcsWorld";
+import FsmStateComp from "../ecs/components/FsmStateComp";
 import TransformComp from "../ecs/components/TransformComp";
+import { FsmAnimMachine } from "../fsm/FsmAnimMachine";
 
 /**
  * ECS <-> 场景渲染节点桥接管理器
@@ -68,6 +71,23 @@ export class RenderEntityManager extends BaseSingleton {
         node.setParent(this._entityRoot);
         // 绑定实体ID（供FsmAnimMachine使用）
         node["entityId"] = entityId;
+
+        //添加FsmAnimMachine组件，绑定实体ID
+        let animMachine = node.getComponent(FsmAnimMachine);
+        if (!animMachine) {
+            animMachine = node.addComponent(FsmAnimMachine);
+        }
+
+        animMachine.entityId = entityId;
+
+        //临时修复事件发送早于节点监听问题
+        const battleRootComp = find("Canvas/BattleRootNode").getComponent(BattleRoot);
+        const world = battleRootComp["_ecsWorld"];
+        const currentFsm = world.tryGetComponent(entityId, FsmStateComp);
+        if (currentFsm) {
+            animMachine.onEntityStateChange(entityId, currentFsm.state);
+        }
+
         this._entityNodeMap.set(entityId, node);
         return node;
     }

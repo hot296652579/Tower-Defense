@@ -13,6 +13,7 @@ import BattleGlobalComp from "./ecs/components/BattleGlobalComp";
 import EnemyComp from "./ecs/components/EnemyComp";
 import TransformComp from "./ecs/components/TransformComp";
 import { EnemyFactory } from "./ecs/factory/EnemyFactory";
+import FsmSwitchSystem from "./ecs/systems/FsmSwitchSystem";
 import MoveSystem from "./ecs/systems/MoveSystem";
 import MapPathData from "./map/MapPathData";
 import { RenderEntityManager } from "./render/RenderEntityManager";
@@ -80,7 +81,7 @@ export default class BattleRoot extends Component {
         // 测试：在path_0起点生成怪物战士
         const startPos = this._mapPathData.getPathStartPos("path_0");
         if (startPos) {
-            EnemyFactory.testSpawnMonster(100, "path_0");
+            EnemyFactory.testSpawnMonster(100, "path_0", startPos);
         }
         // --------------------------------------------
     }
@@ -117,7 +118,7 @@ export default class BattleRoot extends Component {
 
         // =====================后续在这里注册所有System=====================
         this._ecsWorld.registerSystem(new MoveSystem());
-        // this._ecsWorld.registerSystem(new FsmSwitchSystem());
+        this._ecsWorld.registerSystem(new FsmSwitchSystem());
         // this._ecsWorld.registerSystem(new AttackSystem());
         // this._ecsWorld.registerSystem(new WaveSpawnSystem());
         // =================================================================
