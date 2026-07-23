@@ -69,6 +69,9 @@ export class EnemyFactory {
         move.pathIndex = 0;
         move.slowRate = 1;
 
+        move.isFirstSpawn = true;
+        move.isHero = false; // 怪物
+
         atk.atk = cfg.atk;
         atk.atkRange = cfg.atkRange;
         atk.atkInterval = cfg.atkInterval;

@@ -53,12 +53,12 @@ export class HeroFactory {
         // 赋值生成坐标，默认朝右
         trans.pos = spawnPos.clone();
         trans.faceDir = 1;
-
         hp.maxHp = cfg.hp;
         hp.curHp = cfg.hp;
         hp.def = cfg.def;
         hp.isHurt = false;
         hp.hurtCd = 0;
+        console.log(`英雄[${entityId}] 初始化血量 curHp=${hp.curHp}, maxHp=${hp.maxHp}`);
 
         fsm.state = EntityFsmState.IDLE;
 
@@ -66,6 +66,8 @@ export class HeroFactory {
         move.pathId = ""; // 英雄不沿怪物路径移动，留空
         move.pathIndex = 0;
         move.slowRate = 1;
+        move.isFirstSpawn = true;
+        move.isHero = true; // 英雄
 
         atk.atk = cfg.atk;
         atk.atkRange = cfg.atkRange;
