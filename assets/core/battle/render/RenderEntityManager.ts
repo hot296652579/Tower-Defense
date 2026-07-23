@@ -99,8 +99,12 @@ export class RenderEntityManager extends BaseSingleton {
             if (!transComp) continue;
             // 同步坐标
             node.setWorldPosition(new Vec3(transComp.pos.x, transComp.pos.y, 0));
-            // 朝向翻转
-            node.scale.set(Math.abs(node.scale.x) * transComp.faceDir, node.scale.y);
+
+            const spriteNode = node.getChildByName("Sprite");
+            if (spriteNode) {
+                // console.log("实体", eid, "faceDir:", transComp.faceDir, "spriteScaleX:", spriteNode.scale.x);
+                spriteNode.setScale(transComp.faceDir, spriteNode.scale.y);
+            }
         }
     }
 
