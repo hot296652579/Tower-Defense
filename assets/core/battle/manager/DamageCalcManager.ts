@@ -3,13 +3,14 @@ import { GameEvent } from "db://assets/framework/event/EventName";
 import EcsWorld from "../ecs/base/EcsWorld";
 import HPComp from "../ecs/components/HPComp";
 import TransformComp from "../ecs/components/TransformComp";
+import BaseSingleton from "db://assets/framework/base/BaseSingleton";
 
-export class DamageCalcManager {
+export class DamageCalcManager extends BaseSingleton {
     public static instance: DamageCalcManager = new DamageCalcManager();
     private world: EcsWorld = null!;
 
     // 初始化，注入ECS World，绑定事件监听
-    init(world: EcsWorld) {
+    public async init(world: EcsWorld): Promise<void> {
         this.world = world;
         EventManager.getInstance().on(GameEvent.ENTITY_ATTACK, this.onAttackEvent, this);
     }

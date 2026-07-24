@@ -71,6 +71,14 @@ export const UIConfig = {
         bundle: "ui",
         modal: true,
         cache: false,
-    }
+    },
+
+    /** 血条 */
+    HpBar: {
+        name: "HpBar",
+        path: "ui/prefab/HpBar",
+        bundle: "game",
+        cache: true,
+    },
 
 } satisfies Record<string, UIInfo>;

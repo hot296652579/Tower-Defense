@@ -21,6 +21,8 @@ import MoveSystem from "./ecs/systems/MoveSystem";
 import MapPathData from "./map/MapPathData";
 import { RenderEntityManager } from "./render/RenderEntityManager";
 import MeleeAttackSystem from "./ecs/systems/MeleeAttackSystem";
+import { DamageCalcManager } from "./manager/DamageCalcManager";
+import { HpBarManager } from "./ui/HpBarManager";
 
 @ccclass
 export default class BattleRoot extends Component {
@@ -121,7 +123,7 @@ export default class BattleRoot extends Component {
     }
 
     /** 初始化ECS世界，创建全局战斗实体 */
-    private initEcsWorld() {
+    private async initEcsWorld() {
         this._ecsWorld = new EcsWorld();
         // 创建全局战斗实体（固定ID）
         const globalEntity = this._ecsWorld.createEntity();
@@ -142,6 +144,10 @@ export default class BattleRoot extends Component {
 
         // this._ecsWorld.registerSystem(new WaveSpawnSystem());
         // =================================================================
+
+        // 初始化事件驱动管理器
+        await DamageCalcManager.getInstance().init(this._ecsWorld);
+        await HpBarManager.getInstance().loadHpBarPrefab();
     }
 
     protected update(dt: number): void {

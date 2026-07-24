@@ -5,24 +5,25 @@ import { GameEvent } from 'db://assets/framework/event/EventName';
 import HPComp from '../ecs/components/HPComp';
 import TransformComp from '../ecs/components/TransformComp';
 import { HpBarView } from './HpBarView';
+import { ResourceManager } from 'db://assets/framework/resource/ResourceManager';
+import { UIConfig } from 'db://assets/define/UIEnum';
+import BaseSingleton from 'db://assets/framework/base/BaseSingleton';
 
 @ccclass('HpBarManager')
-export class HpBarManager extends Component {
+export class HpBarManager extends BaseSingleton {
     public static instance: HpBarManager = null!;
     // game bundle 血条预制体
     private hpBarPrefab: Prefab | null = null;
     // 血条对象池
     private barPool: Pool<Node> = new Pool(() => {
-        const node = instantiate(this.hpBarPrefab!);
-        node.active = false;
-        node.setParent(this.node);
+        const node = null!;
         return node;
     }, 30);
 
     // 关键映射：实体ID -> 血条View，彻底脱离ECS组件存储节点
     private entityBarMap = new Map<number, HpBarView>();
 
-    onLoad() {
+    public async init(): Promise<void> {
         HpBarManager.instance = this;
         const evt = EventManager.getInstance();
         // 监听血量更新、实体死亡
@@ -31,14 +32,17 @@ export class HpBarManager extends Component {
     }
 
     // 异步加载game bundle内HpBar预制体，游戏初始化调用
-    loadHpBarPrefab() {
-        // director.loadBundle("game", (err, bundle) => {
-        //     if (err) return console.error("加载game bundle失败", err);
-        //     bundle.load("res/ui/prefab/HpBar", Prefab, (err, prefab) => {
-        //         if (err) return console.error("HpBar预制体加载失败", err);
-        //         this.hpBarPrefab = prefab;
-        //     });
-        // });
+    public async loadHpBarPrefab() {
+        this.hpBarPrefab = await ResourceManager.getInstance().loadPrefab(UIConfig.HpBar.path, UIConfig.HpBar.bundle);
+        if (!this.hpBarPrefab) {
+            console.error("HpBar预制体加载失败");
+            return;
+        }
+        this.barPool = new Pool(() => {
+            const node = instantiate(this.hpBarPrefab!);
+            node.active = false;
+            return node;
+        }, 30);
     }
 
     // 血量更新回调
@@ -76,7 +80,7 @@ export class HpBarManager extends Component {
         this.entityBarMap.delete(entityId);
     }
 
-    onDestroy() {
+    public destroy(): void {
         // 解绑事件，防止内存泄漏
         const evt = EventManager.getInstance();
         evt.off(GameEvent.ENTITY_HP_UPDATE, this.onHpUpdate, this);
