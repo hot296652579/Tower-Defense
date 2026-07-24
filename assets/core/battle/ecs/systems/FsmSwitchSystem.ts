@@ -36,13 +36,9 @@ export default class FsmSwitchSystem extends EcsSystem {
                 // 英雄首帧强制待机
                 if (moveComp.isHero) {
                     newState = EntityFsmState.IDLE;
+                } else {
+                    newState = moveComp.moveSpeed > 0 ? EntityFsmState.WALK : EntityFsmState.IDLE;
                 }
-                // 怪物首帧正常走移动逻辑，不锁IDLE
-                else {
-                    if (moveComp.moveSpeed > 0) newState = EntityFsmState.WALK;
-                    else newState = EntityFsmState.IDLE;
-                }
-                // 清除首帧标记，下一帧不再生效
                 moveComp.isFirstSpawn = false;
             }
             else if (moveComp.moveSpeed > 0) {
@@ -54,7 +50,7 @@ export default class FsmSwitchSystem extends EcsSystem {
             // 状态变更派发事件
             if (newState !== oldState) {
                 fsmComp.state = newState;
-                EventManager.getInstance().emit(GameEvent.ENTITY_STATE_CHANGE, entityId, entityId, newState);
+                EventManager.getInstance().emit(GameEvent.ENTITY_STATE_CHANGE, newState);
             }
         }
     }

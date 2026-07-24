@@ -62,7 +62,7 @@ export class EnemyFactory {
         hp.isHurt = false;
         hp.hurtCd = 0;
 
-        fsm.state = EntityFsmState.IDLE;
+        fsm.state = EntityFsmState.WALK;
 
         move.moveSpeed = cfg.moveSpeed;
         move.pathId = pathId;

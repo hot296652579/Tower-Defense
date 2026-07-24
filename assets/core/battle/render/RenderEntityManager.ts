@@ -9,7 +9,6 @@ import { ResourceManager } from "db://assets/framework/resource/ResourceManager"
 import { EntityType, UnitConfig } from "../data/UnitConfigType";
 import { EcsEntity } from "../ecs/base/EcsEntity";
 import EcsWorld from "../ecs/base/EcsWorld";
-import FsmStateComp from "../ecs/components/FsmStateComp";
 import TransformComp from "../ecs/components/TransformComp";
 import { FsmAnimMachine } from "../fsm/FsmAnimMachine";
 
@@ -88,13 +87,6 @@ export class RenderEntityManager extends BaseSingleton {
         }
 
         animMachine.entityId = entityId;
-
-        //手动同步初始状态，补齐时序丢失动画
-        const currentFsm = this._ecsWorld.tryGetComponent(entityId, FsmStateComp);
-        if (currentFsm) {
-            console.log(`实体${entityId} 初始化FSM state=${currentFsm.state}`);
-            animMachine.onEntityStateChange(entityId, currentFsm.state);
-        }
 
         this._entityNodeMap.set(entityId, node);
         return node;

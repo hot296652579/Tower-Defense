@@ -93,7 +93,7 @@ export default class BattleRoot extends Component {
         // 测试：在path_0起点生成怪物战士
         const startPos = this._mapPathData.getPathStartPos("path_0");
         if (startPos) {
-            // EnemyFactory.testSpawnMonster(100, "path_0", startPos);
+            EnemyFactory.testSpawnMonster(100, "path_0", startPos);
         }
         // --------------------------------------------
     }

@@ -10,7 +10,6 @@ export class FsmAnimMachine extends BaseComponent {
 
     private _animComp: Animation | null = null;
     public entityId: number = 0;
-    private _isListenEvent: boolean = false;
 
     protected onLoad(): void {
         const spriteNode: Node | null = this.node.getChildByName("Sprite");
@@ -24,10 +23,7 @@ export class FsmAnimMachine extends BaseComponent {
             return;
         }
 
-        if (!this._isListenEvent) {
-            EventManager.getInstance().on(GameEvent.ENTITY_STATE_CHANGE, this.onEntityStateChange, this);
-            this._isListenEvent = true;
-        }
+        EventManager.getInstance().on(GameEvent.ENTITY_STATE_CHANGE, this.onEntityStateChange, this);
     }
 
     // 对象池取出节点自动重置为待机动画
