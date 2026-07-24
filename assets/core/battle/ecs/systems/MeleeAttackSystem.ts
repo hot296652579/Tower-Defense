@@ -1,12 +1,13 @@
 import { EventManager } from "db://assets/framework/event/EventManager";
 import { GameEvent } from "db://assets/framework/event/EventName";
+import { EntityType } from "../../data/UnitConfigType";
 import EcsSystem from "../base/EcsSystem";
 import AttackComp from "../components/AttackComp";
 import AttackLimitComp from "../components/AttackLimitComp";
+import CampComp from "../components/CampComp";
 import FsmStateComp, { EntityFsmState } from "../components/FsmStateComp";
 import HPComp from "../components/HPComp";
 import MoveComp from "../components/MoveComp";
-import { DamageType } from "../../data/UnitConfigType";
 import TransformComp from "../components/TransformComp";
 
 //MeleeAttackSystem 只负责 AI 寻敌、攻击判定、冷却、目标锁定
@@ -23,7 +24,8 @@ export default class MeleeAttackSystem extends EcsSystem {
         const attackerEntities = this.world.queryEntities([
             AttackComp,
             MoveComp,
-            FsmStateComp
+            FsmStateComp,
+            CampComp
         ]);
 
         for (const attackerId of attackerEntities) {
@@ -31,6 +33,7 @@ export default class MeleeAttackSystem extends EcsSystem {
             const fsmComp = this.world.getComponent(attackerId, FsmStateComp);
             const attackerPos = this.world.getComponent(attackerId, TransformComp);
             const moveComp = this.world.getComponent(attackerId, MoveComp);
+            const attackerCamp = this.world.getComponent(attackerId, CampComp).camp;
 
             // 重置攻击标记:怪物默认继续寻路，英雄站桩不置移动
             attackComp.isAttacking = false;
@@ -48,12 +51,10 @@ export default class MeleeAttackSystem extends EcsSystem {
                 // 冷却中：如果已有锁定目标且目标存活在射程，停止移动
                 if (attackComp.targetEntityId !== 0) {
                     const targetId = attackComp.targetEntityId;
-                    // 校验目标是否存在
-                    if (this.world.getComponent(targetId, HPComp)
-                        && this.world.getComponent(targetId, TransformComp)) {
-                        const targetHp = this.world.getComponent(targetId, HPComp);
-                        const targetPos = this.world.getComponent(targetId, TransformComp);
-                        if (targetHp.curHp > 0) {
+                    if (this.isHostileTarget(attackerCamp, targetId)) {
+                        const targetHp = this.world.tryGetComponent(targetId, HPComp);
+                        const targetPos = this.world.tryGetComponent(targetId, TransformComp);
+                        if (targetHp && targetPos && targetHp.curHp > 0) {
                             const distance = this.calcDistance(
                                 attackerPos.pos.x, attackerPos.pos.y,
                                 targetPos.pos.x, targetPos.pos.y
@@ -62,16 +63,19 @@ export default class MeleeAttackSystem extends EcsSystem {
                                 moveComp.isMoving = false;
                             }
                         }
+                    } else {
+                        attackComp.targetEntityId = 0;
                     }
                 }
                 continue;
             }
 
-            // 阶段3：收集射程内所有存活可攻击目标
+            // 阶段3：收集射程内所有存活敌对目标（不同阵营）
             const rangeTargetList: Array<{ entityId: number; dist: number }> = [];
-            const allValidVictims = this.world.queryEntities([HPComp, AttackLimitComp, TransformComp]);
+            const allValidVictims = this.world.queryEntities([HPComp, AttackLimitComp, TransformComp, CampComp]);
             for (const targetId of allValidVictims) {
-                if (targetId === attackerId) continue;//排除自身
+                if (targetId === attackerId) continue;
+                if (!this.isHostileTarget(attackerCamp, targetId)) continue;
 
                 const targetHp = this.world.getComponent(targetId, HPComp);
                 const targetPos = this.world.getComponent(targetId, TransformComp);
@@ -81,7 +85,6 @@ export default class MeleeAttackSystem extends EcsSystem {
                     attackerPos.pos.x, attackerPos.pos.y,
                     targetPos.pos.x, targetPos.pos.y
                 );
-                console.log('attackerId:', attackerId, 'attackComp.atkRange:', attackComp.atkRange, 'distance:', distance);
                 if (distance <= attackComp.atkRange) {
                     rangeTargetList.push({ entityId: targetId, dist: distance });
                 }
@@ -146,6 +149,13 @@ export default class MeleeAttackSystem extends EcsSystem {
                 moveComp.isMoving = !moveComp.isHero;
             }
         }
+    }
+
+    /** 不同阵营才可攻击 */
+    private isHostileTarget(attackerCamp: EntityType, targetId: number): boolean {
+        const targetCamp = this.world.tryGetComponent(targetId, CampComp);
+        if (!targetCamp) return false;
+        return targetCamp.camp !== attackerCamp;
     }
 
     /** 二维两点距离计算 */

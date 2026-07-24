@@ -17,6 +17,7 @@ import HPComp from "../components/HPComp";
 import MoveComp from "../components/MoveComp";
 import TransformComp from "../components/TransformComp";
 import AttackLimitComp from "../components/AttackLimitComp";
+import CampComp from "../components/CampComp";
 
 export class EnemyFactory {
     private static _world: EcsWorld;
@@ -52,9 +53,11 @@ export class EnemyFactory {
         const move = this._world.addComponent(entityId, MoveComp);
         const atk = this._world.addComponent(entityId, AttackComp);
         const enemy = this._world.addComponent(entityId, EnemyComp);
+        const camp = this._world.addComponent(entityId, CampComp);
         const attackLimit = this._world.addComponent(entityId, AttackLimitComp);
 
         // 基础数据赋值
+        camp.camp = EntityType.ENEMY;
         trans.pos = spawnPos.clone();
         trans.faceDir = 1;
 

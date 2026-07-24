@@ -17,6 +17,7 @@ import HPComp from "../components/HPComp";
 import MoveComp from "../components/MoveComp";
 import TransformComp from "../components/TransformComp";
 import AttackLimitComp from "../components/AttackLimitComp";
+import CampComp from "../components/CampComp";
 
 export class HeroFactory {
     private static _world: EcsWorld;
@@ -50,9 +51,11 @@ export class HeroFactory {
         const move = this._world.addComponent(entityId, MoveComp);
         const atk = this._world.addComponent(entityId, AttackComp);
         const hero = this._world.addComponent(entityId, HeroComp);
+        const camp = this._world.addComponent(entityId, CampComp);
         const attackLimit = this._world.addComponent(entityId, AttackLimitComp);
 
-        // 赋值生成坐标，默认朝右
+        // 基础赋值
+        camp.camp = EntityType.HERO;
         trans.pos = spawnPos.clone();
         trans.faceDir = 1;
         hp.maxHp = cfg.hp;
