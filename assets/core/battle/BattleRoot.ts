@@ -100,7 +100,9 @@ export default class BattleRoot extends Component {
 
             for (let i = 0; i < 10; i++) {
                 setTimeout(() => {
-                    EnemyFactory.testSpawnMonster(100, "path_0", startPos);
+                    const path = ['path_0', 'path_1'];
+                    const randomPath = path[Math.floor(Math.random() * path.length)];
+                    EnemyFactory.testSpawnMonster(100, randomPath, startPos);
                 }, i * 200);
             }
         }

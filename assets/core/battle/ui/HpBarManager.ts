@@ -93,6 +93,7 @@ export class HpBarManager extends BaseSingleton {
         const evt = EventManager.getInstance();
         evt.off(GameEvent.ENTITY_HP_UPDATE, this.onHpUpdate, this);
         evt.off(GameEvent.ENTITY_ENTITY_DEAD, this.onEntityDead, this);
+        evt.off(GameEvent.ENTITY_DESTROY, this.onEntityDead, this);
         HpBarManager.instance = null!;
     }
 }
