@@ -33,6 +33,7 @@ export class HpBarManager extends BaseSingleton {
         // 监听血量更新、实体死亡
         evt.on(GameEvent.ENTITY_HP_UPDATE, this.onHpUpdate, this);
         evt.on(GameEvent.ENTITY_ENTITY_DEAD, this.onEntityDead, this);
+        evt.on(GameEvent.ENTITY_DESTROY, this.onEntityDead, this);
     }
 
     // 异步加载game bundle内HpBar预制体，游戏初始化调用

@@ -41,4 +41,8 @@ export class HpBarView extends Component {
         worldPos.y += this.offsetY;
         this.node.setWorldPosition(worldPos);
     }
+
+    onDestroy(): void {
+        this.unbind();
+    }
 }
