@@ -20,14 +20,15 @@ export default class MeleeAttackSystem extends EcsSystem {
             limitComp.curAttackCount = 0;
         }
 
-        // 阶段2：遍历所有近战攻击者
         const attackerEntities = this.world.queryEntities([
             AttackComp,
             MoveComp,
             FsmStateComp,
-            CampComp
+            CampComp,
+            TransformComp
         ]);
 
+        // 阶段2：先结算冷却中的交战锁定，优先占用攻击名额
         for (const attackerId of attackerEntities) {
             const attackComp = this.world.getComponent(attackerId, AttackComp);
             const fsmComp = this.world.getComponent(attackerId, FsmStateComp);
@@ -35,42 +36,43 @@ export default class MeleeAttackSystem extends EcsSystem {
             const moveComp = this.world.getComponent(attackerId, MoveComp);
             const attackerCamp = this.world.getComponent(attackerId, CampComp).camp;
 
-            // 重置攻击标记:怪物默认继续寻路，英雄站桩不置移动
             attackComp.isAttacking = false;
             moveComp.isMoving = !moveComp.isHero;
 
-            // 死亡/受伤单位直接停止攻击逻辑
             if (fsmComp.state === EntityFsmState.DEAD || fsmComp.state === EntityFsmState.HURT) {
                 attackComp.targetEntityId = 0;
                 continue;
             }
 
-            // 冷却倒计时
-            if (attackComp.atkCd > 0) {
-                attackComp.atkCd -= dt;
-                // 冷却中：如果已有锁定目标且目标存活在射程，停止移动
-                if (attackComp.targetEntityId !== 0) {
-                    const targetId = attackComp.targetEntityId;
-                    if (this.isHostileTarget(attackerCamp, targetId)) {
-                        const targetHp = this.world.tryGetComponent(targetId, HPComp);
-                        const targetPos = this.world.tryGetComponent(targetId, TransformComp);
-                        if (targetHp && targetPos && targetHp.curHp > 0) {
-                            const distance = this.calcDistance(
-                                attackerPos.pos.x, attackerPos.pos.y,
-                                targetPos.pos.x, targetPos.pos.y
-                            );
-                            if (distance <= attackComp.atkRange) {
-                                moveComp.isMoving = false;
-                            }
-                        }
-                    } else {
-                        attackComp.targetEntityId = 0;
-                    }
-                }
+            if (attackComp.atkCd <= 0) continue;
+
+            attackComp.atkCd -= dt;
+            if (attackComp.targetEntityId === 0) continue;
+
+            const targetId = attackComp.targetEntityId;
+            if (this.isHostileTarget(attackerCamp, targetId)
+                && this.tryOccupyEngagedTarget(attackerPos, attackComp, targetId)) {
+                moveComp.isMoving = false;
+            } else {
+                attackComp.targetEntityId = 0;
+            }
+        }
+
+        // 阶段3：冷却结束的单位寻敌并攻击
+        for (const attackerId of attackerEntities) {
+            const attackComp = this.world.getComponent(attackerId, AttackComp);
+            const fsmComp = this.world.getComponent(attackerId, FsmStateComp);
+            const attackerPos = this.world.getComponent(attackerId, TransformComp);
+            const moveComp = this.world.getComponent(attackerId, MoveComp);
+            const attackerCamp = this.world.getComponent(attackerId, CampComp).camp;
+
+            if (fsmComp.state === EntityFsmState.DEAD || fsmComp.state === EntityFsmState.HURT) {
                 continue;
             }
+            // 仍在冷却：阶段2已处理
+            if (attackComp.atkCd > 0) continue;
 
-            // 阶段3：收集射程内所有存活敌对目标（不同阵营）
+            // 收集射程内敌对目标
             const rangeTargetList: Array<{ entityId: number; dist: number }> = [];
             const allValidVictims = this.world.queryEntities([HPComp, AttackLimitComp, TransformComp, CampComp]);
             for (const targetId of allValidVictims) {
@@ -90,17 +92,14 @@ export default class MeleeAttackSystem extends EcsSystem {
                 }
             }
 
-            // 射程内无目标，清空锁定；怪物继续寻路，英雄保持站立
             if (rangeTargetList.length <= 0) {
                 attackComp.targetEntityId = 0;
                 moveComp.isMoving = !moveComp.isHero;
                 continue;
             }
 
-            // 按距离由近到远排序，优先打最近单位
             rangeTargetList.sort((a, b) => a.dist - b.dist);
 
-            // 阶段4：寻找未达攻击上限的目标
             let hitTargetId = 0;
             for (const targetInfo of rangeTargetList) {
                 const limitComp = this.world.getComponent(targetInfo.entityId, AttackLimitComp);
@@ -110,26 +109,23 @@ export default class MeleeAttackSystem extends EcsSystem {
                 }
             }
 
-            // 分支A：找到可用目标，执行攻击
             if (hitTargetId !== 0) {
                 attackComp.targetEntityId = hitTargetId;
                 attackComp.isAttacking = true;
                 moveComp.isMoving = false;
 
-                // 占用攻击名额
                 const targetLimit = this.world.getComponent(hitTargetId, AttackLimitComp);
                 targetLimit.curAttackCount += 1;
-
-                // 重置攻击冷却
                 attackComp.atkCd = attackComp.atkInterval;
 
-                // 造成伤害，触发受伤状态
                 const targetHp = this.world.getComponent(hitTargetId, HPComp);
                 targetHp.curHp -= attackComp.atk;
-                targetHp.isHurt = true;
-                targetHp.hurtCd = 0.3;
+                // 受伤硬直进行中不刷新，避免多段命中卡在 hurt
+                if (targetHp.hurtCd <= 0) {
+                    targetHp.isHurt = true;
+                    targetHp.hurtCd = 0.3;
+                }
 
-                // 派发攻击事件（携带伤害类型）
                 EventManager.getInstance().emit(
                     GameEvent.ENTITY_ATTACK,
                     attackerId,
@@ -142,13 +138,37 @@ export default class MeleeAttackSystem extends EcsSystem {
                     attackerId,
                     EntityFsmState.ATTACK
                 );
-            }
-            // 分支B：范围内全部目标攻击上限已满，怪物游走寻找其他目标
-            else {
+            } else {
+                // 名额已满：清空锁定，怪物继续沿路径走
                 attackComp.targetEntityId = 0;
                 moveComp.isMoving = !moveComp.isHero;
             }
         }
+    }
+
+    /** 冷却交战中占用名额；目标无效或离开射程返回 false */
+    private tryOccupyEngagedTarget(
+        attackerPos: TransformComp,
+        attackComp: AttackComp,
+        targetId: number
+    ): boolean {
+        const targetHp = this.world.tryGetComponent(targetId, HPComp);
+        const targetPos = this.world.tryGetComponent(targetId, TransformComp);
+        const targetLimit = this.world.tryGetComponent(targetId, AttackLimitComp);
+        if (!targetHp || !targetPos || !targetLimit || targetHp.curHp <= 0) {
+            return false;
+        }
+
+        const distance = this.calcDistance(
+            attackerPos.pos.x, attackerPos.pos.y,
+            targetPos.pos.x, targetPos.pos.y
+        );
+        if (distance > attackComp.atkRange) {
+            return false;
+        }
+
+        targetLimit.curAttackCount += 1;
+        return true;
     }
 
     /** 不同阵营才可攻击 */
@@ -158,7 +178,6 @@ export default class MeleeAttackSystem extends EcsSystem {
         return targetCamp.camp !== attackerCamp;
     }
 
-    /** 二维两点距离计算 */
     private calcDistance(x1: number, y1: number, x2: number, y2: number): number {
         const dx = x1 - x2;
         const dy = y1 - y2;

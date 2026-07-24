@@ -18,11 +18,20 @@ export default class FsmSwitchSystem extends EcsSystem {
 
         for (const entityId of entityList) {
             const fsmComp = this.world.getComponent(entityId, FsmStateComp);
-            const attackComp = this.world.getComponent(entityId, AttackComp);
+            const attackComp = this.world.tryGetComponent(entityId, AttackComp);
             const hpComp = this.world.getComponent(entityId, HPComp);
             const moveComp = this.world.getComponent(entityId, MoveComp);
             const oldState = fsmComp.state;
             let newState = oldState;
+
+            // 受伤硬直计时独立递减，避免处于攻击态时 hurtCd 永不消退
+            if (hpComp.hurtCd > 0) {
+                hpComp.hurtCd -= dt;
+                if (hpComp.hurtCd <= 0) {
+                    hpComp.hurtCd = 0;
+                    hpComp.isHurt = false;
+                }
+            }
 
             // 最高优先级：死亡
             if (hpComp.curHp <= 0) {
@@ -31,11 +40,8 @@ export default class FsmSwitchSystem extends EcsSystem {
             else if (attackComp && (attackComp.isAttacking || attackComp.atkCd > 0)) {
                 newState = EntityFsmState.ATTACK;
             }
-            // 受伤优先级：受伤
             else if (hpComp.isHurt || hpComp.hurtCd > 0) {
                 newState = EntityFsmState.HURT;
-                hpComp.hurtCd -= dt;
-                if (hpComp.hurtCd <= 0) hpComp.isHurt = false;
             }
             else if (moveComp.isMoving) {
                 newState = EntityFsmState.WALK;
@@ -43,7 +49,7 @@ export default class FsmSwitchSystem extends EcsSystem {
                 newState = EntityFsmState.IDLE;
             }
 
-            // 状态变更，或首帧强制同步时派发事件
+            // 状态变更派发事件
             if (newState !== oldState) {
                 fsmComp.state = newState;
                 console.log(`实体${entityId} 状态变更：${oldState} -> ${newState}`);
