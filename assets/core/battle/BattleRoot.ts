@@ -20,6 +20,7 @@ import FsmSwitchSystem from "./ecs/systems/FsmSwitchSystem";
 import MoveSystem from "./ecs/systems/MoveSystem";
 import MapPathData from "./map/MapPathData";
 import { RenderEntityManager } from "./render/RenderEntityManager";
+import MeleeAttackSystem from "./ecs/systems/MeleeAttackSystem";
 
 @ccclass
 export default class BattleRoot extends Component {
@@ -129,9 +130,10 @@ export default class BattleRoot extends Component {
         globalComp.isPause = false;
 
         // =====================后续在这里注册所有System=====================
+        // this._ecsWorld.registerSystem(new MeleeAttackSystem());
         this._ecsWorld.registerSystem(new MoveSystem());
         this._ecsWorld.registerSystem(new FsmSwitchSystem());
-        // this._ecsWorld.registerSystem(new AttackSystem());
+
         // this._ecsWorld.registerSystem(new WaveSpawnSystem());
         // =================================================================
     }
@@ -154,7 +156,7 @@ export default class BattleRoot extends Component {
 
     /** 场景点击事件 */
     private onSceneClick(event: EventTouch): void {
-        console.log("场景点击事件:", event.getLocation());
+        // console.log("场景点击事件:", event.getLocation());
 
         const heroWnd = UIManager.getInstance().getWindow<ChooseHeroWnd>(UIConfig.ChooseHeroWnd.name);
         if (!heroWnd) {

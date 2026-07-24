@@ -28,6 +28,7 @@ export enum GameEvent {
     ENTITY_CREATE = "ENTITY_CREATE",//实体创建
     ENTITY_DESTROY = "ENTITY_DESTROY",//实体销毁
     ENTITY_STATE_CHANGE = "ENTITY_STATE_CHANGE",//实体状态改变
+    ENTITY_ATTACK = "ENTITY_ATTACK ",//实体攻击
 
     // 资源加载
     RES_LOAD_FINISH = "RES_LOAD_FINISH",

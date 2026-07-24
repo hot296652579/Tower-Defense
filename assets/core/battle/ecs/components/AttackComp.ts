@@ -2,7 +2,7 @@ import { DamageType } from "../../data/UnitConfigType";
 import EcsComponent from "../base/EcsComponent";
 
 export default class AttackComp extends EcsComponent {
-    /** 攻击力 */
+    /** 攻击伤害 */
     public atk: number = 0;
     /** 攻击范围 */
     public atkRange: number = 0;

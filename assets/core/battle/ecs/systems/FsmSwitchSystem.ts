@@ -5,6 +5,7 @@ import EcsSystem from "../base/EcsSystem";
 import FsmStateComp, { EntityFsmState } from "../components/FsmStateComp";
 import HPComp from "../components/HPComp";
 import MoveComp from "../components/MoveComp";
+import AttackComp from "../components/AttackComp";
 
 export default class FsmSwitchSystem extends EcsSystem {
 
@@ -17,6 +18,7 @@ export default class FsmSwitchSystem extends EcsSystem {
 
         for (const entityId of entityList) {
             const fsmComp = this.world.getComponent(entityId, FsmStateComp);
+            const attackComp = this.world.getComponent(entityId, AttackComp);
             const hpComp = this.world.getComponent(entityId, HPComp);
             const moveComp = this.world.getComponent(entityId, MoveComp);
             const oldState = fsmComp.state;
@@ -25,6 +27,9 @@ export default class FsmSwitchSystem extends EcsSystem {
             // 最高优先级：死亡
             if (hpComp.curHp <= 0) {
                 newState = EntityFsmState.DEAD;
+            }
+            else if (attackComp && (attackComp.isAttacking || attackComp.atkCd > 0)) {
+                newState = EntityFsmState.ATTACK;
             }
             // 受伤优先级：受伤
             else if (hpComp.isHurt || hpComp.hurtCd > 0) {
