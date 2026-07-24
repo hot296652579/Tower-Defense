@@ -9,6 +9,7 @@ import { ResourceManager } from "db://assets/framework/resource/ResourceManager"
 import { EntityType, UnitConfig } from "../data/UnitConfigType";
 import { EcsEntity } from "../ecs/base/EcsEntity";
 import EcsWorld from "../ecs/base/EcsWorld";
+import FsmStateComp from "../ecs/components/FsmStateComp";
 import TransformComp from "../ecs/components/TransformComp";
 import { FsmAnimMachine } from "../fsm/FsmAnimMachine";
 
@@ -87,6 +88,11 @@ export class RenderEntityManager extends BaseSingleton {
         }
 
         animMachine.entityId = entityId;
+        // 按工厂写入的初始状态同步动画（怪物 WALK / 英雄 IDLE），不依赖状态变更事件
+        const fsmComp = this._ecsWorld.tryGetComponent(entityId, FsmStateComp);
+        if (fsmComp) {
+            animMachine.applyState(fsmComp.state);
+        }
 
         this._entityNodeMap.set(entityId, node);
         return node;

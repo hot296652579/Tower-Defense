@@ -68,8 +68,7 @@ export class EnemyFactory {
         move.pathId = pathId;
         move.pathIndex = 0;
         move.slowRate = 1;
-
-        move.isFirstSpawn = true;
+        move.isMoving = false;
         move.isHero = false; // 怪物
 
         atk.atk = cfg.atk;

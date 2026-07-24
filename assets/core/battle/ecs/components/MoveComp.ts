@@ -9,7 +9,7 @@ export default class MoveComp extends EcsComponent {
     public pathIndex: number = 0;
     /** 减速倍率 1=正常速度 */
     public slowRate: number = 1;
-
-    public isFirstSpawn: boolean = true;
+    /** 本帧是否真正在移动（由 MoveSystem 写入） */
+    public isMoving: boolean = false;
     public isHero: boolean = false;
 }

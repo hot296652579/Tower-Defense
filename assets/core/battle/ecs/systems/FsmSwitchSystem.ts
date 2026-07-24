@@ -32,25 +32,17 @@ export default class FsmSwitchSystem extends EcsSystem {
                 hpComp.hurtCd -= dt;
                 if (hpComp.hurtCd <= 0) hpComp.isHurt = false;
             }
-            else if (moveComp.isFirstSpawn) {
-                // 英雄首帧强制待机
-                if (moveComp.isHero) {
-                    newState = EntityFsmState.IDLE;
-                } else {
-                    newState = moveComp.moveSpeed > 0 ? EntityFsmState.WALK : EntityFsmState.IDLE;
-                }
-                moveComp.isFirstSpawn = false;
-            }
-            else if (moveComp.moveSpeed > 0) {
+            else if (moveComp.isMoving) {
                 newState = EntityFsmState.WALK;
             } else {
                 newState = EntityFsmState.IDLE;
             }
 
-            // 状态变更派发事件
+            // 状态变更，或首帧强制同步时派发事件
             if (newState !== oldState) {
                 fsmComp.state = newState;
-                EventManager.getInstance().emit(GameEvent.ENTITY_STATE_CHANGE, newState);
+                console.log(`实体${entityId} 状态变更：${oldState} -> ${newState}`);
+                EventManager.getInstance().emit(GameEvent.ENTITY_STATE_CHANGE, entityId, newState);
             }
         }
     }

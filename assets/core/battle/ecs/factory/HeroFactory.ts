@@ -66,7 +66,7 @@ export class HeroFactory {
         move.pathId = ""; // 英雄不沿怪物路径移动，留空
         move.pathIndex = 0;
         move.slowRate = 1;
-        move.isFirstSpawn = true;
+        move.isMoving = false;
         move.isHero = true; // 英雄
 
         atk.atk = cfg.atk;

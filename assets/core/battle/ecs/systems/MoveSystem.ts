@@ -27,6 +27,9 @@ export default class MoveSystem extends EcsSystem {
             const move = this.world.getComponent(eid, MoveComp);
             const fsm = this.world.getComponent(eid, FsmStateComp);
 
+            // 每帧先清零，仅在本帧真正位移时置 true
+            move.isMoving = false;
+
             // 死亡/受伤状态不移动
             if (fsm.state === EntityFsmState.DEAD || fsm.state === EntityFsmState.HURT) {
                 continue;
@@ -56,6 +59,8 @@ export default class MoveSystem extends EcsSystem {
                     EventManager.getInstance().emit(GameEvent.ENTITY_DESTROY, eid);
                     continue;
                 }
+                // 真正移动 标记
+                move.isMoving = true;
             } else {
                 // 归一化方向向量，移动
                 const dist = Math.sqrt(distSq);
@@ -65,6 +70,7 @@ export default class MoveSystem extends EcsSystem {
                 trans.pos.y += ny * speed;
                 // 设置朝向
                 trans.faceDir = nx >= 0 ? 1 : -1;
+                move.isMoving = true;
             }
         }
     }

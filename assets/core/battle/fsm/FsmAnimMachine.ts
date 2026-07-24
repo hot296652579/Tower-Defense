@@ -26,19 +26,11 @@ export class FsmAnimMachine extends BaseComponent {
         EventManager.getInstance().on(GameEvent.ENTITY_STATE_CHANGE, this.onEntityStateChange, this);
     }
 
-    // 对象池取出节点自动重置为待机动画
-    protected onEnable(): void {
-        if (this._animComp) {
-            this.playAnim("idle");
-        }
-    }
+    /** 按逻辑状态播放动画（创建绑定时 / 状态变更时共用） */
+    public applyState(state: EntityFsmState): void {
+        if (!this._animComp) return;
 
-    /** 接收实体状态变更事件，切换对应动画 */
-    public onEntityStateChange(targetEntityId: number, newState: EntityFsmState): void {
-        if (targetEntityId !== this.entityId || !this._animComp) return;
-
-        console.log(`FsmAnimMachine：实体${this.entityId} 状态切换为:${newState}`);
-        switch (newState) {
+        switch (state) {
             case EntityFsmState.IDLE:
                 this.playAnim("idle");
                 break;
@@ -55,6 +47,14 @@ export class FsmAnimMachine extends BaseComponent {
                 this.playAnim("dead");
                 break;
         }
+    }
+
+    /** 接收实体状态变更事件，切换对应动画 */
+    public onEntityStateChange(targetEntityId: number, newState: EntityFsmState): void {
+        if (targetEntityId !== this.entityId) return;
+
+        console.log(`FsmAnimMachine：实体${this.entityId} 状态切换为:${newState}`);
+        this.applyState(newState);
     }
 
     /** 播放指定动画片段 */
