@@ -5,8 +5,10 @@ import { GameEvent } from "db://assets/framework/event/EventName";
 import BattleRoot from "../../BattleRoot";
 import MapPathData from "../../map/MapPathData";
 import EcsSystem from "../base/EcsSystem";
+import AttackComp from "../components/AttackComp";
 import EnemyComp from "../components/EnemyComp";
 import FsmStateComp, { EntityFsmState } from "../components/FsmStateComp";
+import HPComp from "../components/HPComp";
 import MoveComp from "../components/MoveComp";
 import TransformComp from "../components/TransformComp";
 
@@ -30,9 +32,27 @@ export default class MoveSystem extends EcsSystem {
             // 每帧先清零，仅在本帧真正位移时置 true
             move.isMoving = false;
 
-            // 死亡/受伤状态不移动
-            if (fsm.state === EntityFsmState.DEAD || fsm.state === EntityFsmState.HURT) {
+            // 死亡/受伤/攻击状态不沿路径移动
+            if (fsm.state === EntityFsmState.DEAD
+                || fsm.state === EntityFsmState.HURT
+                || fsm.state === EntityFsmState.ATTACK) {
                 continue;
+            }
+
+            // 已锁定射程内存活目标时停步交战，避免攻击系统停步后又被路径移动覆盖
+            const attack = this.world.tryGetComponent(eid, AttackComp);
+            if (attack && attack.targetEntityId !== 0) {
+                const targetId = attack.targetEntityId;
+                const targetHp = this.world.tryGetComponent(targetId, HPComp);
+                const targetTrans = this.world.tryGetComponent(targetId, TransformComp);
+                if (targetHp && targetTrans && targetHp.curHp > 0) {
+                    const dx = targetTrans.pos.x - trans.pos.x;
+                    const dy = targetTrans.pos.y - trans.pos.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist <= attack.atkRange) {
+                        continue;
+                    }
+                }
             }
 
             const pathPoints = this._mapPathData.getPathPoints(move.pathId);

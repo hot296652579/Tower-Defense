@@ -130,7 +130,7 @@ export default class BattleRoot extends Component {
         globalComp.isPause = false;
 
         // =====================后续在这里注册所有System=====================
-        // this._ecsWorld.registerSystem(new MeleeAttackSystem());
+        this._ecsWorld.registerSystem(new MeleeAttackSystem());
         this._ecsWorld.registerSystem(new MoveSystem());
         this._ecsWorld.registerSystem(new FsmSwitchSystem());
 

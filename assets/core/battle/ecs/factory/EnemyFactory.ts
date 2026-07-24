@@ -16,6 +16,7 @@ import HealerComp from "../components/HealerComp";
 import HPComp from "../components/HPComp";
 import MoveComp from "../components/MoveComp";
 import TransformComp from "../components/TransformComp";
+import AttackLimitComp from "../components/AttackLimitComp";
 
 export class EnemyFactory {
     private static _world: EcsWorld;
@@ -51,6 +52,7 @@ export class EnemyFactory {
         const move = this._world.addComponent(entityId, MoveComp);
         const atk = this._world.addComponent(entityId, AttackComp);
         const enemy = this._world.addComponent(entityId, EnemyComp);
+        const attackLimit = this._world.addComponent(entityId, AttackLimitComp);
 
         // 基础数据赋值
         trans.pos = spawnPos.clone();

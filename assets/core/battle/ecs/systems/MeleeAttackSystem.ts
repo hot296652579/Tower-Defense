@@ -32,8 +32,9 @@ export default class MeleeAttackSystem extends EcsSystem {
             const attackerPos = this.world.getComponent(attackerId, TransformComp);
             const moveComp = this.world.getComponent(attackerId, MoveComp);
 
-            // 重置攻击标记
+            // 重置攻击标记:怪物默认继续寻路，英雄站桩不置移动
             attackComp.isAttacking = false;
+            moveComp.isMoving = !moveComp.isHero;
 
             // 死亡/受伤单位直接停止攻击逻辑
             if (fsmComp.state === EntityFsmState.DEAD || fsmComp.state === EntityFsmState.HURT) {
@@ -44,6 +45,25 @@ export default class MeleeAttackSystem extends EcsSystem {
             // 冷却倒计时
             if (attackComp.atkCd > 0) {
                 attackComp.atkCd -= dt;
+                // 冷却中：如果已有锁定目标且目标存活在射程，停止移动
+                if (attackComp.targetEntityId !== 0) {
+                    const targetId = attackComp.targetEntityId;
+                    // 校验目标是否存在
+                    if (this.world.getComponent(targetId, HPComp)
+                        && this.world.getComponent(targetId, TransformComp)) {
+                        const targetHp = this.world.getComponent(targetId, HPComp);
+                        const targetPos = this.world.getComponent(targetId, TransformComp);
+                        if (targetHp.curHp > 0) {
+                            const distance = this.calcDistance(
+                                attackerPos.pos.x, attackerPos.pos.y,
+                                targetPos.pos.x, targetPos.pos.y
+                            );
+                            if (distance <= attackComp.atkRange) {
+                                moveComp.isMoving = false;
+                            }
+                        }
+                    }
+                }
                 continue;
             }
 
@@ -51,6 +71,8 @@ export default class MeleeAttackSystem extends EcsSystem {
             const rangeTargetList: Array<{ entityId: number; dist: number }> = [];
             const allValidVictims = this.world.queryEntities([HPComp, AttackLimitComp, TransformComp]);
             for (const targetId of allValidVictims) {
+                if (targetId === attackerId) continue;//排除自身
+
                 const targetHp = this.world.getComponent(targetId, HPComp);
                 const targetPos = this.world.getComponent(targetId, TransformComp);
                 if (targetHp.curHp <= 0) continue;
@@ -59,15 +81,16 @@ export default class MeleeAttackSystem extends EcsSystem {
                     attackerPos.pos.x, attackerPos.pos.y,
                     targetPos.pos.x, targetPos.pos.y
                 );
+                console.log('attackerId:', attackerId, 'attackComp.atkRange:', attackComp.atkRange, 'distance:', distance);
                 if (distance <= attackComp.atkRange) {
                     rangeTargetList.push({ entityId: targetId, dist: distance });
                 }
             }
 
-            // 射程内无目标，清空锁定，持续移动寻敌
+            // 射程内无目标，清空锁定；怪物继续寻路，英雄保持站立
             if (rangeTargetList.length <= 0) {
                 attackComp.targetEntityId = 0;
-                moveComp.isMoving = true;
+                moveComp.isMoving = !moveComp.isHero;
                 continue;
             }
 
@@ -88,6 +111,7 @@ export default class MeleeAttackSystem extends EcsSystem {
             if (hitTargetId !== 0) {
                 attackComp.targetEntityId = hitTargetId;
                 attackComp.isAttacking = true;
+                moveComp.isMoving = false;
 
                 // 占用攻击名额
                 const targetLimit = this.world.getComponent(hitTargetId, AttackLimitComp);
@@ -116,10 +140,10 @@ export default class MeleeAttackSystem extends EcsSystem {
                     EntityFsmState.ATTACK
                 );
             }
-            // 分支B：范围内全部目标攻击上限已满，游走寻找其他目标
+            // 分支B：范围内全部目标攻击上限已满，怪物游走寻找其他目标
             else {
                 attackComp.targetEntityId = 0;
-                moveComp.isMoving = true;
+                moveComp.isMoving = !moveComp.isHero;
             }
         }
     }
