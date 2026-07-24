@@ -118,13 +118,13 @@ export default class MeleeAttackSystem extends EcsSystem {
                 targetLimit.curAttackCount += 1;
                 attackComp.atkCd = attackComp.atkInterval;
 
-                const targetHp = this.world.getComponent(hitTargetId, HPComp);
-                targetHp.curHp -= attackComp.atk;
-                // 受伤硬直进行中不刷新，避免多段命中卡在 hurt
-                if (targetHp.hurtCd <= 0) {
-                    targetHp.isHurt = true;
-                    targetHp.hurtCd = 0.3;
-                }
+                // const targetHp = this.world.getComponent(hitTargetId, HPComp);
+                // targetHp.curHp -= attackComp.atk;
+                // // 受伤硬直进行中不刷新，避免多段命中卡在 hurt
+                // if (targetHp.hurtCd <= 0) {
+                //     targetHp.isHurt = true;
+                //     targetHp.hurtCd = 0.3;
+                // }
 
                 EventManager.getInstance().emit(
                     GameEvent.ENTITY_ATTACK,
