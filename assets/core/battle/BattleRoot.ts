@@ -147,6 +147,7 @@ export default class BattleRoot extends Component {
 
         // 初始化事件驱动管理器
         await DamageCalcManager.getInstance().init(this._ecsWorld);
+        await HpBarManager.getInstance().init();
         await HpBarManager.getInstance().loadHpBarPrefab();
     }
 

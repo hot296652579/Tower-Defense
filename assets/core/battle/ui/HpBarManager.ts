@@ -8,6 +8,9 @@ import { HpBarView } from './HpBarView';
 import { ResourceManager } from 'db://assets/framework/resource/ResourceManager';
 import { UIConfig } from 'db://assets/define/UIEnum';
 import BaseSingleton from 'db://assets/framework/base/BaseSingleton';
+import { UILayerRoot, UILayerType } from 'db://assets/ui/layer/UILayer';
+import EcsWorld from '../ecs/base/EcsWorld';
+import { RenderEntityManager } from '../render/RenderEntityManager';
 
 @ccclass('HpBarManager')
 export class HpBarManager extends BaseSingleton {
@@ -19,6 +22,7 @@ export class HpBarManager extends BaseSingleton {
         const node = null!;
         return node;
     }, 30);
+
 
     // 关键映射：实体ID -> 血条View，彻底脱离ECS组件存储节点
     private entityBarMap = new Map<number, HpBarView>();
@@ -53,24 +57,27 @@ export class HpBarManager extends BaseSingleton {
         deltaHp: number;
     }) {
         if (!this.hpBarPrefab) return;
-        const { entityId, hpComp, posComp, deltaHp } = data;
-        const targetNode = posComp;
+        const { entityId, hpComp, posComp, deltaHp } = data; //entityId受伤者Id
 
+        // console.log('更新血量组件 hpComp', hpComp.curHp, hpComp.maxHp);
         let barView: HpBarView;
         if (this.entityBarMap.has(entityId)) {
             barView = this.entityBarMap.get(entityId)!;
         } else {
             const barNode = this.barPool.alloc();
+            barNode.setParent(UILayerRoot.getRootByLayer(UILayerType.SCENE_UI)!);
             barView = barNode.getComponent(HpBarView)!;
             this.entityBarMap.set(entityId, barView);
         }
 
-        // barView.bindTarget(targetNode);
+        const renderNode = RenderEntityManager.getInstance().getRenderNode(entityId);
+        if (renderNode) {
+            barView.bindTarget(renderNode);
+        }
         barView.refreshHp(hpComp.curHp, hpComp.maxHp);
         // 掉血播放闪烁
         if (deltaHp < 0) barView.playHurtFlash();
     }
-
 
     // 实体死亡回收血条
     private onEntityDead(entityId: number) {
