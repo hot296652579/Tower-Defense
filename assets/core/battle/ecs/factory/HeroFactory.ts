@@ -18,6 +18,8 @@ import MoveComp from "../components/MoveComp";
 import TransformComp from "../components/TransformComp";
 import AttackLimitComp from "../components/AttackLimitComp";
 import CampComp from "../components/CampComp";
+import DamageTypeComp from "../components/DamageTypeComp";
+import RangerBulletComp from "../components/RangerBulletComp";
 
 export class HeroFactory {
     private static _world: EcsWorld;
@@ -53,7 +55,7 @@ export class HeroFactory {
         const hero = this._world.addComponent(entityId, HeroComp);
         const camp = this._world.addComponent(entityId, CampComp);
         const attackLimit = this._world.addComponent(entityId, AttackLimitComp);
-
+        const damageType = this._world.addComponent(entityId, DamageTypeComp);
         // 基础赋值
         camp.camp = EntityType.HERO;
         trans.pos = spawnPos.clone();
@@ -105,6 +107,8 @@ export class HeroFactory {
                 break;
             case UnitType.MELEE:
             case UnitType.RANGER:
+                damageType.damageType = cfg.damageType;
+                this._world.addComponent(entityId, RangerBulletComp);
                 break;
         }
 

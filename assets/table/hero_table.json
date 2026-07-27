@@ -24,7 +24,7 @@
         "moveSpeed": 1.2,
         "atk": 180,
         "atkInterval": 1.2,
-        "atkRange": 350,
+        "atkRange": 240,
         "damageType": "magic",
         "animKey": "dark_mage",
         "prefabPath": "hero/ranger/prefab/PirateFlamer",
