@@ -1,43 +1,31 @@
+import { Vec2, math, Node } from "cc";
 import EcsSystem from "../base/EcsSystem";
 import TransformComp from "../components/TransformComp";
 import AttackComp from "../components/AttackComp";
 import RangerBulletComp from "../components/RangerBulletComp";
 import CampComp from "../components/CampComp";
 import HPComp from "../components/HPComp";
-import HeroComp from "../components/HeroComp";
-import EnemyComp from "../components/EnemyComp";
 
-import { Vec2, math, Node } from "cc";
-import { PoolManager } from "db://assets/framework/pool/PoolManager";
-import { ResourceManager } from "db://assets/framework/resource/ResourceManager";
 import DamageTypeComp from "../components/DamageTypeComp";
 import { EntityType } from "../../data/UnitConfigType";
-import { ConfigManager } from "db://assets/framework/config/ConfigManager";
-import { BundlesEnum } from "db://assets/define/BundlesEnum";
 import { EventManager } from "db://assets/framework/event/EventManager";
 import { GameEvent } from "db://assets/framework/event/EventName";
 import { EntityFsmState } from "../components/FsmStateComp";
 import { BattleConfigHelper, UnitBulletConfig } from "../../data/BattleConfigHelper";
 import { UILayerRoot, UILayerType } from "db://assets/ui/layer/UILayer";
 import { EffectManager } from "../../manager/EffectManager";
-
-
-interface BulletRuntimeInfo {
-    attackerEid: number;
-    targetEid: number;
-    startWorldPos: Vec2;
-    maxAttackRange: number;
-    poolKey: string;
-}
+// 投射物管理器
+import { ProjectileManager, ProjectileRuntimeInfo } from "../../manager/ProjectileManager";
 
 export default class RangerAttackSystem extends EcsSystem {
-    private _poolMgr = PoolManager.getInstance();
-    private _resMgr = ResourceManager.getInstance();
-    private _activeBulletMap = new Map<Node, BulletRuntimeInfo>();
+
+    private _projectileMgr = ProjectileManager.getInstance();
 
     public update(dt: number): void {
         this.handleRangerAttack(dt);
-        this.updateAllFlyingBullets(dt);
+        // 交给管理器统一更新所有子弹，获取命中列表
+        const hitProjectileList = this._projectileMgr.updateAllProjectile(dt, this.world);
+        this.handleAllHitProjectile(hitProjectileList);
     }
 
     private handleRangerAttack(dt: number) {
@@ -69,11 +57,19 @@ export default class RangerAttackSystem extends EcsSystem {
             bulletComp.targetId = targetEid;
             bulletComp.damage = atkComp.atk;
 
-            // 调用全局配置工具读取子弹配置
+            // 读取子弹配置
             const bulletCfg: UnitBulletConfig = BattleConfigHelper.getBattleByBulletConfig(this.world, eid);
             if (!bulletCfg.bulletPath) continue;
 
-            this.spawnBulletNode(trans.pos, targetEid, eid, atkComp.atkRange, bulletCfg.bulletPath);
+            //子弹生成
+            this._projectileMgr.spawnProjectile(
+                trans.pos,
+                targetEid,
+                eid,
+                atkComp.atkRange,
+                bulletCfg.bulletPath,
+                UILayerRoot.getRootByLayer(UILayerType.SCENE_UI)!
+            );
         }
     }
 
@@ -97,115 +93,43 @@ export default class RangerAttackSystem extends EcsSystem {
         return nearestId;
     }
 
-    /**
-     * 生成子弹节点
-     * @param spawnPos 生成位置
-     * @param targetEid 目标实体ID
-     * @param attackerEid 攻击者实体ID
-     * @param maxRange 最大范围
-     * @param poolKey 子弹预制体路径
-     * @returns 子弹节点
-    */
-    private async spawnBulletNode(
-        spawnPos: Vec2,
-        targetEid: number,
-        attackerEid: number,
-        maxRange: number,
-        poolKey: string
-    ) {
-        let bulletNode = this._poolMgr.spawn(poolKey);
-        if (!bulletNode) {
-            const prefab = await this._resMgr.loadPrefab(poolKey, BundlesEnum.Game);
-            if (!prefab) return;
-            this._poolMgr.registerPool(poolKey, prefab, 40);
-            bulletNode = this._poolMgr.spawn(poolKey)!;
-        }
-
-        bulletNode.active = true;
-        bulletNode.setParent(UILayerRoot.getRootByLayer(UILayerType.SCENE_UI)!);
-        bulletNode.setWorldPosition(spawnPos.x, spawnPos.y, 0);
-
-        const runtimeInfo: BulletRuntimeInfo = {
-            attackerEid,
-            targetEid,
-            startWorldPos: spawnPos.clone(),
-            maxAttackRange: maxRange,
-            poolKey
-        };
-        this._activeBulletMap.set(bulletNode, runtimeInfo);
-    }
-
-    private updateAllFlyingBullets(dt: number) {
-        const recycleList: Node[] = [];
-        this._activeBulletMap.forEach((info, bulletNode) => {
+    /** 批量处理所有命中子弹：伤害、事件、特效 */
+    private handleAllHitProjectile(hitList: ProjectileRuntimeInfo[]) {
+        for (const info of hitList) {
             const bulletComp = this.world.tryGetComponent(info.attackerEid, RangerBulletComp);
-            if (!bulletComp) {
-                recycleList.push(bulletNode);
-                return;
-            }
+            const dmgTypeComp = this.world.tryGetComponent(info.attackerEid, DamageTypeComp);
             const targetTrans = this.world.tryGetComponent(info.targetEid, TransformComp);
-            if (!targetTrans) {
-                recycleList.push(bulletNode);
-                return;
-            }
+            if (!bulletComp || !dmgTypeComp || !targetTrans) continue;
 
-            const dir = math.Vec2.subtract(new Vec2(), targetTrans.pos, new Vec2(bulletNode.worldPosition.x, bulletNode.worldPosition.y).clone());
-            const distToTarget = dir.length();
-            const moveStep = bulletComp.bulletSpeed * dt;
-            const travelDist = math.Vec2.distance(info.startWorldPos, new Vec2(bulletNode.worldPosition.x, bulletNode.worldPosition.y).clone());
+            const bulletCfg: UnitBulletConfig = BattleConfigHelper.getBattleByBulletConfig(this.world, info.attackerEid);
+            const atkComp = this.world.tryGetComponent(info.attackerEid, AttackComp);
+            if (atkComp) atkComp.isAttacking = false;
 
-            if (distToTarget < moveStep || travelDist > info.maxAttackRange) {
-                this.handleBulletHit(info, bulletNode, targetTrans.pos);
-                recycleList.push(bulletNode);
-                return;
-            }
-
-            dir.normalize();
-            bulletNode.setWorldPosition(
-                bulletNode.worldPosition.x + dir.x * moveStep,
-                bulletNode.worldPosition.y + dir.y * moveStep,
-                0
+            // 攻击事件
+            EventManager.getInstance().emit(
+                GameEvent.ENTITY_ATTACK,
+                info.attackerEid,
+                info.targetEid,
+                bulletComp.damage,
+                dmgTypeComp.damageType
             );
-            // console.log("子弹移动", bulletNode.worldPosition.x, bulletNode.worldPosition.y);
-        });
 
-        for (const node of recycleList) {
-            const info = this._activeBulletMap.get(node)!;
-            this._poolMgr.despawn(node);
-            this._activeBulletMap.delete(node);
+            // 攻击状态动画
+            EventManager.getInstance().emit(
+                GameEvent.ENTITY_STATE_CHANGE,
+                info.attackerEid,
+                EntityFsmState.ATTACK
+            );
+
+            // 播放命中特效
+            if (bulletCfg.hitEffectPath) {
+                EffectManager.getInstance().playEffect(bulletCfg.hitEffectPath, targetTrans.pos);
+            }
         }
     }
 
-    private handleBulletHit(info: BulletRuntimeInfo, bulletNode: Node, hitPos: Vec2) {
-        const bulletComp = this.world.getComponent(info.attackerEid, RangerBulletComp);
-        const dmgTypeComp = this.world.getComponent(info.attackerEid, DamageTypeComp);
-
-        const bulletCfg: UnitBulletConfig = BattleConfigHelper.getBattleByBulletConfig(this.world, info.attackerEid);
-
-        const atkComp = this.world.tryGetComponent(info.attackerEid, AttackComp);
-        if (atkComp) atkComp.isAttacking = false;
-
-        EventManager.getInstance().emit(
-            GameEvent.ENTITY_ATTACK,
-            info.attackerEid,
-            info.targetEid,
-            bulletComp.damage,
-            dmgTypeComp.damageType
-        );
-
-        EventManager.getInstance().emit(
-            GameEvent.ENTITY_STATE_CHANGE,
-            info.attackerEid,
-            EntityFsmState.ATTACK
-        );
-
-        if (bulletCfg.hitEffectPath) EffectManager.getInstance().playEffect(bulletCfg.hitEffectPath, hitPos);
-    }
-
+    /** 关卡刷新清空子弹，转发给管理器 */
     public clearAllBullet() {
-        this._activeBulletMap.forEach((info, node) => {
-            this._poolMgr.despawn(node);
-        });
-        this._activeBulletMap.clear();
+        this._projectileMgr.clearAllProjectile();
     }
 }

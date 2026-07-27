@@ -5,7 +5,9 @@ import { ResourceManager } from "../../../framework/resource/ResourceManager";
 import { BundlesEnum } from "db://assets/define/BundlesEnum";
 import { UILayerRoot, UILayerType } from "db://assets/ui/layer/UILayer";
 
-/*** 特效管理器*/
+/*** 特效管理器
+ * @param 只管一次性视觉特效（命中、受伤、爆炸、死亡等特效）
+*/
 export class EffectManager extends BaseSingleton {
     private _effectPoolKeys = new Set<string>();
 
