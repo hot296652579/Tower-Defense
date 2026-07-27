@@ -18,6 +18,8 @@ import MoveComp from "../components/MoveComp";
 import TransformComp from "../components/TransformComp";
 import AttackLimitComp from "../components/AttackLimitComp";
 import CampComp from "../components/CampComp";
+import DamageTypeComp from "../components/DamageTypeComp";
+import RangerBulletComp from "../components/RangerBulletComp";
 
 export class EnemyFactory {
     private static _world: EcsWorld;
@@ -55,6 +57,7 @@ export class EnemyFactory {
         const enemy = this._world.addComponent(entityId, EnemyComp);
         const camp = this._world.addComponent(entityId, CampComp);
         const attackLimit = this._world.addComponent(entityId, AttackLimitComp);
+        const damageType = this._world.addComponent(entityId, DamageTypeComp);
 
         // 基础数据赋值
         camp.camp = EntityType.ENEMY;
@@ -109,7 +112,8 @@ export class EnemyFactory {
                 break;
             }
             case UnitType.RANGER:
-                // 远程子弹数据后续在AttackSystem使用，不需要额外组件，配置存在EnemyConfig
+                damageType.damageType = cfg.damageType;
+                this._world.addComponent(entityId, RangerBulletComp);
                 break;
             case UnitType.MELEE:
                 break;
