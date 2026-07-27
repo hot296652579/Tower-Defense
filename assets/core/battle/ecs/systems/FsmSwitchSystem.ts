@@ -33,15 +33,19 @@ export default class FsmSwitchSystem extends EcsSystem {
                 }
             }
 
-            // 最高优先级：死亡
+            // 优先级：死亡 > 出刀帧攻击 > 受伤 > 攻击冷却维持 > 移动 > 待机
+            // atkCd 不再压过 HURT，交战冷却期间受击可播受伤动画
             if (hpComp.curHp <= 0) {
                 newState = EntityFsmState.DEAD;
             }
-            else if (attackComp && (attackComp.isAttacking || attackComp.atkCd > 0)) {
+            else if (attackComp && attackComp.isAttacking) {
                 newState = EntityFsmState.ATTACK;
             }
             else if (hpComp.isHurt || hpComp.hurtCd > 0) {
                 newState = EntityFsmState.HURT;
+            }
+            else if (attackComp && attackComp.atkCd > 0) {
+                newState = EntityFsmState.ATTACK;
             }
             else if (moveComp.isMoving) {
                 newState = EntityFsmState.WALK;

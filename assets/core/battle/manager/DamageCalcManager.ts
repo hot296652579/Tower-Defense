@@ -34,7 +34,7 @@ export class DamageCalcManager extends BaseSingleton {
         // 2. 设置受伤硬直状态
         if (targetHp.hurtCd <= 0) {
             targetHp.isHurt = true;
-            targetHp.hurtCd = 0.3;
+            targetHp.hurtCd = 0.5;
         }
 
         // 3. 派发血量更新事件，交给HpBarManager刷新UI
