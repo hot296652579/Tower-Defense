@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "5ee3e1a7-8232-4fa8-870c-284c9a6b1976",
+  "uuid": "fc2bcb65-932e-4b44-a328-caba0ba925df",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "5ee3e1a7-8232-4fa8-870c-284c9a6b1976@6c48a",
-      "displayName": "proy_Necromancer_0006",
+      "uuid": "fc2bcb65-932e-4b44-a328-caba0ba925df@6c48a",
+      "displayName": "SaurianBlazefangBolt_0002",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "5ee3e1a7-8232-4fa8-870c-284c9a6b1976",
+        "imageUuidOrDatabaseUri": "fc2bcb65-932e-4b44-a328-caba0ba925df",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,20 +34,20 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "5ee3e1a7-8232-4fa8-870c-284c9a6b1976@f9941",
-      "displayName": "proy_Necromancer_0006",
+      "uuid": "fc2bcb65-932e-4b44-a328-caba0ba925df@f9941",
+      "displayName": "SaurianBlazefangBolt_0002",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
         "trimThreshold": 1,
         "rotated": false,
-        "offsetX": 4.5,
-        "offsetY": -3,
-        "trimX": 11,
-        "trimY": 11,
-        "width": 35,
-        "height": 36,
-        "rawWidth": 48,
+        "offsetX": 2,
+        "offsetY": 3.5,
+        "trimX": 15,
+        "trimY": 4,
+        "width": 42,
+        "height": 37,
+        "rawWidth": 68,
         "rawHeight": 52,
         "borderTop": 0,
         "borderBottom": 0,
@@ -60,17 +60,17 @@
         "meshType": 0,
         "vertices": {
           "rawPosition": [
-            -17.5,
-            -18,
+            -21,
+            -18.5,
             0,
-            17.5,
-            -18,
+            21,
+            -18.5,
             0,
-            -17.5,
-            18,
+            -21,
+            18.5,
             0,
-            17.5,
-            18,
+            21,
+            18.5,
             0
           ],
           "indexes": [
@@ -82,38 +82,38 @@
             3
           ],
           "uv": [
+            15,
+            48,
+            57,
+            48,
+            15,
             11,
-            41,
-            46,
-            41,
-            11,
-            5,
-            46,
-            5
+            57,
+            11
           ],
           "nuv": [
-            0.22916666666666666,
-            0.09615384615384616,
-            0.9583333333333334,
-            0.09615384615384616,
-            0.22916666666666666,
-            0.7884615384615384,
-            0.9583333333333334,
-            0.7884615384615384
+            0.22058823529411764,
+            0.21153846153846154,
+            0.8382352941176471,
+            0.21153846153846154,
+            0.22058823529411764,
+            0.9230769230769231,
+            0.8382352941176471,
+            0.9230769230769231
           ],
           "minPos": [
-            -17.5,
-            -18,
+            -21,
+            -18.5,
             0
           ],
           "maxPos": [
-            17.5,
-            18,
+            21,
+            18.5,
             0
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "5ee3e1a7-8232-4fa8-870c-284c9a6b1976@6c48a",
+        "imageUuidOrDatabaseUri": "fc2bcb65-932e-4b44-a328-caba0ba925df@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "hasAlpha": true,
     "fixAlphaTransparencyArtifacts": false,
-    "redirect": "5ee3e1a7-8232-4fa8-870c-284c9a6b1976@6c48a"
+    "redirect": "fc2bcb65-932e-4b44-a328-caba0ba925df@6c48a"
   }
 }

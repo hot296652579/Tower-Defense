@@ -29,7 +29,8 @@
         "animKey": "dark_mage",
         "prefabPath": "hero/ranger/prefab/PirateFlamer",
         "goldDrop": 25,
-        "bulletPath": "entity/bullet/magic_bullet",
+        "bulletPath": "skill/bullet/prefab/bullet1",
+        "effectPath": "skill/effect/prefab/effect_bullet1",
         "bulletSpeed": 800,
         "splashRadius": 40
     },

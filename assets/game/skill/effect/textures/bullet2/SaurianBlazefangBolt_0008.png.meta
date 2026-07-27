@@ -2,7 +2,7 @@
   "ver": "1.0.27",
   "importer": "image",
   "imported": true,
-  "uuid": "0774baaf-6a08-4c79-a6b4-7ce3d7a98a39",
+  "uuid": "8d0651de-b09d-45b5-8921-400f3b68f033",
   "files": [
     ".json",
     ".png"
@@ -10,14 +10,14 @@
   "subMetas": {
     "6c48a": {
       "importer": "texture",
-      "uuid": "0774baaf-6a08-4c79-a6b4-7ce3d7a98a39@6c48a",
+      "uuid": "8d0651de-b09d-45b5-8921-400f3b68f033@6c48a",
       "displayName": "SaurianBlazefangBolt_0008",
       "id": "6c48a",
       "name": "texture",
       "userData": {
         "wrapModeS": "clamp-to-edge",
         "wrapModeT": "clamp-to-edge",
-        "imageUuidOrDatabaseUri": "0774baaf-6a08-4c79-a6b4-7ce3d7a98a39",
+        "imageUuidOrDatabaseUri": "8d0651de-b09d-45b5-8921-400f3b68f033",
         "isUuid": true,
         "visible": false,
         "minfilter": "linear",
@@ -34,7 +34,7 @@
     },
     "f9941": {
       "importer": "sprite-frame",
-      "uuid": "0774baaf-6a08-4c79-a6b4-7ce3d7a98a39@f9941",
+      "uuid": "8d0651de-b09d-45b5-8921-400f3b68f033@f9941",
       "displayName": "SaurianBlazefangBolt_0008",
       "id": "f9941",
       "name": "spriteFrame",
@@ -113,7 +113,7 @@
           ]
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "0774baaf-6a08-4c79-a6b4-7ce3d7a98a39@6c48a",
+        "imageUuidOrDatabaseUri": "8d0651de-b09d-45b5-8921-400f3b68f033@6c48a",
         "atlasUuid": "",
         "trimType": "auto"
       },
@@ -129,6 +129,6 @@
     "type": "sprite-frame",
     "hasAlpha": true,
     "fixAlphaTransparencyArtifacts": false,
-    "redirect": "0774baaf-6a08-4c79-a6b4-7ce3d7a98a39@6c48a"
+    "redirect": "8d0651de-b09d-45b5-8921-400f3b68f033@6c48a"
   }
 }

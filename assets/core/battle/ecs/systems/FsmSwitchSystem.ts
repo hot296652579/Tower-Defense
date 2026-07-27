@@ -45,7 +45,7 @@ export default class FsmSwitchSystem extends EcsSystem {
                 newState = EntityFsmState.HURT;
             }
             else if (attackComp && attackComp.atkCd > 0) {
-                newState = EntityFsmState.ATTACK;
+                newState = EntityFsmState.ATTACK;//攻击冷却维持
             }
             else if (moveComp.isMoving) {
                 newState = EntityFsmState.WALK;
