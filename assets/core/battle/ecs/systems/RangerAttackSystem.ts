@@ -19,6 +19,7 @@ import { GameEvent } from "db://assets/framework/event/EventName";
 import { EntityFsmState } from "../components/FsmStateComp";
 import { BattleConfigHelper, UnitBulletConfig } from "../../data/BattleConfigHelper";
 import { UILayerRoot, UILayerType } from "db://assets/ui/layer/UILayer";
+import { EffectManager } from "../../manager/EffectManager";
 
 
 interface BulletRuntimeInfo {
@@ -96,6 +97,15 @@ export default class RangerAttackSystem extends EcsSystem {
         return nearestId;
     }
 
+    /**
+     * 生成子弹节点
+     * @param spawnPos 生成位置
+     * @param targetEid 目标实体ID
+     * @param attackerEid 攻击者实体ID
+     * @param maxRange 最大范围
+     * @param poolKey 子弹预制体路径
+     * @returns 子弹节点
+    */
     private async spawnBulletNode(
         spawnPos: Vec2,
         targetEid: number,
@@ -112,8 +122,9 @@ export default class RangerAttackSystem extends EcsSystem {
         }
 
         bulletNode.active = true;
-        bulletNode.setWorldPosition(spawnPos.x, spawnPos.y, 0);
         bulletNode.setParent(UILayerRoot.getRootByLayer(UILayerType.SCENE_UI)!);
+        bulletNode.setWorldPosition(spawnPos.x, spawnPos.y, 0);
+
         const runtimeInfo: BulletRuntimeInfo = {
             attackerEid,
             targetEid,
@@ -155,7 +166,7 @@ export default class RangerAttackSystem extends EcsSystem {
                 bulletNode.worldPosition.y + dir.y * moveStep,
                 0
             );
-            console.log("子弹移动", bulletNode.worldPosition.x, bulletNode.worldPosition.y);
+            // console.log("子弹移动", bulletNode.worldPosition.x, bulletNode.worldPosition.y);
         });
 
         for (const node of recycleList) {
@@ -188,8 +199,7 @@ export default class RangerAttackSystem extends EcsSystem {
             EntityFsmState.ATTACK
         );
 
-        // DOTO:后续添加EffectManager播放命中特效
-        // if(bulletCfg.hitEffectPath) EffectManager.playEffect(bulletCfg.hitEffectPath, hitPos);
+        if (bulletCfg.hitEffectPath) EffectManager.getInstance().playEffect(bulletCfg.hitEffectPath, hitPos);
     }
 
     public clearAllBullet() {

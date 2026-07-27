@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "effect_bullet1",
+    "_name": "effect_bullet2",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "effect_bullet1",
+    "_name": "effect_bullet2",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -127,8 +127,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 30,
-      "height": 30
+      "width": 25,
+      "height": 24
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -164,7 +164,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "32ea5874-5b22-47c4-a080-d50fb141f4fc@f9941",
+      "__uuid__": "5604d107-cfc3-4840-848a-9b68b1fe83bb@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -201,12 +201,12 @@
     "playOnLoad": true,
     "_clips": [
       {
-        "__uuid__": "d906106f-1e08-4ebe-a021-0dcaf8509aaa",
+        "__uuid__": "4aabcd26-396a-41b4-88b9-43ac1a2e9465",
         "__expectedType__": "cc.AnimationClip"
       }
     ],
     "_defaultClip": {
-      "__uuid__": "d906106f-1e08-4ebe-a021-0dcaf8509aaa",
+      "__uuid__": "4aabcd26-396a-41b4-88b9-43ac1a2e9465",
       "__expectedType__": "cc.AnimationClip"
     },
     "_id": ""

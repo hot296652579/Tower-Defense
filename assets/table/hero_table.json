@@ -22,7 +22,7 @@
         "hp": 450,
         "def": 10,
         "moveSpeed": 1.2,
-        "atk": 180,
+        "atk": 1,
         "atkInterval": 1.2,
         "atkRange": 240,
         "damageType": "magic",
@@ -30,7 +30,7 @@
         "prefabPath": "hero/ranger/prefab/PirateFlamer",
         "goldDrop": 25,
         "bulletPath": "skill/bullet/prefab/bullet1",
-        "effectPath": "skill/effect/prefab/effect_bullet1",
+        "effectPath": "skill/effect/prefab/effect_bullet2",
         "bulletSpeed": 800,
         "splashRadius": 40
     },

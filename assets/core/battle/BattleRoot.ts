@@ -26,6 +26,7 @@ import { HpBarManager } from "./ui/HpBarManager";
 import { EventManager } from "../../framework/event/EventManager";
 import { GameEvent } from "../../framework/event/EventName";
 import RangerAttackSystem from "./ecs/systems/RangerAttackSystem";
+import { EffectManager } from "./manager/EffectManager";
 
 @ccclass
 export default class BattleRoot extends Component {
@@ -94,10 +95,12 @@ export default class BattleRoot extends Component {
             return;
         }
 
+        EffectManager.getInstance().clearAllEffect();
+
         this.entityRoot.removeAllChildren();
         this.mapNode.removeAllChildren();
         await this.loadMap();
-        this.initEcsWorld();
+        await this.initEcsWorld();
         EnemyFactory.setEcsWorld(this._ecsWorld);
         HeroFactory.setEcsWorld(this._ecsWorld);
         console.log("ECS世界初始化完成");
@@ -153,6 +156,7 @@ export default class BattleRoot extends Component {
         await DamageCalcManager.getInstance().init(this._ecsWorld);
         await HpBarManager.getInstance().init();
         await HpBarManager.getInstance().loadHpBarPrefab();
+        await EffectManager.getInstance().init();
     }
 
     protected update(dt: number): void {
@@ -183,7 +187,7 @@ export default class BattleRoot extends Component {
 
     //测试代码添加怪物
     private testAddMonster(): void {
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 1; i++) {
             setTimeout(() => {
                 const path = ['path_0'];
                 const randomPath = path[Math.floor(Math.random() * path.length)];
