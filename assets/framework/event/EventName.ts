@@ -32,6 +32,8 @@ export enum GameEvent {
     ENTITY_HP_UPDATE = "ENTITY_HP_UPDATE",//实体血量更新
     ENTITY_ENTITY_DEAD = "ENTITY_ENTITY_DEAD",//实体死亡
 
+    GAME_RESTART_LEVEL = "GAME_RESTART_LEVEL",//游戏重新开始关卡
+
     // 资源加载
     RES_LOAD_FINISH = "RES_LOAD_FINISH",
 }

@@ -1,5 +1,5 @@
 // assets/ui/layer/UILayer.ts
-import { Layers, Node } from "cc";
+import { HorizontalTextAlignment, Layers, Node, UITransform, Widget } from "cc";
 
 /** UI分层枚举，层级越大渲染越靠上 */
 export enum UILayerType {
@@ -48,7 +48,52 @@ export class UILayerRoot {
         const node = new Node(name);
         node.setParent(parent);
         node.layer = Layers.nameToLayer("UI");
-        node.setPosition(0, 0, 0);
+        node.addComponent(UITransform);
+
+        let widget = node.getComponent(Widget);
+        if (!widget) {
+            widget = node.addComponent(Widget);
+        }
+
+        this.setWidgetAlign(widget, {
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+        });
+        widget.updateAlignment();
         return node;
+    }
+
+    private static setWidgetAlign(
+        widget: Widget,
+        options: {
+            left?: number;
+            right?: number;
+            top?: number;
+            bottom?: number;
+            hCenter?: number;
+            vCenter?: number;
+        }
+    ) {
+        widget.isAlignLeft = options.left !== undefined;
+        if (options.left !== undefined) widget.left = options.left;
+
+        widget.isAlignRight = options.right !== undefined;
+        if (options.right !== undefined) widget.right = options.right;
+
+        widget.isAlignTop = options.top !== undefined;
+        if (options.top !== undefined) widget.top = options.top;
+
+        widget.isAlignBottom = options.bottom !== undefined;
+        if (options.bottom !== undefined) widget.bottom = options.bottom;
+
+        widget.isAlignHorizontalCenter = options.hCenter !== undefined;
+        if (options.hCenter !== undefined) widget.horizontalCenter = options.hCenter;
+
+        widget.isAlignVerticalCenter = options.vCenter !== undefined;
+        if (options.vCenter !== undefined) widget.verticalCenter = options.vCenter;
+
+        widget.updateAlignment();
     }
 }

@@ -84,6 +84,7 @@ export class HpBarManager extends BaseSingleton {
     private onEntityDead(entityId: number) {
         if (!this.entityBarMap.has(entityId)) return;
         const bar = this.entityBarMap.get(entityId)!;
+        bar.node.removeFromParent();
         this.barPool.free(bar.node);
         this.entityBarMap.delete(entityId);
     }

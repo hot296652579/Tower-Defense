@@ -63,7 +63,7 @@ export class HeroFactory {
         hp.def = cfg.def;
         hp.isHurt = false;
         hp.hurtCd = 0;
-        console.log(`英雄[${entityId}] 初始化血量 curHp=${hp.curHp}, maxHp=${hp.maxHp}`);
+        // console.log(`英雄[${entityId}] 初始化血量 curHp=${hp.curHp}, maxHp=${hp.maxHp}`);
 
         fsm.state = EntityFsmState.IDLE;
 

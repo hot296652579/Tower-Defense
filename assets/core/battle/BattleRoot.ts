@@ -23,6 +23,8 @@ import { RenderEntityManager } from "./render/RenderEntityManager";
 import MeleeAttackSystem from "./ecs/systems/MeleeAttackSystem";
 import { DamageCalcManager } from "./manager/DamageCalcManager";
 import { HpBarManager } from "./ui/HpBarManager";
+import { EventManager } from "../../framework/event/EventManager";
+import { GameEvent } from "../../framework/event/EventName";
 
 @ccclass
 export default class BattleRoot extends Component {
@@ -51,8 +53,11 @@ export default class BattleRoot extends Component {
     // 全局战斗实体固定ID
     private readonly _globalBattleEntityId = 1;
 
+    private _isRestarting: boolean = false;
+
     protected onLoad(): void {
         this.node.on(Node.EventType.TOUCH_END, this.onSceneClick, this);
+        EventManager.getInstance().on(GameEvent.GAME_RESTART_LEVEL, this.onGameRestartLevel, this);
     }
 
     async start() {
@@ -94,17 +99,13 @@ export default class BattleRoot extends Component {
 
         // ----------------【测试代码】----------------
         // 测试：在path_0起点生成怪物战士
-        const startPos = this._mapPathData.getPathStartPos("path_0");
-        if (startPos) {
-            // EnemyFactory.testSpawnMonster(100, "path_0", startPos);
-
-            for (let i = 0; i < 10; i++) {
-                setTimeout(() => {
-                    const path = ['path_0', 'path_1'];
-                    const randomPath = path[Math.floor(Math.random() * path.length)];
-                    EnemyFactory.testSpawnMonster(100, randomPath, startPos);
-                }, i * 200);
-            }
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                const path = ['path_0'];
+                const randomPath = path[Math.floor(Math.random() * path.length)];
+                const startPos = this._mapPathData.getPathStartPos(randomPath);
+                EnemyFactory.testSpawnMonster(100, randomPath, startPos);
+            }, i * 200);
         }
         // --------------------------------------------
     }
@@ -167,6 +168,29 @@ export default class BattleRoot extends Component {
         // 同步所有英雄Transform
         const heroList = this._ecsWorld.queryEntities([TransformComp, HeroComp]);
         RenderEntityManager.getInstance().syncAllTransform(heroList, this._ecsWorld);
+    }
+
+    private async onGameRestartLevel(): Promise<void> {
+        if (this._isRestarting) return;
+        this._isRestarting = true;
+
+        //暂停战斗
+        const globalComp = this._ecsWorld.tryGetComponent(this._globalBattleEntityId, BattleGlobalComp);
+        if (globalComp) globalComp.isPause = true;
+
+        RenderEntityManager.getInstance().clear();
+        this._ecsWorld.clear();
+
+        //重置战斗数据
+        globalComp.gold = this._levelCfg.initGold;
+        globalComp.baseHp = this._levelCfg.baseMaxHp;
+        globalComp.baseMaxHp = this._levelCfg.baseMaxHp;
+        globalComp.curWaveIndex = 0;
+        globalComp.canStartNextWave = true;
+        globalComp.gameSpeed = 1;
+        globalComp.isPause = false;
+
+        this._isRestarting = false;
     }
 
     /** 场景点击事件 */

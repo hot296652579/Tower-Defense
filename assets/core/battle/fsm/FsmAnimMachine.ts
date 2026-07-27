@@ -53,7 +53,7 @@ export class FsmAnimMachine extends BaseComponent {
     public onEntityStateChange(targetEntityId: number, newState: EntityFsmState): void {
         if (targetEntityId !== this.entityId) return;
 
-        console.log(`FsmAnimMachine：实体${this.entityId} 状态切换为:${newState}`);
+        // console.log(`FsmAnimMachine：实体${this.entityId} 状态切换为:${newState}`);
         this.applyState(newState);
     }
 

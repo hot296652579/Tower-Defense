@@ -31,8 +31,8 @@ export default class BaseWindow extends BaseComponent {
         this._openParam = param;
         this.node.active = true;
 
-        this.node.getComponent(UITransform).anchorPoint.set(0, 0);
-        this.node.setPosition(0, 0, 0);
+        // this.node.getComponent(UITransform).anchorPoint.set(0, 0);
+        // this.node.setPosition(0, 0, 0);
 
         if (this.playOpenTween) {
             this.playOpenAnim();

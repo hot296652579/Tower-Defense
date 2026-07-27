@@ -115,7 +115,7 @@ export class EnemyFactory {
                 break;
         }
 
-        console.log(`创建怪物实体[${entityId}] cfgId:${monsterCfgId} path:${pathId}`);
+        // console.log(`创建怪物实体[${entityId}] cfgId:${monsterCfgId} path:${pathId}`);
         EventManager.getInstance().emit(GameEvent.ENTITY_CREATE, entityId, monsterCfgId, EntityType.ENEMY);
         return entityId;
     }

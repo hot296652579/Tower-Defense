@@ -52,7 +52,7 @@ export default class FsmSwitchSystem extends EcsSystem {
             // 状态变更派发事件
             if (newState !== oldState) {
                 fsmComp.state = newState;
-                console.log(`实体${entityId} 状态变更：${oldState} -> ${newState}`);
+                // console.log(`实体${entityId} 状态变更：${oldState} -> ${newState}`);
                 EventManager.getInstance().emit(GameEvent.ENTITY_STATE_CHANGE, entityId, newState);
             }
         }
