@@ -67,16 +67,25 @@ export default class BattleRoot extends Component {
         UILayerRoot.initRoot(this.uiRoot);
 
         console.log("开始加载game分包");
+        await ConfigManager.getInstance().loadTable("hero_table", BundlesEnum.Table);
+        await ConfigManager.getInstance().loadTable("enemy_table", BundlesEnum.Table);
+        await ConfigManager.getInstance().loadTable("level_table", BundlesEnum.Table);
+
         const bundle = await ResourceManager.getInstance().loadBundle(BundlesEnum.Game);
         if (!bundle) {
             console.error("game分包加载失败");
             return;
         }
 
-        await ConfigManager.getInstance().loadTable("hero_table", BundlesEnum.Table);
-        await ConfigManager.getInstance().loadTable("enemy_table", BundlesEnum.Table);
-        await ConfigManager.getInstance().loadTable("level_table", BundlesEnum.Table);
+        await this.battleInit();
 
+        // ----------------【测试代码】----------------
+        // 测试：在path_0起点生成怪物战士
+        this.testAddMonster();
+        // --------------------------------------------
+    }
+
+    private async battleInit(): Promise<void> {
         // 获取关卡配置
         this._levelCfg = ConfigManager.getInstance().getRowById<LevelConfig>("level_table", this._levelId)!;
         if (!this._levelCfg) {
@@ -84,6 +93,8 @@ export default class BattleRoot extends Component {
             return;
         }
 
+        this.entityRoot.removeAllChildren();
+        this.mapNode.removeAllChildren();
         await this.loadMap();
         this.initEcsWorld();
         EnemyFactory.setEcsWorld(this._ecsWorld);
@@ -96,18 +107,6 @@ export default class BattleRoot extends Component {
         console.log("战斗窗口打开完成");
 
         console.log("===== 战斗初始化全部完成 =====");
-
-        // ----------------【测试代码】----------------
-        // 测试：在path_0起点生成怪物战士
-        for (let i = 0; i < 5; i++) {
-            setTimeout(() => {
-                const path = ['path_0'];
-                const randomPath = path[Math.floor(Math.random() * path.length)];
-                const startPos = this._mapPathData.getPathStartPos(randomPath);
-                EnemyFactory.testSpawnMonster(100, randomPath, startPos);
-            }, i * 200);
-        }
-        // --------------------------------------------
     }
 
     /** 加载地图并且解析路径 */
@@ -174,23 +173,22 @@ export default class BattleRoot extends Component {
         if (this._isRestarting) return;
         this._isRestarting = true;
 
-        //暂停战斗
-        const globalComp = this._ecsWorld.tryGetComponent(this._globalBattleEntityId, BattleGlobalComp);
-        if (globalComp) globalComp.isPause = true;
-
-        RenderEntityManager.getInstance().clear();
-        this._ecsWorld.clear();
-
-        //重置战斗数据
-        globalComp.gold = this._levelCfg.initGold;
-        globalComp.baseHp = this._levelCfg.baseMaxHp;
-        globalComp.baseMaxHp = this._levelCfg.baseMaxHp;
-        globalComp.curWaveIndex = 0;
-        globalComp.canStartNextWave = true;
-        globalComp.gameSpeed = 1;
-        globalComp.isPause = false;
-
+        console.log("开始重新加载关卡");
+        await this.battleInit();
         this._isRestarting = false;
+        this.testAddMonster();
+    }
+
+    //测试代码添加怪物
+    private testAddMonster(): void {
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => {
+                const path = ['path_0'];
+                const randomPath = path[Math.floor(Math.random() * path.length)];
+                const startPos = this._mapPathData.getPathStartPos(randomPath);
+                EnemyFactory.testSpawnMonster(100, randomPath, startPos);
+            }, i * 200);
+        }
     }
 
     /** 场景点击事件 */
