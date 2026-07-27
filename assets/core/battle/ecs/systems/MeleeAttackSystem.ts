@@ -4,6 +4,7 @@ import { EntityType } from "../../data/UnitConfigType";
 import EcsSystem from "../base/EcsSystem";
 import AttackComp from "../components/AttackComp";
 import AttackLimitComp from "../components/AttackLimitComp";
+import AttackModeComp, { AttackMode } from "../components/AttackModeComp";
 import CampComp from "../components/CampComp";
 import FsmStateComp, { EntityFsmState } from "../components/FsmStateComp";
 import HPComp from "../components/HPComp";
@@ -25,11 +26,16 @@ export default class MeleeAttackSystem extends EcsSystem {
             MoveComp,
             FsmStateComp,
             CampComp,
-            TransformComp
+            TransformComp,
+            AttackModeComp
         ]);
 
         // 阶段2：先结算冷却中的交战锁定，优先占用攻击名额
         for (const attackerId of attackerEntities) {
+            if (this.world.getComponent(attackerId, AttackModeComp).mode !== AttackMode.MELEE) {
+                continue;
+            }
+
             const attackComp = this.world.getComponent(attackerId, AttackComp);
             const fsmComp = this.world.getComponent(attackerId, FsmStateComp);
             const attackerPos = this.world.getComponent(attackerId, TransformComp);
@@ -60,6 +66,10 @@ export default class MeleeAttackSystem extends EcsSystem {
 
         // 阶段3：冷却结束的单位寻敌并攻击
         for (const attackerId of attackerEntities) {
+            if (this.world.getComponent(attackerId, AttackModeComp).mode !== AttackMode.MELEE) {
+                continue;
+            }
+
             const attackComp = this.world.getComponent(attackerId, AttackComp);
             const fsmComp = this.world.getComponent(attackerId, FsmStateComp);
             const attackerPos = this.world.getComponent(attackerId, TransformComp);

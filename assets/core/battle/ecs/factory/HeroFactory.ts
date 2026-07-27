@@ -20,6 +20,7 @@ import AttackLimitComp from "../components/AttackLimitComp";
 import CampComp from "../components/CampComp";
 import DamageTypeComp from "../components/DamageTypeComp";
 import RangerBulletComp from "../components/RangerBulletComp";
+import AttackModeComp, { AttackMode } from "../components/AttackModeComp";
 
 export class HeroFactory {
     private static _world: EcsWorld;
@@ -105,11 +106,19 @@ export class HeroFactory {
                 buff.buffInterval = 5;
                 buff.buffCd = 0;
                 break;
-            case UnitType.MELEE:
-            case UnitType.RANGER:
+            case UnitType.MELEE: {
                 damageType.damageType = cfg.damageType;
+                const mode = this._world.addComponent(entityId, AttackModeComp);
+                mode.mode = AttackMode.MELEE;
+                break;
+            }
+            case UnitType.RANGER: {
+                damageType.damageType = cfg.damageType;
+                const mode = this._world.addComponent(entityId, AttackModeComp);
+                mode.mode = AttackMode.RANGER;
                 this._world.addComponent(entityId, RangerBulletComp);
                 break;
+            }
         }
 
         console.log(`创建英雄实体[${entityId}] cfgId:${heroCfgId} 生成坐标:${spawnPos.toString()}`);

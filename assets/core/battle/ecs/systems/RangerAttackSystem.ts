@@ -16,8 +16,8 @@ import { EntityFsmState } from "../components/FsmStateComp";
 import { BattleConfigHelper, UnitBulletConfig } from "../../data/BattleConfigHelper";
 import { UILayerRoot, UILayerType } from "db://assets/ui/layer/UILayer";
 import { EffectManager } from "../../manager/EffectManager";
-// 投射物管理器
 import { ProjectileManager, ProjectileRuntimeInfo } from "../../manager/ProjectileManager";
+import AttackModeComp, { AttackMode } from "../components/AttackModeComp";
 
 export default class RangerAttackSystem extends EcsSystem {
     private _projectileMgr = ProjectileManager.getInstance();
@@ -35,10 +35,15 @@ export default class RangerAttackSystem extends EcsSystem {
             AttackComp,
             RangerBulletComp,
             CampComp,
-            DamageTypeComp
+            DamageTypeComp,
+            AttackModeComp
         ]);
 
         for (const eid of rangerEntityList) {
+            if (this.world.getComponent(eid, AttackModeComp).mode !== AttackMode.RANGER) {
+                continue;
+            }
+
             const trans = this.world.getComponent(eid, TransformComp);
             const atkComp = this.world.getComponent(eid, AttackComp);
             const bulletComp = this.world.getComponent(eid, RangerBulletComp);
@@ -69,7 +74,6 @@ export default class RangerAttackSystem extends EcsSystem {
                 eid,
                 EntityFsmState.ATTACK
             );
-            // ======================================================================
 
             // 填充子弹运行数据
             bulletComp.sourceEntityId = eid;

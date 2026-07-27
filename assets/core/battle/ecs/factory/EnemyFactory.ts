@@ -20,6 +20,7 @@ import AttackLimitComp from "../components/AttackLimitComp";
 import CampComp from "../components/CampComp";
 import DamageTypeComp from "../components/DamageTypeComp";
 import RangerBulletComp from "../components/RangerBulletComp";
+import AttackModeComp, { AttackMode } from "../components/AttackModeComp";
 
 export class EnemyFactory {
     private static _world: EcsWorld;
@@ -111,12 +112,19 @@ export class EnemyFactory {
                 buffComp.buffCd = 0;
                 break;
             }
-            case UnitType.RANGER:
+            case UnitType.RANGER: {
                 damageType.damageType = cfg.damageType;
+                const mode = this._world.addComponent(entityId, AttackModeComp);
+                mode.mode = AttackMode.RANGER;
                 this._world.addComponent(entityId, RangerBulletComp);
                 break;
-            case UnitType.MELEE:
+            }
+            case UnitType.MELEE: {
+                damageType.damageType = cfg.damageType;
+                const mode = this._world.addComponent(entityId, AttackModeComp);
+                mode.mode = AttackMode.MELEE;
                 break;
+            }
         }
 
         // console.log(`创建怪物实体[${entityId}] cfgId:${monsterCfgId} path:${pathId}`);
