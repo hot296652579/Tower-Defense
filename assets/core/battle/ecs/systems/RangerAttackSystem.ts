@@ -5,7 +5,6 @@ import AttackComp from "../components/AttackComp";
 import RangerBulletComp from "../components/RangerBulletComp";
 import CampComp from "../components/CampComp";
 import HPComp from "../components/HPComp";
-
 import DamageTypeComp from "../components/DamageTypeComp";
 import { EntityType } from "../../data/UnitConfigType";
 import { EventManager } from "db://assets/framework/event/EventManager";

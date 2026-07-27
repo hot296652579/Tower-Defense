@@ -15,6 +15,10 @@ export interface ProjectileRuntimeInfo {
     poolKey: string;
 }
 
+/**
+ * 投射物管理器
+ * @param 管理所有飞行子弹、投射物
+*/
 export class ProjectileManager extends BaseSingleton {
     private _poolMgr = PoolManager.getInstance();
     private _resMgr = ResourceManager.getInstance();
