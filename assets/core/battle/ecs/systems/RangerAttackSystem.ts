@@ -1,10 +1,13 @@
-import { Vec2, math, Node } from "cc";
 import EcsSystem from "../base/EcsSystem";
 import TransformComp from "../components/TransformComp";
 import AttackComp from "../components/AttackComp";
 import RangerBulletComp from "../components/RangerBulletComp";
 import CampComp from "../components/CampComp";
 import HPComp from "../components/HPComp";
+import HeroComp from "../components/HeroComp";
+import EnemyComp from "../components/EnemyComp";
+
+import { Vec2, math, Node } from "cc";
 import DamageTypeComp from "../components/DamageTypeComp";
 import { EntityType } from "../../data/UnitConfigType";
 import { EventManager } from "db://assets/framework/event/EventManager";
@@ -17,12 +20,11 @@ import { EffectManager } from "../../manager/EffectManager";
 import { ProjectileManager, ProjectileRuntimeInfo } from "../../manager/ProjectileManager";
 
 export default class RangerAttackSystem extends EcsSystem {
-
     private _projectileMgr = ProjectileManager.getInstance();
 
     public update(dt: number): void {
         this.handleRangerAttack(dt);
-        // 交给管理器统一更新所有子弹，获取命中列表
+        // 子弹帧更新，获取命中列表
         const hitProjectileList = this._projectileMgr.updateAllProjectile(dt, this.world);
         this.handleAllHitProjectile(hitProjectileList);
     }
@@ -48,10 +50,28 @@ export default class RangerAttackSystem extends EcsSystem {
             const targetEid = this.findEnemyTargetInRange(eid, campComp.camp, trans.pos, atkComp.atkRange);
             if (targetEid <= 0) continue;
 
+            // 重置攻击冷却
             atkComp.atkCd = atkComp.atkInterval;
             atkComp.isAttacking = true;
 
-            // 动态填充子弹组件战斗数据
+            const dmgTypeComp = this.world.getComponent(eid, DamageTypeComp);
+            // 攻击事件
+            EventManager.getInstance().emit(
+                GameEvent.ENTITY_ATTACK,
+                eid,
+                targetEid,
+                atkComp.atk,
+                dmgTypeComp.damageType
+            );
+            // 切换攻击动画状态
+            EventManager.getInstance().emit(
+                GameEvent.ENTITY_STATE_CHANGE,
+                eid,
+                EntityFsmState.ATTACK
+            );
+            // ======================================================================
+
+            // 填充子弹运行数据
             bulletComp.sourceEntityId = eid;
             bulletComp.targetId = targetEid;
             bulletComp.damage = atkComp.atk;
@@ -60,7 +80,7 @@ export default class RangerAttackSystem extends EcsSystem {
             const bulletCfg: UnitBulletConfig = BattleConfigHelper.getBattleByBulletConfig(this.world, eid);
             if (!bulletCfg.bulletPath) continue;
 
-            //子弹生成
+            // 调用管理器生成子弹
             this._projectileMgr.spawnProjectile(
                 trans.pos,
                 targetEid,
@@ -92,7 +112,10 @@ export default class RangerAttackSystem extends EcsSystem {
         return nearestId;
     }
 
-    /** 批量处理所有命中子弹：伤害、事件、特效 */
+    /**
+     * 子弹命中仅处理：伤害计算 + 命中特效
+     * 移除攻击、状态事件派发，不再重复触发攻击动画
+     */
     private handleAllHitProjectile(hitList: ProjectileRuntimeInfo[]) {
         for (const info of hitList) {
             const bulletComp = this.world.tryGetComponent(info.attackerEid, RangerBulletComp);
@@ -101,33 +124,14 @@ export default class RangerAttackSystem extends EcsSystem {
             if (!bulletComp || !dmgTypeComp || !targetTrans) continue;
 
             const bulletCfg: UnitBulletConfig = BattleConfigHelper.getBattleByBulletConfig(this.world, info.attackerEid);
-            const atkComp = this.world.tryGetComponent(info.attackerEid, AttackComp);
-            if (atkComp) atkComp.isAttacking = false;
 
-            // 攻击事件
-            EventManager.getInstance().emit(
-                GameEvent.ENTITY_ATTACK,
-                info.attackerEid,
-                info.targetEid,
-                bulletComp.damage,
-                dmgTypeComp.damageType
-            );
-
-            // 攻击状态动画
-            EventManager.getInstance().emit(
-                GameEvent.ENTITY_STATE_CHANGE,
-                info.attackerEid,
-                EntityFsmState.ATTACK
-            );
-
-            // 播放命中特效
             if (bulletCfg.hitEffectPath) {
                 EffectManager.getInstance().playEffect(bulletCfg.hitEffectPath, targetTrans.pos);
             }
         }
     }
 
-    /** 关卡刷新清空子弹，转发给管理器 */
+    /** 关卡刷新清空子弹 */
     public clearAllBullet() {
         this._projectileMgr.clearAllProjectile();
     }

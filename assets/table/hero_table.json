@@ -22,7 +22,7 @@
         "hp": 450,
         "def": 10,
         "moveSpeed": 1.2,
-        "atk": 1,
+        "atk": 100,
         "atkInterval": 1.2,
         "atkRange": 240,
         "damageType": "magic",

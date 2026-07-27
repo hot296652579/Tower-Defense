@@ -27,6 +27,7 @@ import { EventManager } from "../../framework/event/EventManager";
 import { GameEvent } from "../../framework/event/EventName";
 import RangerAttackSystem from "./ecs/systems/RangerAttackSystem";
 import { EffectManager } from "./manager/EffectManager";
+import { ProjectileManager } from "./manager/ProjectileManager";
 
 @ccclass
 export default class BattleRoot extends Component {
@@ -96,6 +97,7 @@ export default class BattleRoot extends Component {
         }
 
         EffectManager.getInstance().clearAllEffect();
+        ProjectileManager.getInstance().clearAllProjectile();
 
         this.entityRoot.removeAllChildren();
         this.mapNode.removeAllChildren();
@@ -144,7 +146,7 @@ export default class BattleRoot extends Component {
         globalComp.isPause = false;
 
         // =====================后续在这里注册所有System=====================
-        // this._ecsWorld.registerSystem(new MeleeAttackSystem());
+        this._ecsWorld.registerSystem(new MeleeAttackSystem());
         this._ecsWorld.registerSystem(new RangerAttackSystem());
         this._ecsWorld.registerSystem(new MoveSystem());
         this._ecsWorld.registerSystem(new FsmSwitchSystem());
