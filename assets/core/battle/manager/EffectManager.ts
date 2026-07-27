@@ -31,7 +31,7 @@ export class EffectManager extends BaseSingleton {
         }
 
         effectNode.active = true;
-        effectNode.getComponent(Animation)?.play();
+        effectNode.getComponentInChildren(Animation)!.play();
         effectNode.setParent(UILayerRoot.getRootByLayer(UILayerType.SCENE_UI)!);
         effectNode.setWorldPosition(worldPos.x, worldPos.y, 0);
 
@@ -39,7 +39,7 @@ export class EffectManager extends BaseSingleton {
         // 定时自动回收特效
         setTimeout(() => {
             PoolManager.getInstance().despawn(effectNode);
-        }, lifeTime * 1000);
+        }, lifeTime * 500);
     }
 
     /** 清空所有特效池，关卡刷新调用 */
