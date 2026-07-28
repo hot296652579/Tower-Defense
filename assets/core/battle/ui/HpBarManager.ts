@@ -9,8 +9,8 @@ import { ResourceManager } from 'db://assets/framework/resource/ResourceManager'
 import { UIConfig } from 'db://assets/define/UIEnum';
 import BaseSingleton from 'db://assets/framework/base/BaseSingleton';
 import { UILayerRoot, UILayerType } from 'db://assets/ui/layer/UILayer';
-import EcsWorld from '../ecs/base/EcsWorld';
 import { RenderEntityManager } from '../render/RenderEntityManager';
+import { PoolManager } from 'db://assets/framework/pool/PoolManager';
 
 @ccclass('HpBarManager')
 export class HpBarManager extends BaseSingleton {
@@ -30,6 +30,7 @@ export class HpBarManager extends BaseSingleton {
     public async init(): Promise<void> {
         HpBarManager.instance = this;
         const evt = EventManager.getInstance();
+
         // 监听血量更新、实体死亡
         evt.on(GameEvent.ENTITY_HP_UPDATE, this.onHpUpdate, this);
         evt.on(GameEvent.ENTITY_DESTROY, this.onEntityDead, this);
@@ -42,11 +43,7 @@ export class HpBarManager extends BaseSingleton {
             console.error("HpBar预制体加载失败");
             return;
         }
-        this.barPool = new Pool(() => {
-            const node = instantiate(this.hpBarPrefab!);
-            node.active = false;
-            return node;
-        }, 30);
+        PoolManager.getInstance().registerPool(UIConfig.HpBar.path, this.hpBarPrefab!, 30);
     }
 
     // 血量更新回调
@@ -64,7 +61,7 @@ export class HpBarManager extends BaseSingleton {
         if (this.entityBarMap.has(entityId)) {
             barView = this.entityBarMap.get(entityId)!;
         } else {
-            const barNode = this.barPool.alloc();
+            const barNode = PoolManager.getInstance().spawn(UIConfig.HpBar.path)!;
             barNode.setParent(UILayerRoot.getRootByLayer(UILayerType.SCENE_UI)!);
             barView = barNode.getComponent(HpBarView)!;
             this.entityBarMap.set(entityId, barView);
@@ -83,8 +80,7 @@ export class HpBarManager extends BaseSingleton {
     private onEntityDead(entityId: number) {
         if (!this.entityBarMap.has(entityId)) return;
         const bar = this.entityBarMap.get(entityId)!;
-        bar.node.removeFromParent();
-        this.barPool.free(bar.node);
+        PoolManager.getInstance().despawn(bar.node);
         this.entityBarMap.delete(entityId);
     }
 
