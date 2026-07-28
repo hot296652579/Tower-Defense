@@ -4,7 +4,7 @@ export default class BattleGlobalComp extends EcsComponent {
     /** 当前金币 */
     public gold: number = 200;
     /** 基地剩余血量 */
-    public baseHp: number = 20;
+    public baseHp: number = 10;
     /** 基地最大血量 */
     public baseMaxHp: number = 20;
     /** 当前关卡波次索引 */

@@ -9,6 +9,8 @@ type ComponentClass<T extends EcsComponent> = new () => T;
  * 每一局战斗独立 new EcsWorld()，禁止全局单例
  */
 export default class EcsWorld {
+
+    public readonly GLOBAL_ENTITY_ID = 1;
     // 自增实体id生成器
     private _nextEntityId = 1;
 

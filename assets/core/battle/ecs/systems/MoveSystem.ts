@@ -77,6 +77,7 @@ export default class MoveSystem extends EcsSystem {
                     // 到达终点，怪物进攻基地，销毁实体
                     this.world.destroyEntity(eid);
                     EventManager.getInstance().emit(GameEvent.ENTITY_DESTROY, eid);
+                    EventManager.getInstance().emit(GameEvent.ATTACK_BASE, eid);
                     continue;
                 }
                 // 真正移动 标记

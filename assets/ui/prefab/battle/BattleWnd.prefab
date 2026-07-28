@@ -1944,6 +1944,15 @@
     },
     "windowLayer": 20,
     "playOpenTween": false,
+    "lblGold": {
+      "__id__": 12
+    },
+    "lblBaseHp": {
+      "__id__": 28
+    },
+    "lbWaves": {
+      "__id__": 44
+    },
     "btnRefresh": {
       "__id__": 71
     },

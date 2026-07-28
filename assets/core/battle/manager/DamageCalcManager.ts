@@ -4,6 +4,8 @@ import EcsWorld from "../ecs/base/EcsWorld";
 import HPComp from "../ecs/components/HPComp";
 import TransformComp from "../ecs/components/TransformComp";
 import BaseSingleton from "db://assets/framework/base/BaseSingleton";
+import EnemyComp from "../ecs/components/EnemyComp";
+import BattleGlobalComp from "../ecs/components/BattleGlobalComp";
 
 export class DamageCalcManager extends BaseSingleton {
     public static instance: DamageCalcManager = new DamageCalcManager();
@@ -13,11 +15,13 @@ export class DamageCalcManager extends BaseSingleton {
         this.world = world;
         EventManager.getInstance().on(GameEvent.ENTITY_ATTACK, this.onAttackEvent, this);
         EventManager.getInstance().on(GameEvent.UNIT_HEAL, this.onHealEvent, this);
+        EventManager.getInstance().on(GameEvent.ATTACK_BASE, this.onAttackBaseEvent, this);
     }
 
     destroy() {
         EventManager.getInstance().off(GameEvent.ENTITY_ATTACK, this.onAttackEvent, this);
         EventManager.getInstance().off(GameEvent.UNIT_HEAL, this.onHealEvent, this);
+        EventManager.getInstance().off(GameEvent.ATTACK_BASE, this.onAttackBaseEvent, this);
     }
 
     /** 监听攻击事件，统一计算伤害、修改血量、派发血量更新事件 */
@@ -50,6 +54,7 @@ export class DamageCalcManager extends BaseSingleton {
         if (targetHp.curHp <= 0) {
             console.log("血量归零，派发死亡事件回收血条", targetId);
             this.world.destroyEntity(targetId);
+            this.onEnemyDead(targetId);
             EventManager.getInstance().emit(GameEvent.ENTITY_DESTROY, targetId);
         }
     }
@@ -76,5 +81,45 @@ export class DamageCalcManager extends BaseSingleton {
             posComp: targetTrans,
             deltaHp: hpDelta
         });
+    }
+
+    /**怪物死亡 增加战斗金币*/
+    private onEnemyDead(targetEid: number) {
+        // 判断是否是敌方怪物
+        if (!this.world.getComponent(targetEid, EnemyComp)) return;
+
+        const enemyComp = this.world.getComponent(targetEid, EnemyComp);
+        const dropGold = enemyComp.goldDrop ?? 0;
+        if (dropGold <= 0) return;
+
+        // 获取全局战斗组件，修改金币
+        const globalComp = this.world.getComponent(this.world.GLOBAL_ENTITY_ID, BattleGlobalComp);
+        const oldGold = globalComp.gold;
+        globalComp.gold += dropGold;
+
+        // 派发金币变更事件，通知UI刷新
+        EventManager.getInstance().emit(GameEvent.UI_GLOBAL_GOLD_CHANGE, {
+            oldValue: oldGold,
+            newValue: globalComp.gold
+        });
+    }
+
+    /** 监听攻击基地事件，统一计算伤害、修改血量、派发血量更新事件 */
+    private onAttackBaseEvent() {
+        const globalComp = this.world.getComponent(this.world.GLOBAL_ENTITY_ID, BattleGlobalComp);
+        const oldHp = globalComp.baseHp;
+        globalComp.baseHp = oldHp - 1;
+
+        // 派发基地血量变更事件，通知UI刷新
+        EventManager.getInstance().emit(GameEvent.UI_GLOBAL_BASE_HP_CHANGE, {
+            oldValue: oldHp,
+            newValue: globalComp.baseHp,
+            maxHp: globalComp.baseMaxHp
+        });
+
+        if (globalComp.baseHp <= 0) {
+            console.log("基地血量归零，派发战斗失败事件");
+            EventManager.getInstance().emit(GameEvent.BATTLE_LOSE);
+        }
     }
 }

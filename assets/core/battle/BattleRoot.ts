@@ -134,7 +134,7 @@ export default class BattleRoot extends Component {
     /** 初始化ECS世界，创建全局战斗实体 */
     private async initEcsWorld() {
         this._ecsWorld = new EcsWorld();
-        // 创建全局战斗实体（固定ID）
+        // 创建全局战斗实体
         const globalEntity = this._ecsWorld.createEntity();
         const globalComp = this._ecsWorld.addComponent(globalEntity, BattleGlobalComp);
         // 填充关卡初始数据
@@ -191,7 +191,7 @@ export default class BattleRoot extends Component {
 
     //测试代码添加怪物
     private testAddMonster(): void {
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 10; i++) {
             setTimeout(() => {
                 const path = ['path_0'];
                 const randomPath = path[Math.floor(Math.random() * path.length)];
