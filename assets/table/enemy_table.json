@@ -21,7 +21,7 @@
         "unitType": "ranger",
         "hp": 450,
         "def": 10,
-        "moveSpeed": 1.2,
+        "moveSpeed": 130,
         "atk": 180,
         "atkInterval": 1.2,
         "atkRange": 350,
@@ -29,7 +29,8 @@
         "animKey": "dark_mage",
         "prefabPath": "enemy/ranger/prefab/CanibalHunter",
         "goldDrop": 25,
-        "bulletPath": "entity/bullet/magic_bullet",
+        "bulletPath": "skill/bullet/prefab/bullet3",
+        "bulletEffectPath": "skill/effect/prefab/effect_bullet3",
         "bulletSpeed": 800,
         "splashRadius": 40
     },

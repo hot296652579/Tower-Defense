@@ -96,10 +96,12 @@ export class EnemyFactory {
         switch (cfg.unitType) {
             case UnitType.HEALER: {
                 const healer = this._world.addComponent(entityId, HealerComp);
+                const mode = this._world.addComponent(entityId, AttackModeComp);
+                mode.mode = AttackMode.RANGER;
                 healer.healValue = cfg.healValue;
                 healer.healRange = cfg.healRange;
                 healer.healInterval = cfg.healInterval;
-                healer.healCd = 0;
+                healer.healCd = cfg.healInterval;
                 break;
             }
             case UnitType.BUFFER: {

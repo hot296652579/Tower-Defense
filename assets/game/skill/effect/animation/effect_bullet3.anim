@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.AnimationClip",
-    "_name": "attack",
+    "_name": "effect_bullet3",
     "_objFlags": 0,
     "__editorExtras__": {
       "embeddedPlayerGroups": []
@@ -11,7 +11,7 @@
     "speed": 0.2,
     "wrapMode": 1,
     "enableTrsBlending": false,
-    "_duration": 0.13333333333333333,
+    "_duration": 0.08333333333333333,
     "_hash": 500763545,
     "_tracks": [
       {
@@ -65,42 +65,27 @@
       0.016666666666666666,
       0.03333333333333333,
       0.05,
-      0.06666666666666667,
-      0.08333333333333333,
-      0.1,
-      0.11666666666666667
+      0.06666666666666667
     ],
     "_values": [
       {
-        "__uuid__": "00159d7e-f8d2-402e-b162-94e37cd5c453@f9941",
+        "__uuid__": "ed8916ca-2c70-468b-9ba4-a92974f879ab@f9941",
         "__expectedType__": "cc.SpriteFrame"
       },
       {
-        "__uuid__": "ef313f1c-c86b-4fae-ac74-75249d8fed35@f9941",
+        "__uuid__": "254ba40a-d2a4-4ef7-b1b1-8da2767cdcf1@f9941",
         "__expectedType__": "cc.SpriteFrame"
       },
       {
-        "__uuid__": "f7c25841-a7ce-45d1-a617-79c9512f94b3@f9941",
+        "__uuid__": "6c68b81e-68a9-44cc-a73a-0f26f3aaa855@f9941",
         "__expectedType__": "cc.SpriteFrame"
       },
       {
-        "__uuid__": "5a237e49-d694-4ab9-9fbb-e75e3c507481@f9941",
+        "__uuid__": "36fadf37-4f21-4cac-9122-4d5e38164494@f9941",
         "__expectedType__": "cc.SpriteFrame"
       },
       {
-        "__uuid__": "f1e4bcec-4e55-4d96-92d1-f08bd15acb1a@f9941",
-        "__expectedType__": "cc.SpriteFrame"
-      },
-      {
-        "__uuid__": "d83b2fa0-1e82-4eac-bec2-857a9408cfde@f9941",
-        "__expectedType__": "cc.SpriteFrame"
-      },
-      {
-        "__uuid__": "294d0ed3-9ef8-427c-8509-7edbbf3be9ec@f9941",
-        "__expectedType__": "cc.SpriteFrame"
-      },
-      {
-        "__uuid__": "dd861dd7-2ad1-46cb-9cd0-3a38d3bcfcf2@f9941",
+        "__uuid__": "915c0fab-c4b4-4f1a-8b51-cb2a9df525ef@f9941",
         "__expectedType__": "cc.SpriteFrame"
       }
     ]

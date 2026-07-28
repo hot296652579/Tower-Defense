@@ -2,6 +2,8 @@ import { ConfigManager } from "../../../framework/config/ConfigManager";
 import EcsWorld from "../ecs/base/EcsWorld";
 import HeroComp from "../ecs/components/HeroComp";
 import EnemyComp from "../ecs/components/EnemyComp";
+import CampComp from "../ecs/components/CampComp";
+import { EntityType } from "./UnitConfigType";
 
 /** 单位子弹/特效配置返回结构 */
 export type UnitBulletConfig = {
@@ -18,8 +20,9 @@ export class BattleConfigHelper {
      * @returns 子弹、特效资源路径
      */
     public static getBattleByBulletConfig(world: EcsWorld, entityId: number): UnitBulletConfig {
+        const campComp = world.getComponent(entityId, CampComp);
         // 英雄单位
-        if (world.getComponent(entityId, HeroComp)) {
+        if (campComp.camp === EntityType.HERO) {
             const heroComp = world.getComponent(entityId, HeroComp);
             const cfg = ConfigManager.getInstance().getRowById("hero_table", heroComp.configId);
             return {
@@ -29,7 +32,7 @@ export class BattleConfigHelper {
             };
         }
         // 怪物单位
-        if (world.getComponent(entityId, EnemyComp)) {
+        if (campComp.camp === EntityType.ENEMY) {
             const enemyComp = world.getComponent(entityId, EnemyComp);
             const cfg = ConfigManager.getInstance().getRowById("enemy_table", enemyComp.configId);
             return {
