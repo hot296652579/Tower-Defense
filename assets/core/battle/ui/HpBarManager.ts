@@ -32,7 +32,6 @@ export class HpBarManager extends BaseSingleton {
         const evt = EventManager.getInstance();
         // 监听血量更新、实体死亡
         evt.on(GameEvent.ENTITY_HP_UPDATE, this.onHpUpdate, this);
-        evt.on(GameEvent.ENTITY_ENTITY_DEAD, this.onEntityDead, this);
         evt.on(GameEvent.ENTITY_DESTROY, this.onEntityDead, this);
     }
 
@@ -93,7 +92,6 @@ export class HpBarManager extends BaseSingleton {
         // 解绑事件，防止内存泄漏
         const evt = EventManager.getInstance();
         evt.off(GameEvent.ENTITY_HP_UPDATE, this.onHpUpdate, this);
-        evt.off(GameEvent.ENTITY_ENTITY_DEAD, this.onEntityDead, this);
         evt.off(GameEvent.ENTITY_DESTROY, this.onEntityDead, this);
         HpBarManager.instance = null!;
     }

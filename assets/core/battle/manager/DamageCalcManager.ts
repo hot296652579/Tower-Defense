@@ -48,7 +48,9 @@ export class DamageCalcManager extends BaseSingleton {
 
         //血量归零，派发死亡事件回收血条
         if (targetHp.curHp <= 0) {
-            EventManager.getInstance().emit(GameEvent.ENTITY_ENTITY_DEAD, targetId);
+            console.log("血量归零，派发死亡事件回收血条", targetId);
+            this.world.destroyEntity(targetId);
+            EventManager.getInstance().emit(GameEvent.ENTITY_DESTROY, targetId);
         }
     }
 

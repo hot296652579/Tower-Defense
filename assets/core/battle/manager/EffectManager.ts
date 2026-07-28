@@ -24,7 +24,7 @@ export class EffectManager extends BaseSingleton {
         let effectNode = PoolManager.getInstance().spawn(bulletEffectPath);
         // 池无预制，加载并注册池
         if (!effectNode) {
-            console.log("加载特效预制", bulletEffectPath);
+            // console.log("加载特效预制", bulletEffectPath);
             const prefab = await ResourceManager.getInstance().loadPrefab(bulletEffectPath, BundlesEnum.Game);
             if (!prefab) return;
             PoolManager.getInstance().registerPool(bulletEffectPath, prefab, 30);
@@ -37,7 +37,7 @@ export class EffectManager extends BaseSingleton {
         effectNode.setParent(UILayerRoot.getRootByLayer(UILayerType.SCENE_UI)!);
         effectNode.setWorldPosition(worldPos.x, worldPos.y, 0);
 
-        console.log("特效节点", effectNode.position.x, effectNode.position.y);
+        // console.log("特效节点", effectNode.position.x, effectNode.position.y);
         // 定时自动回收特效
         setTimeout(() => {
             PoolManager.getInstance().despawn(effectNode);
