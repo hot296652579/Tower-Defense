@@ -76,7 +76,7 @@ export class HpBarManager extends BaseSingleton {
         }
         barView.refreshHp(hpComp.curHp, hpComp.maxHp);
         // 掉血播放闪烁
-        if (deltaHp < 0) barView.playHurtFlash();
+        // if (deltaHp < 0) barView.playHurtFlash();
     }
 
     // 实体死亡回收血条

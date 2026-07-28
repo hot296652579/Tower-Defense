@@ -53,14 +53,6 @@ export default class HealerSystem extends EcsSystem {
 
             const healCfg = BattleConfigHelper.getBattleByBulletConfig(this.world, eid);
 
-            // 派发攻击事件
-            EventManager.getInstance().emit(
-                GameEvent.ENTITY_ATTACK,
-                eid,
-                targetHealEid,
-                healerComp.healValue,
-                0
-            );
             // 切换攻击动画状态
             EventManager.getInstance().emit(
                 GameEvent.ENTITY_STATE_CHANGE,
@@ -87,7 +79,7 @@ export default class HealerSystem extends EcsSystem {
 
     /**
      * 寻找范围内血量最低的同阵营单位（不分英雄/怪物）
-     * 对齐远程系统 findEnemyTargetInRange 代码规范
+     * 对齐远程系统 findEnemyTargetInRange 
      */
     private findLowHpAllyInRange(healerEid: number, selfCamp: EntityType, healerPos: Vec2, healRange: number): number {
         const allAllyTargets = this.world.queryEntities([TransformComp, HPComp, CampComp]);

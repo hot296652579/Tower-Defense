@@ -6,6 +6,8 @@ import TransformComp from "../ecs/components/TransformComp";
 import BaseSingleton from "db://assets/framework/base/BaseSingleton";
 import EnemyComp from "../ecs/components/EnemyComp";
 import BattleGlobalComp from "../ecs/components/BattleGlobalComp";
+import CampComp from "../ecs/components/CampComp";
+import { EntityType } from "../data/UnitConfigType";
 
 export class DamageCalcManager extends BaseSingleton {
     public static instance: DamageCalcManager = new DamageCalcManager();
@@ -86,7 +88,8 @@ export class DamageCalcManager extends BaseSingleton {
     /**怪物死亡 增加战斗金币*/
     private onEnemyDead(targetEid: number) {
         // 判断是否是敌方怪物
-        if (!this.world.getComponent(targetEid, EnemyComp)) return;
+        const campComp = this.world.getComponent(targetEid, CampComp);
+        if (campComp.camp !== EntityType.ENEMY) return;
 
         const enemyComp = this.world.getComponent(targetEid, EnemyComp);
         const dropGold = enemyComp.goldDrop ?? 0;
