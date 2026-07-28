@@ -1,4 +1,4 @@
-import { Node, Vec3 } from "cc";
+import { Node, Tween, tween, UIOpacity, Vec3 } from "cc";
 import { BundlesEnum } from "db://assets/define/BundlesEnum";
 import BaseSingleton from "db://assets/framework/base/BaseSingleton";
 import { ConfigManager } from "db://assets/framework/config/ConfigManager";
@@ -129,6 +129,9 @@ export class RenderEntityManager extends BaseSingleton {
         const node = this._entityNodeMap.get(entityId);
         if (!node) return;
         this._entityNodeMap.delete(entityId);
-        PoolManager.getInstance().despawn(node);
+
+        setTimeout(() => {
+            PoolManager.getInstance().despawn(node);
+        }, 1500);
     }
 }
