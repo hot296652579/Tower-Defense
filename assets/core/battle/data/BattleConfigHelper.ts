@@ -7,6 +7,7 @@ import EnemyComp from "../ecs/components/EnemyComp";
 export type UnitBulletConfig = {
     bulletPath: string;
     hitEffectPath: string;
+    effectPath: string;
 };
 
 export class BattleConfigHelper {
@@ -23,7 +24,8 @@ export class BattleConfigHelper {
             const cfg = ConfigManager.getInstance().getRowById("hero_table", heroComp.configId);
             return {
                 bulletPath: cfg.bulletPath ?? "",
-                hitEffectPath: cfg.effectPath ?? ""
+                hitEffectPath: cfg.bulletEffectPath ?? "",
+                effectPath: cfg.effectPath ?? ""
             };
         }
         // 怪物单位
@@ -32,10 +34,11 @@ export class BattleConfigHelper {
             const cfg = ConfigManager.getInstance().getRowById("enemy_table", enemyComp.configId);
             return {
                 bulletPath: cfg.bulletPath ?? "",
-                hitEffectPath: cfg.effectPath ?? ""
+                hitEffectPath: cfg.bulletEffectPath ?? "",
+                effectPath: cfg.effectPath ?? ""
             };
         }
         // 无匹配单位，返回空路径
-        return { bulletPath: "", hitEffectPath: "" };
+        return { bulletPath: "", hitEffectPath: "", effectPath: "" };
     }
 }

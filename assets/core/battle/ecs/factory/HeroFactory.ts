@@ -91,11 +91,14 @@ export class HeroFactory {
         // 根据单位类型挂载差异化组件
         switch (cfg.unitType) {
             case UnitType.HEALER:
+                this._world.addComponent(entityId, RangerBulletComp);
+                const mode = this._world.addComponent(entityId, AttackModeComp);
+                mode.mode = AttackMode.RANGER;
                 const healer = this._world.addComponent(entityId, HealerComp);
                 healer.healValue = cfg.healValue;
                 healer.healRange = cfg.healRange;
                 healer.healInterval = cfg.healInterval;
-                healer.healCd = 0;
+                healer.healCd = cfg.healInterval;
                 break;
             case UnitType.BUFFER:
                 const buff = this._world.addComponent(entityId, BufferComp);
@@ -107,13 +110,12 @@ export class HeroFactory {
                 buff.buffCd = 0;
                 break;
             case UnitType.MELEE: {
-                damageType.damageType = cfg.damageType;
+
                 const mode = this._world.addComponent(entityId, AttackModeComp);
                 mode.mode = AttackMode.MELEE;
                 break;
             }
             case UnitType.RANGER: {
-                damageType.damageType = cfg.damageType;
                 const mode = this._world.addComponent(entityId, AttackModeComp);
                 mode.mode = AttackMode.RANGER;
                 this._world.addComponent(entityId, RangerBulletComp);

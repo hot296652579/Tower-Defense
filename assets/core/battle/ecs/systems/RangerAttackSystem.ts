@@ -4,8 +4,6 @@ import AttackComp from "../components/AttackComp";
 import RangerBulletComp from "../components/RangerBulletComp";
 import CampComp from "../components/CampComp";
 import HPComp from "../components/HPComp";
-import HeroComp from "../components/HeroComp";
-import EnemyComp from "../components/EnemyComp";
 
 import { Vec2, math, Node } from "cc";
 import DamageTypeComp from "../components/DamageTypeComp";

@@ -4,6 +4,7 @@ import EcsComponent from "../base/EcsComponent";
 export enum AttackMode {
     MELEE = "melee",
     RANGER = "ranger",
+    HEALER = "healer",
 }
 
 export default class AttackModeComp extends EcsComponent {

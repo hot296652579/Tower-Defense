@@ -15,21 +15,21 @@ export class EffectManager extends BaseSingleton {
 
     /**
      * 播放特效
-     * @param effectPath 特效预制资源路径
+     * @param bulletEffectPath 特效预制资源路径
      * @param worldPos 世界坐标
      * @param lifeTime 特效自动回收时长（秒，默认1秒）
      */
-    public async playEffect(effectPath: string, worldPos: Vec2, lifeTime: number = 1): Promise<void> {
-        if (!effectPath) return;
-        let effectNode = PoolManager.getInstance().spawn(effectPath);
+    public async playEffect(bulletEffectPath: string, worldPos: Vec2, lifeTime: number = 1): Promise<void> {
+        if (!bulletEffectPath) return;
+        let effectNode = PoolManager.getInstance().spawn(bulletEffectPath);
         // 池无预制，加载并注册池
         if (!effectNode) {
-            console.log("加载特效预制", effectPath);
-            const prefab = await ResourceManager.getInstance().loadPrefab(effectPath, BundlesEnum.Game);
+            console.log("加载特效预制", bulletEffectPath);
+            const prefab = await ResourceManager.getInstance().loadPrefab(bulletEffectPath, BundlesEnum.Game);
             if (!prefab) return;
-            PoolManager.getInstance().registerPool(effectPath, prefab, 30);
-            effectNode = PoolManager.getInstance().spawn(effectPath)!;
-            this._effectPoolKeys.add(effectPath);
+            PoolManager.getInstance().registerPool(bulletEffectPath, prefab, 30);
+            effectNode = PoolManager.getInstance().spawn(bulletEffectPath)!;
+            this._effectPoolKeys.add(bulletEffectPath);
         }
 
         effectNode.active = true;
