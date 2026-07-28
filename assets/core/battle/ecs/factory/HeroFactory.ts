@@ -93,8 +93,8 @@ export class HeroFactory {
             case UnitType.HEALER:
                 this._world.addComponent(entityId, RangerBulletComp);
                 const mode = this._world.addComponent(entityId, AttackModeComp);
-                mode.mode = AttackMode.RANGER;
                 const healer = this._world.addComponent(entityId, HealerComp);
+                mode.mode = AttackMode.RANGER;
                 healer.healValue = cfg.healValue;
                 healer.healRange = cfg.healRange;
                 healer.healInterval = cfg.healInterval;
