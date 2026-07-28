@@ -110,7 +110,6 @@ export class HeroFactory {
                 buff.buffCd = 0;
                 break;
             case UnitType.MELEE: {
-
                 const mode = this._world.addComponent(entityId, AttackModeComp);
                 mode.mode = AttackMode.MELEE;
                 break;

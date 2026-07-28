@@ -10,7 +10,7 @@ import { Vec2, math } from "cc";
 import { EntityType } from "../../data/UnitConfigType";
 import { EventManager } from "db://assets/framework/event/EventManager";
 import { GameEvent } from "db://assets/framework/event/EventName";
-import { EntityFsmState } from "../components/FsmStateComp";
+import FsmStateComp, { EntityFsmState } from "../components/FsmStateComp";
 import { BattleConfigHelper } from "../../data/BattleConfigHelper";
 import { EffectManager } from "../../manager/EffectManager";
 
@@ -33,10 +33,6 @@ export default class HealerSystem extends EcsSystem {
         ]);
 
         for (const eid of healerEntityList) {
-            // 过滤：仅处理治疗模式单位，和远程系统AttackMode判断逻辑对齐
-            const attackModeComp = this.world.getComponent(eid, AttackModeComp);
-            if (attackModeComp.mode !== AttackMode.HEALER) continue;
-
             const trans = this.world.getComponent(eid, TransformComp);
             const healerComp = this.world.getComponent(eid, HealerComp);
             const campComp = this.world.getComponent(eid, CampComp);
@@ -104,8 +100,9 @@ export default class HealerSystem extends EcsSystem {
 
             const targetHpComp = this.world.getComponent(targetEid, HPComp);
             const targetCamp = this.world.getComponent(targetEid, CampComp).camp;
+            const targetState = this.world.getComponent(targetEid, FsmStateComp);
             // 过滤规则：敌方单位 / 满血 / 已死亡单位
-            if (targetCamp !== selfCamp || targetHpComp.curHp >= targetHpComp.maxHp || targetHpComp.curHp <= 0) continue;
+            if (targetCamp !== selfCamp || targetHpComp.curHp >= targetHpComp.maxHp || targetHpComp.curHp <= 0 || targetState.state == EntityFsmState.DEAD) continue;
 
             const targetTrans = this.world.getComponent(targetEid, TransformComp);
             const distance = math.Vec2.distance(healerPos, targetTrans.pos);

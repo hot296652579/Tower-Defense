@@ -30,7 +30,7 @@
         "prefabPath": "hero/ranger/prefab/PirateFlamer",
         "goldDrop": 25,
         "bulletPath": "skill/bullet/prefab/bullet1",
-        "bulletEffectPath": "skill/effect/prefab/effect_bullet2",
+        "bulletEffectPath": "skill/effect/prefab/effect_bullet1",
         "bulletSpeed": 800,
         "splashRadius": 40
     },
@@ -48,11 +48,12 @@
         "animKey": "healer_hero",
         "prefabPath": "hero/healer/prefab/Healer",
         "bulletPath": "skill/bullet/prefab/bullet2",
-        "bulletEffectPath": "skill/effect/prefab/effect_healer",
+        "bulletEffectPath": "skill/effect/prefab/effect_bullet2",
+        "effectPath": "skill/effect/prefab/effect_healer",
         "goldDrop": 30,
-        "healValue": 60,
+        "healValue": 120,
         "healRange": 220,
-        "healInterval": 3.0
+        "healInterval": 2
     },
     {
         "id": 4,

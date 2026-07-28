@@ -191,7 +191,7 @@ export default class BattleRoot extends Component {
 
     //测试代码添加怪物
     private testAddMonster(): void {
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 5; i++) {
             setTimeout(() => {
                 const path = ['path_0'];
                 const randomPath = path[Math.floor(Math.random() * path.length)];
