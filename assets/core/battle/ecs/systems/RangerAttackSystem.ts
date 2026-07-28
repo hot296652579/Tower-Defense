@@ -104,8 +104,13 @@ export default class RangerAttackSystem extends EcsSystem {
             const targetCamp = this.world.getComponent(targetEid, CampComp).camp;
             if (hp.curHp <= 0 || targetCamp === selfCamp) continue;
 
+            const acterTrans = this.world.getComponent(attackerEid, TransformComp);
             const targetTrans = this.world.getComponent(targetEid, TransformComp);
             const dist = math.Vec2.distance(attackerPos, targetTrans.pos);
+
+            const nx = (targetTrans.pos.x - attackerPos.x) / dist;
+            acterTrans.faceDir = nx >= 0 ? 1 : -1;
+
             if (dist < minDist) {
                 minDist = dist;
                 nearestId = targetEid;

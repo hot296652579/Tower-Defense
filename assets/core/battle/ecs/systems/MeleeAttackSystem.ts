@@ -165,6 +165,11 @@ export default class MeleeAttackSystem extends EcsSystem {
             attackerPos.pos.x, attackerPos.pos.y,
             targetPos.pos.x, targetPos.pos.y
         );
+
+        const dist = Math.sqrt(distance);
+        const nx = (targetPos.pos.x - attackerPos.pos.x) / dist;
+        attackerPos.faceDir = nx >= 0 ? 1 : -1;
+
         if (distance > attackComp.atkRange) {
             return false;
         }
