@@ -1,21 +1,20 @@
-import EcsSystem from "../base/EcsSystem";
-import TransformComp from "../components/TransformComp";
-import AttackComp from "../components/AttackComp";
-import RangerBulletComp from "../components/RangerBulletComp";
-import CampComp from "../components/CampComp";
-import HPComp from "../components/HPComp";
-
-import { Vec2, math, Node } from "cc";
-import DamageTypeComp from "../components/DamageTypeComp";
-import { EntityType } from "../../data/UnitConfigType";
+import { Vec2, math } from "cc";
 import { EventManager } from "db://assets/framework/event/EventManager";
 import { GameEvent } from "db://assets/framework/event/EventName";
-import { EntityFsmState } from "../components/FsmStateComp";
-import { BattleConfigHelper, UnitBulletConfig } from "../../data/BattleConfigHelper";
 import { UILayerRoot, UILayerType } from "db://assets/ui/layer/UILayer";
+import { BattleConfigHelper, UnitBulletConfig } from "../../data/BattleConfigHelper";
+import { EntityType } from "../../data/UnitConfigType";
 import { EffectManager } from "../../manager/EffectManager";
 import { ProjectileManager, ProjectileRuntimeInfo } from "../../manager/ProjectileManager";
+import EcsSystem from "../base/EcsSystem";
+import AttackComp from "../components/AttackComp";
 import AttackModeComp, { AttackMode } from "../components/AttackModeComp";
+import CampComp from "../components/CampComp";
+import DamageTypeComp from "../components/DamageTypeComp";
+import { EntityFsmState } from "../components/FsmStateComp";
+import HPComp from "../components/HPComp";
+import RangerBulletComp from "../components/RangerBulletComp";
+import TransformComp from "../components/TransformComp";
 
 export default class RangerAttackSystem extends EcsSystem {
     private _projectileMgr = ProjectileManager.getInstance();

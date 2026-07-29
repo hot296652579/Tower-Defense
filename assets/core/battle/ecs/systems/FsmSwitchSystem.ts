@@ -2,10 +2,10 @@
 import { EventManager } from "db://assets/framework/event/EventManager";
 import { GameEvent } from "db://assets/framework/event/EventName";
 import EcsSystem from "../base/EcsSystem";
+import AttackComp from "../components/AttackComp";
 import FsmStateComp, { EntityFsmState } from "../components/FsmStateComp";
 import HPComp from "../components/HPComp";
 import MoveComp from "../components/MoveComp";
-import AttackComp from "../components/AttackComp";
 
 export default class FsmSwitchSystem extends EcsSystem {
 

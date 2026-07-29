@@ -1,16 +1,16 @@
-import { _decorator, Component, Node, Prefab, instantiate, Pool, director } from 'cc';
-const { ccclass, property } = _decorator;
-import { EventManager } from 'db://assets/framework/event/EventManager';
-import { GameEvent } from 'db://assets/framework/event/EventName';
-import HPComp from '../ecs/components/HPComp';
-import TransformComp from '../ecs/components/TransformComp';
-import { HpBarView } from './HpBarView';
-import { ResourceManager } from 'db://assets/framework/resource/ResourceManager';
+import { _decorator, Node, Pool, Prefab } from 'cc';
 import { UIConfig } from 'db://assets/define/UIEnum';
 import BaseSingleton from 'db://assets/framework/base/BaseSingleton';
-import { UILayerRoot, UILayerType } from 'db://assets/ui/layer/UILayer';
-import { RenderEntityManager } from '../render/RenderEntityManager';
+import { EventManager } from 'db://assets/framework/event/EventManager';
+import { GameEvent } from 'db://assets/framework/event/EventName';
 import { PoolManager } from 'db://assets/framework/pool/PoolManager';
+import { ResourceManager } from 'db://assets/framework/resource/ResourceManager';
+import { UILayerRoot, UILayerType } from 'db://assets/ui/layer/UILayer';
+import HPComp from '../ecs/components/HPComp';
+import TransformComp from '../ecs/components/TransformComp';
+import { RenderEntityManager } from '../render/RenderEntityManager';
+import { HpBarView } from './HpBarView';
+const { ccclass, property } = _decorator;
 
 @ccclass('HpBarManager')
 export class HpBarManager extends BaseSingleton {
