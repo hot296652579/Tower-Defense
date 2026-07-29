@@ -47,18 +47,28 @@ export default class RangerAttackSystem extends EcsSystem {
             const bulletComp = this.world.getComponent(eid, RangerBulletComp);
             const campComp = this.world.getComponent(eid, CampComp);
 
-            atkComp.atkCd -= dt;
-            if (atkComp.atkCd > 0) continue;
+            // 每帧先清攻击标记
+            atkComp.isAttacking = false;
+
+            if (atkComp.atkCd > 0) {
+                atkComp.atkCd -= dt;
+            }
 
             const targetEid = this.findEnemyTargetInRange(eid, campComp.camp, trans.pos, atkComp.atkRange);
-            if (targetEid <= 0) continue;
+            if (targetEid <= 0) {
+                // 无攻击目标：清锁定，怪物继续沿路径走
+                atkComp.targetEntityId = 0;
+                continue;
+            }
+            atkComp.targetEntityId = targetEid;
 
-            // 重置攻击冷却
+            if (atkComp.atkCd > 0) continue;
+
+            // 出手
             atkComp.atkCd = atkComp.atkInterval;
             atkComp.isAttacking = true;
 
             const dmgTypeComp = this.world.getComponent(eid, DamageTypeComp);
-            // 攻击事件
             EventManager.getInstance().emit(
                 GameEvent.ENTITY_ATTACK,
                 eid,
@@ -66,23 +76,19 @@ export default class RangerAttackSystem extends EcsSystem {
                 atkComp.atk,
                 dmgTypeComp.damageType
             );
-            // 切换攻击动画状态
             EventManager.getInstance().emit(
                 GameEvent.ENTITY_STATE_CHANGE,
                 eid,
                 EntityFsmState.ATTACK
             );
 
-            // 填充子弹运行数据
             bulletComp.sourceEntityId = eid;
             bulletComp.targetId = targetEid;
             bulletComp.damage = atkComp.atk;
 
-            // 读取子弹配置
             const bulletCfg: UnitBulletConfig = BattleConfigHelper.getBattleByBulletConfig(this.world, eid);
             if (!bulletCfg.bulletPath) continue;
 
-            // 调用管理器生成子弹
             this._projectileMgr.spawnProjectile(
                 trans.pos,
                 targetEid,

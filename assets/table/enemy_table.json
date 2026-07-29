@@ -6,7 +6,7 @@
         "hp": 1200,
         "def": 30,
         "moveSpeed": 120,
-        "atk": 150,
+        "atk": 15,
         "atkInterval": 1.5,
         "atkRange": 80,
         "damageType": "physic",

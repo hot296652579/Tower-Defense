@@ -32,15 +32,17 @@ export default class MoveSystem extends EcsSystem {
             // 每帧先清零，仅在本帧真正位移时置 true
             move.isMoving = false;
 
-            // 死亡/受伤/攻击状态不沿路径移动
-            if (fsm.state === EntityFsmState.DEAD
-                || fsm.state === EntityFsmState.HURT
-                || fsm.state === EntityFsmState.ATTACK) {
+            // 死亡/受伤不移动（治疗/冷却不再用 ATTACK 状态整段禁走）
+            if (fsm.state === EntityFsmState.DEAD || fsm.state === EntityFsmState.HURT) {
                 continue;
             }
 
-            // 已锁定射程内存活目标时停步交战，避免攻击系统停步后又被路径移动覆盖
             const attack = this.world.tryGetComponent(eid, AttackComp);
+            // 仅出刀帧停步
+            if (attack && attack.isAttacking) {
+                continue;
+            }
+            // 已锁定射程内存活敌人时停步交战（治疗友军不走此逻辑）
             if (attack && attack.targetEntityId !== 0) {
                 const targetId = attack.targetEntityId;
                 const targetHp = this.world.tryGetComponent(targetId, HPComp);

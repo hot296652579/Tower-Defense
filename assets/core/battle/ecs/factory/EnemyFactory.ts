@@ -98,6 +98,9 @@ export class EnemyFactory {
                 const healer = this._world.addComponent(entityId, HealerComp);
                 const mode = this._world.addComponent(entityId, AttackModeComp);
                 mode.mode = AttackMode.RANGER;
+                // 怪物牧师也可远程普攻，与英雄治疗一致
+                this._world.addComponent(entityId, RangerBulletComp);
+                damageType.damageType = cfg.damageType;
                 healer.healValue = cfg.healValue;
                 healer.healRange = cfg.healRange;
                 healer.healInterval = cfg.healInterval;

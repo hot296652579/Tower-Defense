@@ -24,28 +24,18 @@ export default class FsmSwitchSystem extends EcsSystem {
             const oldState = fsmComp.state;
             let newState = oldState;
 
-            // 受伤硬直计时独立递减，避免处于攻击态时 hurtCd 永不消退
-            if (hpComp.hurtCd > 0) {
-                hpComp.hurtCd -= dt;
-                if (hpComp.hurtCd <= 0) {
-                    hpComp.hurtCd = 0;
-                    hpComp.isHurt = false;
-                }
-            }
-
-            // 优先级：死亡 > 出刀帧攻击 > 受伤 > 攻击冷却维持 > 移动 > 待机
-            // atkCd 不再压过 HURT，交战冷却期间受击可播受伤动画
+            // 优先级：死亡 > 出刀帧 > 交战冷却维持攻击 > 受伤 > 移动 > 待机
             if (hpComp.curHp <= 0) {
                 newState = EntityFsmState.DEAD;
             }
             else if (attackComp && attackComp.isAttacking) {
                 newState = EntityFsmState.ATTACK;
             }
+            else if (attackComp && attackComp.atkCd > 0 && attackComp.targetEntityId !== 0) {
+                newState = EntityFsmState.ATTACK;
+            }
             else if (hpComp.isHurt || hpComp.hurtCd > 0) {
                 newState = EntityFsmState.HURT;
-            }
-            else if (attackComp && attackComp.atkCd > 0) {
-                newState = EntityFsmState.ATTACK;//攻击冷却维持
             }
             else if (moveComp.isMoving) {
                 newState = EntityFsmState.WALK;

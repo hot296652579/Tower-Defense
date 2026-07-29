@@ -36,43 +36,38 @@ export default class HealerSystem extends EcsSystem {
             const trans = this.world.getComponent(eid, TransformComp);
             const healerComp = this.world.getComponent(eid, HealerComp);
             const campComp = this.world.getComponent(eid, CampComp);
+            const atkComp = this.world.getComponent(eid, AttackComp);
+
+            // 每帧清攻击标记，治疗不应让怪物长期卡在 ATTACK 导致不走路
+            atkComp.isAttacking = false;
 
             healerComp.healCd -= dt;
-            // 治疗冷却未结束，直接跳过，交给近战/远程攻击系统处理普攻
             if (healerComp.healCd > 0) continue;
 
             const targetHealEid = this.findLowHpAllyInRange(eid, campComp.camp, trans.pos, healerComp.healRange);
             if (targetHealEid <= 0) continue;
 
-            // 重置治疗冷却
             healerComp.healCd = healerComp.healInterval;
-
-            // ========= 治疗触发：事件、动画 完全对齐远程攻击系统的派发时机 =========
-            const atkComp = this.world.getComponent(eid, AttackComp);
             atkComp.isAttacking = true;
 
             const healCfg = BattleConfigHelper.getBattleByBulletConfig(this.world, eid);
 
-            // 切换攻击动画状态
             EventManager.getInstance().emit(
                 GameEvent.ENTITY_STATE_CHANGE,
                 eid,
                 EntityFsmState.ATTACK
             );
 
-            // 派发专属治疗事件，DamageCalcManager统一处理回血逻辑
             EventManager.getInstance().emit(
                 GameEvent.UNIT_HEAL,
                 eid,
                 targetHealEid,
                 healerComp.healValue
             );
-            // ====================================================================
 
-            // 播放治疗特效，生成在被治疗单位坐标
             const targetTrans = this.world.getComponent(targetHealEid, TransformComp);
-            if (healCfg.hitEffectPath) {
-                this._effectMgr.playEffect(healCfg.effectPath, targetTrans.pos, 1);
+            if (healCfg.hitEffectPath || healCfg.effectPath) {
+                this._effectMgr.playEffect(healCfg.effectPath || healCfg.hitEffectPath, targetTrans.pos, 1);
             }
         }
     }
