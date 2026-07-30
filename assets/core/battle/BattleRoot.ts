@@ -119,7 +119,7 @@ export default class BattleRoot extends Component {
         console.log("===== 战斗初始化全部完成 =====");
     }
 
-    /** 战斗 UI 就绪后初始化波次，并自动开启第一波 */
+    /** 初始化波次*/
     private initWaveAfterUiReady(): void {
         const waveSys = this._ecsWorld.getSystem(WaveSpawnSystem);
         if (!waveSys) {
@@ -127,7 +127,6 @@ export default class BattleRoot extends Component {
             return;
         }
         waveSys.initLevelWave(this._levelCfg);
-        waveSys.startNextWave();
     }
 
     /** 加载地图并且解析路径 */

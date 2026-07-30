@@ -42,6 +42,7 @@ export class BattleWnd extends BaseWindow {
         EventManager.getInstance().off(GameEvent.UI_GLOBAL_GOLD_CHANGE, this.onGlobalGoldChange, this);
         EventManager.getInstance().off(GameEvent.UI_GLOBAL_BASE_HP_CHANGE, this.onGlobalBaseHpChange, this);
         EventManager.getInstance().off(GameEvent.WAVE_CHANGE, this.onWaveChange, this);
+        this.btnNextWave.node.off(Button.EventType.CLICK, this.onBtnNextWaveClick, this);
     }
 
     protected onBtnRefreshClick(): void {
@@ -49,6 +50,7 @@ export class BattleWnd extends BaseWindow {
     }
 
     private onBtnNextWaveClick(): void {
+        EventManager.getInstance().emit(GameEvent.WAVE_START);
     }
 
     private onGlobalGoldChange(evt: { newValue: number }): void {

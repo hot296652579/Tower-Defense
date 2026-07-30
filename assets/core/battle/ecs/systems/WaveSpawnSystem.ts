@@ -9,9 +9,20 @@ import { EnemyFactory } from "../factory/EnemyFactory";
 /**
  * 波次刷怪系统
  * - initLevelWave：关卡/UI就绪后调用，只做数据初始化，不立刻刷怪
- * - startNextWave：UI 开波 / 自动开第一波时调用
  */
 export default class WaveSpawnSystem extends EcsSystem {
+
+    public init(): void {
+        EventManager.getInstance().on(GameEvent.WAVE_START, this.onWaveStartRequest, this);
+    }
+
+    public destroy(): void {
+        EventManager.getInstance().off(GameEvent.WAVE_START, this.onWaveStartRequest, this);
+    }
+
+    private onWaveStartRequest(): void {
+        this.startNextWave();
+    }
 
     public update(dt: number): void {
         const globalEid = this.world.GLOBAL_ENTITY_ID;
@@ -65,7 +76,7 @@ export default class WaveSpawnSystem extends EcsSystem {
         EventManager.getInstance().emit(GameEvent.WAVE_CHANGE, null, 0, levelCfg.waves.length);
     }
 
-    /** 开启下一波（UI 按钮 / 开战自动调用） */
+    /** 开启下一波 */
     public startNextWave(): boolean {
         const globalEid = this.world.GLOBAL_ENTITY_ID;
         const waveRuntime = this.world.tryGetComponent(globalEid, WaveRuntimeComp);
@@ -108,7 +119,6 @@ export default class WaveSpawnSystem extends EcsSystem {
             waveRuntime.groupRuntimeList.push(groupRun);
         }
 
-        EventManager.getInstance().emit(GameEvent.WAVE_START, targetWave, curIdx);
         EventManager.getInstance().emit(
             GameEvent.WAVE_CHANGE,
             targetWave,
