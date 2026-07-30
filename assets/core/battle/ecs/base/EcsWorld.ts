@@ -112,6 +112,16 @@ export default class EcsWorld {
         this._systems.push(system);
     }
 
+    /** 按类型获取已注册系统 */
+    public getSystem<T extends EcsSystem>(cls: new (...args: any[]) => T): T | null {
+        for (const sys of this._systems) {
+            if (sys instanceof cls) {
+                return sys as T;
+            }
+        }
+        return null;
+    }
+
     /**
      * 每一帧驱动所有System
      */

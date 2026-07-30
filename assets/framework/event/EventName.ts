@@ -33,6 +33,9 @@ export enum GameEvent {
     UNIT_HEAL = "UNIT_HEAL",
     ATTACK_BASE = "ATTACK_BASE",
 
+    WAVE_CHANGE = "WAVE_CHANGE",//波次改变
+    WAVE_ALL_SPAWN_FINISH = "WAVE_ALL_SPAWN_FINISH", // 当前波全部怪物生成完成
+
     GAME_RESTART_LEVEL = "GAME_RESTART_LEVEL",//游戏重新开始关卡
 
     //UI通知

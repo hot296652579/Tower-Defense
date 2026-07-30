@@ -4,11 +4,13 @@ const { ccclass, property } = _decorator;
 import { BundlesEnum } from "../../define/BundlesEnum";
 import { UIConfig } from "../../define/UIEnum";
 import { ConfigManager } from "../../framework/config/ConfigManager";
+import { EventManager } from "../../framework/event/EventManager";
+import { GameEvent } from "../../framework/event/EventName";
 import { ResourceManager } from "../../framework/resource/ResourceManager";
 import { UILayerRoot } from "../../ui/layer/UILayer";
 import { UIManager } from "../../ui/manager/UIManager";
 import { ChooseHeroWnd } from "../../ui/window/battle/ChooseHeroWnd";
-import { LevelConfig } from "./data/LevelConfigType";
+import { LevelConfig } from "./data/LevelWaveType";
 import EcsWorld from "./ecs/base/EcsWorld";
 import BattleGlobalComp from "./ecs/components/BattleGlobalComp";
 import EnemyComp from "./ecs/components/EnemyComp";
@@ -17,18 +19,17 @@ import TransformComp from "./ecs/components/TransformComp";
 import { EnemyFactory } from "./ecs/factory/EnemyFactory";
 import { HeroFactory } from "./ecs/factory/HeroFactory";
 import FsmSwitchSystem from "./ecs/systems/FsmSwitchSystem";
-import MoveSystem from "./ecs/systems/MoveSystem";
-import MapPathData from "./map/MapPathData";
-import { RenderEntityManager } from "./render/RenderEntityManager";
+import HealerSystem from "./ecs/systems/HealerSystem";
 import MeleeAttackSystem from "./ecs/systems/MeleeAttackSystem";
-import { DamageCalcManager } from "./manager/DamageCalcManager";
-import { HpBarManager } from "./ui/HpBarManager";
-import { EventManager } from "../../framework/event/EventManager";
-import { GameEvent } from "../../framework/event/EventName";
+import MoveSystem from "./ecs/systems/MoveSystem";
 import RangerAttackSystem from "./ecs/systems/RangerAttackSystem";
+import WaveSpawnSystem from "./ecs/systems/WaveSpawnSystem";
+import { DamageCalcManager } from "./manager/DamageCalcManager";
 import { EffectManager } from "./manager/EffectManager";
 import { ProjectileManager } from "./manager/ProjectileManager";
-import HealerSystem from "./ecs/systems/HealerSystem";
+import MapPathData from "./map/MapPathData";
+import { RenderEntityManager } from "./render/RenderEntityManager";
+import { HpBarManager } from "./ui/HpBarManager";
 
 @ccclass
 export default class BattleRoot extends Component {
@@ -85,7 +86,7 @@ export default class BattleRoot extends Component {
 
         // ----------------【测试代码】----------------
         // 测试：在path_0起点生成怪物战士
-        this.testAddMonster();
+        // this.testAddMonster();
         // --------------------------------------------
     }
 
@@ -104,7 +105,7 @@ export default class BattleRoot extends Component {
         this.mapNode.removeAllChildren();
         await this.loadMap();
         await this.initEcsWorld();
-        EnemyFactory.setEcsWorld(this._ecsWorld);
+        EnemyFactory.setEcsWorld(this._ecsWorld, this);
         HeroFactory.setEcsWorld(this._ecsWorld);
         console.log("ECS世界初始化完成");
         await RenderEntityManager.getInstance().init(this.entityRoot, this._ecsWorld);
@@ -113,7 +114,20 @@ export default class BattleRoot extends Component {
         await UIManager.getInstance().openWindow(UIConfig.ChooseHeroWnd.name);
         console.log("战斗窗口打开完成");
 
+        this.initWaveAfterUiReady();
+
         console.log("===== 战斗初始化全部完成 =====");
+    }
+
+    /** 战斗 UI 就绪后初始化波次，并自动开启第一波 */
+    private initWaveAfterUiReady(): void {
+        const waveSys = this._ecsWorld.getSystem(WaveSpawnSystem);
+        if (!waveSys) {
+            console.error("WaveSpawnSystem 未注册");
+            return;
+        }
+        waveSys.initLevelWave(this._levelCfg);
+        waveSys.startNextWave();
     }
 
     /** 加载地图并且解析路径 */
@@ -152,8 +166,7 @@ export default class BattleRoot extends Component {
         this._ecsWorld.registerSystem(new HealerSystem());
         this._ecsWorld.registerSystem(new MoveSystem());
         this._ecsWorld.registerSystem(new FsmSwitchSystem());
-
-        // this._ecsWorld.registerSystem(new WaveSpawnSystem());
+        this._ecsWorld.registerSystem(new WaveSpawnSystem());
         // =================================================================
 
         // 初始化事件驱动管理器
@@ -198,7 +211,7 @@ export default class BattleRoot extends Component {
                 const randomPath = path[Math.floor(Math.random() * path.length)];
                 const startPos = this._mapPathData.getPathStartPos(randomPath);
                 const randomId = id[Math.floor(Math.random() * id.length)];
-                EnemyFactory.testSpawnMonster(randomId, randomPath, startPos);
+                EnemyFactory.testSpawnMonster(randomId);
             }, i * 500);
         }
     }

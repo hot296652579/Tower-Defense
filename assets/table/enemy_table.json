@@ -13,6 +13,10 @@
         "animKey": "warrior",
         "prefabPath": "enemy/melee/prefab/Enemy_Melee",
         "goldDrop": 10,
+        "paths": [
+            "path_0",
+            "path_1"
+        ],
         "blockRate": 0.25
     },
     {
@@ -32,7 +36,11 @@
         "bulletPath": "skill/bullet/prefab/bullet3",
         "bulletEffectPath": "skill/effect/prefab/effect_bullet3",
         "bulletSpeed": 800,
-        "splashRadius": 40
+        "splashRadius": 40,
+        "paths": [
+            "path_0",
+            "path_1"
+        ]
     },
     {
         "id": 102,

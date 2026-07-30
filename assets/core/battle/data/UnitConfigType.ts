@@ -41,6 +41,7 @@ export interface BaseUnitConfig {
     animKey: string;             // 动画集名（idle/walk/attack/hurt/dead）
     prefabPath: string;          // game分包内预制体路径
     goldDrop: number;            // 死亡掉落金币（怪物生效，英雄无效）
+    pathsId: string[];           // 生成路径ID列表
 }
 
 export interface MeleeUnitCfg extends BaseUnitConfig {

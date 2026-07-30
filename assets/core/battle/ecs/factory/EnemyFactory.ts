@@ -5,37 +5,39 @@ import { EcsEntity } from "../base/EcsEntity";
 import EcsWorld from "../base/EcsWorld";
 
 // 引入全部组件
-import { Vec2 } from "cc";
 import { EventManager } from "db://assets/framework/event/EventManager";
 import { GameEvent } from "db://assets/framework/event/EventName";
+import BattleRoot from "../../BattleRoot";
 import AttackComp from "../components/AttackComp";
+import AttackLimitComp from "../components/AttackLimitComp";
+import AttackModeComp, { AttackMode } from "../components/AttackModeComp";
 import BufferComp from "../components/BufferComp";
+import CampComp from "../components/CampComp";
+import DamageTypeComp from "../components/DamageTypeComp";
 import EnemyComp from "../components/EnemyComp";
 import FsmStateComp, { EntityFsmState } from "../components/FsmStateComp";
 import HealerComp from "../components/HealerComp";
 import HPComp from "../components/HPComp";
 import MoveComp from "../components/MoveComp";
-import TransformComp from "../components/TransformComp";
-import AttackLimitComp from "../components/AttackLimitComp";
-import CampComp from "../components/CampComp";
-import DamageTypeComp from "../components/DamageTypeComp";
 import RangerBulletComp from "../components/RangerBulletComp";
-import AttackModeComp, { AttackMode } from "../components/AttackModeComp";
+import TransformComp from "../components/TransformComp";
 
 export class EnemyFactory {
     private static _world: EcsWorld;
+    private static _battleRoot: BattleRoot;
 
-    public static setEcsWorld(world: EcsWorld): void {
+    public static setEcsWorld(world: EcsWorld, battleRoot: BattleRoot): void {
+        this._battleRoot = battleRoot;
         this._world = world;
     }
 
     /**
      * 创建怪物实体入口
      * @param monsterCfgId 怪物配置ID
-     * @param pathId 生成在哪一条路径 path_0 / path_1
+     * @param pathId 可选路径；不传则从配置 pathsId 随机
      * @returns entityId
      */
-    public static createEnemy(monsterCfgId: number, pathId: string, spawnPos: Vec2): number {
+    public static createEnemy(monsterCfgId: number, pathId?: string): number {
         if (!this._world) {
             console.error("EnemyFactory: 未设置EcsWorld");
             return EcsEntity.INVALID;
@@ -60,9 +62,20 @@ export class EnemyFactory {
         const attackLimit = this._world.addComponent(entityId, AttackLimitComp);
         const damageType = this._world.addComponent(entityId, DamageTypeComp);
 
+        const pathsId = (pathId && pathId.length > 0)
+            ? [pathId]
+            : (cfg.pathsId && cfg.pathsId.length > 0 ? cfg.pathsId : ["path_0"]);
+        const randomPath = pathsId[Math.floor(Math.random() * pathsId.length)];
+        const startPos = this._battleRoot.getMapPathData().getPathStartPos(randomPath);
+        if (!startPos) {
+            console.error("EnemyFactory: 找不到路径起点", randomPath);
+            this._world.destroyEntity(entityId);
+            return EcsEntity.INVALID;
+        }
+
         // 基础数据赋值
         camp.camp = EntityType.ENEMY;
-        trans.pos = spawnPos.clone();
+        trans.pos = startPos.clone();
         trans.faceDir = 1;
 
         hp.maxHp = cfg.hp;
@@ -74,11 +87,11 @@ export class EnemyFactory {
         fsm.state = EntityFsmState.WALK;
 
         move.moveSpeed = cfg.moveSpeed;
-        move.pathId = pathId;
+        move.pathId = randomPath;
         move.pathIndex = 0;
         move.slowRate = 1;
         move.isMoving = false;
-        move.isHero = false; // 怪物
+        move.isHero = false;
 
         atk.atk = cfg.atk;
         atk.atkRange = cfg.atkRange;
@@ -142,7 +155,7 @@ export class EnemyFactory {
      * @param monsterId 怪物id
      * @param pathId 路径id
      */
-    public static testSpawnMonster(monsterId: number = 100, pathId: string = "path_0", spawnPos: Vec2 = new Vec2()): number {
-        return this.createEnemy(monsterId, pathId, spawnPos);
+    public static testSpawnMonster(monsterId: number = 100): number {
+        return this.createEnemy(monsterId);
     }
 }

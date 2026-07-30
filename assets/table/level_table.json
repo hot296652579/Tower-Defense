@@ -16,6 +16,10 @@
         ],
         "unlockHeroIdList": [],
         "passRewardGold": 150,
+        "paths": [
+            "path_0",
+            "path_1"
+        ],
         "waves": [
             {
                 "waveLocalId": 1,
@@ -85,6 +89,10 @@
             1
         ],
         "passRewardGold": 200,
+        "paths": [
+            "path_0",
+            "path_1"
+        ],
         "waves": [
             {
                 "waveLocalId": 1,

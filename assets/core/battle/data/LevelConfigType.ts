@@ -27,4 +27,5 @@ export interface LevelConfig {
     unlockTowerIdList: number[];      // 本关可使用炮塔id列表
     unlockHeroIdList: number[];       // 本关可用英雄
     passRewardGold: number;           // 关卡通关一次性奖励
+    paths: string[];                  // 本关卡所有路径ID列表
 }
