@@ -1,0 +1,78 @@
+[
+    {
+        "towerId": 1,
+        "name": "兵营塔",
+        "towerType": "barrack",
+        "buildCost": 100,
+        "sellRatio": 0.6,
+        "buildTime": 2.5,
+        "prefabPath": "tower/barrack/prefab/barrack_tower",
+        "spawnUnitId": 1001,
+        "spawnInterval": 8,
+        "maxUnitCount": 3,
+        "unitStandRange": 120,
+        "upgradeList": [
+            {
+                "cost": 75,
+                "spawnIntervalAdd": -1.2,
+                "maxUnitAdd": 1
+            },
+            {
+                "cost": 130,
+                "spawnIntervalAdd": -1.5,
+                "maxUnitAdd": 1
+            }
+        ]
+    },
+    {
+        "towerId": 2,
+        "name": "弓箭塔",
+        "towerType": "archery",
+        "buildCost": 100,
+        "sellRatio": 0.6,
+        "buildTime": 2.5,
+        "prefabPath": "tower/barrack/prefab/barrack_tower",
+        "spawnUnitId": 1001,
+        "spawnInterval": 8,
+        "maxUnitCount": 3,
+        "unitStandRange": 120,
+        "upgradeList": [
+            {
+                "cost": 75,
+                "spawnIntervalAdd": -1.2,
+                "maxUnitAdd": 1
+            },
+            {
+                "cost": 130,
+                "spawnIntervalAdd": -1.5,
+                "maxUnitAdd": 1
+            }
+        ]
+    },
+    {
+        "towerId": 3,
+        "name": "火炮塔",
+        "towerType": "cannon",
+        "buildCost": 150,
+        "sellRatio": 0.6,
+        "buildTime": 3,
+        "prefabPath": "tower/cannon/prefab/cannon_tower",
+        "atk": 260,
+        "atkRange": 320,
+        "atkInterval": 2.2,
+        "splashRadius": 80,
+        "bulletPath": "skill/bullet/prefab/cannon_bullet",
+        "upgradeList": [
+            {
+                "cost": 100,
+                "atkAdd": 90,
+                "splashRadiusAdd": 15
+            },
+            {
+                "cost": 180,
+                "atkAdd": 140,
+                "atkRangeAdd": 30
+            }
+        ]
+    }
+]
